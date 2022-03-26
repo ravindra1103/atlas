@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { InputForm } from '../shared/interfaces';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-input-form',
@@ -15,7 +16,9 @@ export class InputFormComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    
+  }
 
   getClassToApply() {
     if (this.inputFormData?.twoColumnLayout && this.isToggled)

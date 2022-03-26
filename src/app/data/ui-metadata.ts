@@ -16,7 +16,7 @@ const getInputFormsLtr = () => {
           type: CommonConstants.dropdownType,
           label: 'Loan Purpose',
           isMandatory: true,
-          valueToBind: ['Purchase', 'Delayed Purchase', 'Cash Out'],
+          valueToBind: ['Purchase', 'Delayed Purchase', 'Rate/Term', 'Cash Out'],
           selectedValueToBind: 'Purchase',
           keyToRead: 'loan_purpose'
         },

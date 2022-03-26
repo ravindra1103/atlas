@@ -54,7 +54,7 @@ export class SectionsComponent implements OnInit {
     console.log('atlasId', this.atlasId);
     this.http
       .get(
-        `http://pricingengineapi.azurewebsites.net/api/Price/GetLoanInputs/${this.atlasId}`
+        `https://pricingengineapi.azurewebsites.net/api/Price/GetLoanInputs/${this.atlasId}`
       )
       .subscribe((response: any) => {
         const availableTabData = this.data.find(
