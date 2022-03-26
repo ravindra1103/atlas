@@ -1,0 +1,28 @@
+  <div>
+  <mat-grid-list cols="12" rowHeight="6rem">
+    <mat-grid-tile colspan="6" class="appNameTile">
+      <div (click)="toggleSideNav()">
+        <mat-icon *ngIf="!showArrow" class="arrowDownIcon">menu</mat-icon>
+        <mat-icon *ngIf="showArrow" class="arrowDownIcon">arrow_back</mat-icon>
+      </div>
+      <span><img src="/assets/images/logo-atlas.png" class="atlasLogo" alt="image" /></span>
+      <span class="appName">ATLAS PRICING ENGINE</span>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="1"></mat-grid-tile>
+    <mat-grid-tile colspan="5" matGridTile>
+      <span class="dark">DARK</span>
+      <mat-slide-toggle [formControl]="toggleControl" themeToggle> </mat-slide-toggle>
+      <span class="light">LIGHT</span>
+      <mat-card class="avatar-card">
+        <mat-card-header>
+          <div mat-card-avatar class="avatar-header-image"></div>
+          <div class="avatarCardWrapper">
+            <mat-card-title class="user-name">Travis Sharpe</mat-card-title>
+            <mat-card-subtitle class="user-designition">COO</mat-card-subtitle>
+          </div>
+          <mat-icon class="arrowDownIcon">keyboard_arrow_down</mat-icon>
+        </mat-card-header>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

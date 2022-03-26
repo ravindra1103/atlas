@@ -1,0 +1,138 @@
+<div class="commonBgThemeBased calculatedWrapper">
+  <div>
+    <div class="tabsContainerCommon">
+      <mat-tab-group
+        mat-align-tabs="start"
+        (selectedIndexChange)="onTabChange($event)"
+      >
+        <div *ngFor="let tabValue of tabsToShow">
+          <mat-tab [label]="tabValue">{{ "" }}</mat-tab>
+        </div>
+      </mat-tab-group>
+    </div>
+    <div class="gridListWrapper" *ngIf="selectedTab === 0">
+      <mat-grid-list cols="2" rowHeight="50px" gutterSize="0">
+        <mat-grid-tile class="topLeft">
+          <div class="cellWrapper">
+            <div class="calcDLabel">LTV</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile class="topRight">
+          <div class="cellWrapper">
+            <div class="calcDLabel">Property Value</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile class="bottomLeft">
+          <div class="cellWrapper">
+            <div class="calcDLabel">Max Loan Amount</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile class="bottomRight">
+          <div class="cellWrapper">
+            <div class="calcDLabel">T&I Amount</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+
+    <div class="gridListWrapper" *ngIf="selectedTab === 1">
+      <mat-grid-list cols="12" rowHeight="50px" gutterSize="0">
+        <mat-grid-tile [colspan]="'4'" class="topLeft">
+          <div class="cellWrapper">
+            <div class="calcDLabel">Loan Purpose</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="'4'">
+          <div class="cellWrapper">
+            <div class="calcDLabel">LTV</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="'4'" class="topRight">
+          <div class="cellWrapper">
+            <div class="calcDLabel">Loan Amount</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="'4'">
+          <div class="cellWrapper">
+            <div class="calcDLabel">Rate</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="'4'">
+          <div class="cellWrapper">
+            <div class="calcDLabel">FICO</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="'4'">
+          <div class="cellWrapper">
+            <div class="calcDLabel">DSCR</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="'4'">
+          <div class="cellWrapper">
+            <div class="calcDLabel">Property Type</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="'4'">
+          <div class="cellWrapper">
+            <div class="calcDLabel">PITI</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="'4'">
+          <div class="cellWrapper">
+            <div class="calcDLabel">Property Value</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="'4'">
+          <div class="cellWrapper">
+            <div class="calcDLabel">Disc./(Prem)</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="'8'">
+          <div class="cellWrapper">
+            <div class="calcDLabel">Total Rents / Gross Rents</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="'4'" class="bottomLeft">
+          <div class="cellWrapper">
+            <div class="calcDLabel">Total Cost</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile [colspan]="'8'" class="bottomRight">
+          <div class="cellWrapper">
+            <div class="calcDLabel">Cash To/(From)</div>
+            <div class="calcDValue">-</div>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
+    </div>
+  </div>
+
+  <div class="actionButtonWrapper borderTopCommon">
+    <button
+      mat-stroked-button
+      color="primary"
+      class="secondary-button borderRadius0"
+    >
+      Lock Rate
+    </button>
+    <!-- <button mat-flat-button color="primary" class="borderRadius0">
+      Save Quote
+    </button> -->
+  </div>
+</div>

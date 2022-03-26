@@ -1,0 +1,21 @@
+.formsWrapper {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    text-align: center;
+    gap: 5px;
+}
+
+.singleFormWrapper {
+    flex-basis: 33%;
+    padding-top: 25px;
+}
+
+.singleFormWrapperView {
+    flex-basis: 33%;
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+.displayView {
+}

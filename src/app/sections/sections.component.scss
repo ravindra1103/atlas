@@ -1,0 +1,55 @@
+::ng-deep .mat-tab-label {
+  font-size: 14px !important;
+  font-weight: 600;
+}
+
+// ::ng-deep .mat-tab-label.mat-tab-label-active {
+//   padding: 5px;
+//   background-color: transparent;
+//   // color: #287cf2;
+//   font-size: 14px !important;
+//   font-weight: 600;
+//   opacity: 1;
+// }
+
+::ng-deep .mat-tab-label-content {
+  font-size: 14px !important;
+}
+
+.bodySection {
+  padding: 0 15px;
+}
+
+.pricingButton {
+  position: absolute;
+  font-weight: 600;
+  display: flex;
+  gap: 25px;
+  right: 20px;
+  top: 80px;
+}
+
+.paddingLeft5Percent {
+  padding-left: 75px;
+}
+
+.width93Px {
+  width: 93px !important;
+}
+
+.width105Px {
+  width: 105px !important;
+}
+
+.disabledDiv {
+  pointer-events: none;
+  opacity: 0.4;
+}
+
+::ng-deep mat-tab-group[topTabs] .mat-tab-header {
+  width: 50% !important;
+}
+
+.loanType {
+  width: 125px !important;
+}

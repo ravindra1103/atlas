@@ -1,0 +1,34 @@
+@use "variables";
+
+@font-face {
+  font-family: Inter;
+  src: url(../assets/fonts/Inter.ttf) format("opentype");
+}
+
+html,
+body {
+  height: 100%;
+}
+
+button {
+  height: 30px;
+  line-height: 22px !important;
+}
+
+// button.secondary-button {
+//   color: variables.$primary-color !important;
+//   border: 1px solid variables.$primary-color !important;
+// }
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: variables.$font-family;
+  font-size: 12px;
+
+}
+
+.mat-icon {
+  font-family: 'Material Icons' !important;
+}

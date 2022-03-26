@@ -1,0 +1,54 @@
+.wrapper {
+    display: flex;
+}
+
+.displyFlex {
+    display: flex;
+}
+
+.fontColor {
+    color: #FFFFFF;
+}
+
+.singleProduct {
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.marginProductName {
+    margin: 10px 0 0 10px;
+}
+
+.mainLogo {
+    justify-content: center;
+    padding: 35px 0;
+    border-bottom: 1px solid #cccccc30;
+}
+
+.singleProductWrapper {
+    padding: 20px 10px;
+    border-bottom: 1px solid #cccccc30;
+    border-left: 5px solid transparent;
+}
+
+.singleIconSideNav {
+    display: flex;
+    justify-content: center;
+    padding: 30px 0;
+    border-bottom: 1px solid #cccccc30;
+}
+
+.imgCommon {
+    width: 22px;
+    height: 22px;
+}
+
+.mainLogoWidth {
+    width: 160px;
+}
+
+.singleGlobe {
+    width: 29px;
+    height: 28px;
+}

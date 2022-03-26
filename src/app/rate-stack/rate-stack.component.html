@@ -1,0 +1,47 @@
+<div class="minHeightPadding commonBgThemeBased">
+  <div class="flexDisplay">
+    <div class="flexOne">
+      <label class="formLabel tableHeaderLabel formNameLableCommon"
+        >Rate Stack</label
+      >
+    </div>
+    <div class="ioSwitch">
+      <span class="ioText">I/O</span><mat-slide-toggle class="commonThemeColor" ioToggle (click)="switchState()"></mat-slide-toggle>
+    </div>
+    <span *ngIf="switchClicked" style="position: relative;">
+    <span class="checkmark">
+      <div class="checkmark_stem"></div>
+      <div class="checkmark_kick"></div>
+    </span>
+  </span>
+  </div>
+  <table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="rate">
+      <th mat-header-cell *matHeaderCellDef>Rate</th>
+      <td mat-cell *matCellDef="let element">{{ element.rate }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="dscr">
+      <th mat-header-cell *matHeaderCellDef>DSCR</th>
+      <td mat-cell *matCellDef="let element">{{ element.dscr }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="piti">
+      <th mat-header-cell *matHeaderCellDef>PITI</th>
+      <td mat-cell *matCellDef="let element">{{ element.piti }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef>Price</th>
+      <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="disc_prem">
+      <th mat-header-cell *matHeaderCellDef>Disc./(Prem)</th>
+      <td mat-cell *matCellDef="let element">{{ element.disc_prem }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>

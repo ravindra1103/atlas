@@ -1,0 +1,82 @@
+@use "../../styles/variables";
+
+.appName {
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 26px;
+  letter-spacing: 0em;
+  text-align: center;
+}
+
+.atlasLogo {
+  margin: 0px 25px;
+  width: 43px;
+  height: 42px;
+}
+
+
+.appNameTile {
+  left: unset !important;
+}
+
+
+tr.mat-footer-row {
+  border: 1px solid #e7e7e7;
+  font-weight: bold;
+  height: 50px !important;
+}
+
+.avatar-card {
+  max-width: 400px;
+  padding: 5px;
+  height: 46px;
+  border-radius: 35px;
+  background: unset;
+  color: unset;
+  margin-left: 35px;
+}
+
+.avatar-header-image {
+  background-image: url(../../assets/images/user-avatar.png);
+  background-size: cover;
+  width: 32px;
+  height: 32px;
+  margin: 2px;
+}
+
+.user-name {
+  font-size: 15px;
+  line-height: 24px;
+  margin-bottom: 0px !important;
+  font-weight: 600;
+}
+
+.user-designition {
+  font-weight: 400;
+  font-size: 12px;
+  padding-top: 5px;
+  color: unset;
+}
+
+.arrowDownIcon {
+  font-size: 30px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.avatarCardWrapper {
+  margin: 0 15px 0px -15px;
+}
+
+::ng-deep mat-grid-tile[matGridTile] .mat-grid-tile-content {
+  justify-content: flex-end;
+  margin-right: 20px;
+}
+
+::ng-deep mat-grid-tile.appNameTile > div {
+  width: 70%;
+  display: flex;
+  justify-content: flex-start;
+  margin-left: 50px;
+}

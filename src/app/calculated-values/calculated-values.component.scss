@@ -1,0 +1,89 @@
+.calcLabel {
+    font-size: 14px;
+    padding-right: 10px;
+    // color: #727272;
+    font-weight: 600;
+    display: flex;
+}
+
+.mat-grid-tile {
+    border: 1px solid #CECECE;
+}
+
+.calcDValue {
+    font-size: 14px;
+    font-weight: 600;
+    padding-top: 5px;
+    text-align: left;
+}
+
+.cellWrapper {
+    left: 0;
+    position: absolute;
+    padding-left: 15px;
+}
+
+.gridListWrapper {
+    margin-top: 20px;
+    padding: 0 20px;
+    // margin-bottom: 175px;
+}
+
+.calcLabel2 {
+    font-size: 14px;
+    font-weight: 600;
+    display: flex;
+}
+
+.greenRectangle {
+    width: 10px;
+    height: 10px;
+    background-color: #1BD592;
+    border-radius: 2px;
+    margin-top: 2px;
+    margin-right: 5px;
+}
+
+.displayFlex {
+    display: flex;
+}
+
+.bottomBorder {
+    margin-top: 20px;
+    border-bottom: 1px solid #CECECE;
+    padding-bottom: 20px;
+}
+
+.calculatedWrapper {
+    min-height: 400px;
+}
+
+.paddingTop20 {
+    padding-top: 20px;
+}
+
+.actionButtonWrapper {
+    margin: 0px 0;
+    position: absolute;
+    bottom: 40px;
+    display: flex;
+    justify-content: center;
+    width: 33%;
+    padding-top: 10px;
+}
+
+.topLeft {
+    border-top-left-radius: 4px;
+}
+
+.topRight {
+    border-top-right-radius: 4px;
+}
+
+.bottomLeft {
+    border-bottom-left-radius: 4px;
+}
+
+.bottomRight {
+    border-bottom-right-radius: 4px;
+}

@@ -1,0 +1,459 @@
+@use "@angular/material" as mat;
+@use "styles/base";
+@use "styles/variables";
+
+@import "~@angular/material/theming";
+
+@include mat.core();
+
+$atlas-t: (
+  50: #e5effd,
+  100: #bfd8fb,
+  200: #94bef9,
+  300: #69a3f6,
+  400: #4890f4,
+  500: #287cf2,
+  600: #2474f0,
+  700: #1e69ee,
+  800: #185fec,
+  900: #0f4ce8,
+  A100: #ffffff,
+  A200: #e1e8ff,
+  A400: #aec2ff,
+  A700: #95aeff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+$atlas-t2: (
+  50: #ffffff,
+  100: #ffffff,
+  200: #ffffff,
+  300: #ffffff,
+  400: #ffffff,
+  500: #ffffff,
+  600: #ffffff,
+  700: #ffffff,
+  800: #ffffff,
+  900: #ffffff,
+  A100: #ffffff,
+  A200: #ffffff,
+  A400: #ffffff,
+  A700: #ffffff,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #000000,
+    800: #000000,
+    900: #000000,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+$darkthemeprimary: (
+  50: #f5f8ea,
+  100: #e5eccb,
+  200: #d4e0a8,
+  300: #c2d485,
+  400: #b5ca6a,
+  500: #a8c150,
+  600: #a0bb49,
+  700: #97b340,
+  800: #8dab37,
+  900: #7d9e27,
+  A100: #f5ffde,
+  A200: #e6ffab,
+  A400: #d7ff78,
+  A700: #cfff5e,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #000000,
+    800: #000000,
+    900: #000000,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
+  ),
+);
+
+/* For use in src/lib/core/theming/_palette.scss */
+$darkthemesecondary: (
+  50: #e2e4e6,
+  100: #b7bac0,
+  200: #878d96,
+  300: #565f6c,
+  400: #323c4d,
+  500: #14253d,
+  600: #424e62,
+  700: #2d3b50,
+  800: #080f1c,
+  900: #040811,
+  A100: #5284ff,
+  A200: #1f5fff,
+  A400: #0043eb,
+  A700: #003cd2,
+  contrast: (
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #ffffff,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #ffffff,
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+// Defining a light theme
+$light-primary: mat.define-palette($atlas-t);
+$light-accent: mat.define-palette($atlas-t2);
+$light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $light-primary,
+      accent: $light-accent,
+    ),
+  )
+);
+
+// Defining a dark theme
+$dark-primary: mat.define-palette($darkthemeprimary);
+$dark-accent: mat.define-palette($darkthemesecondary);
+$dark-theme: mat.define-dark-theme(
+  (
+    color: (
+      primary: $dark-primary,
+      accent: $dark-accent,
+    ),
+  )
+);
+
+@include mat.all-component-colors($light-theme);
+
+.darkMode {
+  @include mat.all-component-colors($dark-theme);
+}
+
+.darkMode .mat-app-background,
+.darkMode.mat-app-background,
+.mat-app-background {
+  background-color: unset;
+  color: unset;
+}
+
+.my-light-style {
+  background: #f5f9fa;
+  color: mat.get-color-from-palette($atlas-t, "contrast-500") !important;
+
+  .bgCommonInputForm {
+    background-color: mat.get-color-from-palette($atlas-t, "A100") !important;
+  }
+
+  .bgTabCommon {
+    background-color: #ffffff !important;
+  }
+
+  .formNameLableCommon {
+    color: #364150 !important;
+  }
+
+  .inputFieldLabelCommon {
+    color: #727272;
+  }
+
+  .mat-tab-label.mat-tab-label-active {
+    padding: 5px;
+    background-color: transparent;
+    color: #287cf2;
+    font-size: 14px !important;
+    font-weight: 600;
+    opacity: 1;
+  }
+
+  .tabsContainerCommon {
+    border-bottom: 1px solid #cecece;
+    background-clip: padding-box;
+  }
+
+  .dark {
+    font-size: 10px;
+    padding: 5px;
+    color: #a1a1a1;
+  }
+
+  .light {
+    font-size: 10px;
+    color: #000000;
+    padding: 5px;
+  }
+
+  .mat-card {
+    background-color: #ffffff !important;
+  }
+
+  .mat-slide-toggle[ioToggle].mat-checked:not(.mat-disabled)
+    .mat-slide-toggle-bar {
+    background-color: #287cf2;
+  }
+
+  .mat-table thead {
+    background: #D4E5F4;
+  }
+
+  button.secondary-button {
+    color: #287cf2 !important;
+    border-color: #287cf2 !important;
+  }
+
+  .calcDLabel {
+    color: #727272;
+    text-align: left;
+  }
+
+  .commonBg {
+    background-color: #1BD492;
+  }
+
+  .singleProductWrapper[selected=true] {
+    border-left: 5px solid #287CF2;
+  }   
+
+  .borderTopCommon {
+    border-top: 1px solid #CECECE;
+  }
+}
+
+.my-dark-style {
+  background: #0e1a2d;
+
+  .bgCommonInputForm {
+    background-color: #14253d !important;
+  }
+
+  .bgTabCommon {
+    background-color: #14253d !important;
+  }
+
+  .formNameLableCommon {
+    color: #a8c150 !important;
+  }
+
+  .inputFieldLabelCommon {
+    color: #ffffff;
+  }
+
+  .mat-form-field-appearance-outline .mat-form-field-outline {
+    background-color: #424e62;
+    border-radius: 5px;
+  }
+
+  .mat-select-panel {
+    background-color: #424e62;
+  }
+
+  .mat-tab-label.mat-tab-label-active {
+    padding: 5px;
+    background-color: transparent;
+    color: #a8c150;
+    font-size: 14px !important;
+    font-weight: 600;
+    opacity: 1;
+  }
+
+  .tabsContainerCommon {
+    border-bottom: 1px solid rgb(255, 255, 255, 0.5);
+    background-clip: padding-box;
+  }
+
+  .mat-table thead {
+    background: #424e62;
+  }
+
+  .mat-table tbody {
+    background: #2d3b50;
+  }
+
+  th.mat-header-cell {
+    border-bottom: unset;
+  }
+
+  .mat-header-cell {
+    color: #ffffff;
+  }
+
+  .mat-slide-toggle[themeToggle] .mat-slide-toggle-thumb {
+    background-color: white;
+    box-shadow: -3px 0px black;
+    width: 10px !important;
+    height: 10px !important;
+    position: absolute;
+    right: 8px;
+  }
+
+  .mat-slide-toggle[themeToggle] .mat-slide-toggle-bar {
+    background-color: white;
+  }
+
+  .dark {
+    font-size: 10px;
+    padding: 5px;
+    color: #ffffff;
+  }
+
+  .light {
+    font-size: 10px;
+    color: #727272;
+    padding: 5px;
+  }
+
+  .mat-card {
+    background-color: #2d3b50 !important;
+  }
+
+  .mat-slide-toggle[ioToggle].mat-checked:not(.mat-disabled)
+    .mat-slide-toggle-bar {
+    background-color: #a8c150;
+  }
+
+  .mat-header-cell {
+    color: #FFFFFF;
+  }
+
+  button.secondary-button {
+    color: #a8c150 !important;
+    border-color: #a8c150 !important;
+  }
+
+  button.secondary-button {
+    color: #a8c150 !important;
+    border-color: #a8c150 !important;
+  }
+
+  .commonBg {
+    background-color: #A8C150;
+  }
+
+  .singleProductWrapper[selected=true] {
+    border-left: 5px solid #A8C150;
+  }
+
+  .borderTopCommon {
+    border-top: 1px solid #FFFFFF;
+  }
+}
+
+.formLabel {
+  line-height: 22px;
+  font-size: 14px !important;
+  font-weight: 600;
+  display: flex;
+  padding-bottom: 15px;
+  padding-left: 5px;
+}
+
+.borderRadius0 {
+  border-radius: 0 !important;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+mat-tab-header {
+  border-bottom: none !important;
+  .mat-tab-label-container {
+    .mat-tab-labels {
+      .mat-tab-label {
+        padding: 0 0 !important;
+        min-width: 10px;
+      }
+    }
+  }
+}
+
+div[role="tab"] {
+  margin-left: 40px !important;
+}
+
+.mat-drawer-container {
+  background-color: unset !important;
+}
+
+@mixin theme($theme) {
+  background: $theme;
+  color: #fff;
+}
+
+.mat-slide-toggle-thumb {
+  width: 10px !important;
+  height: 10px !important;
+  transform: translate(50%, 50%);
+}
+
+.mat-slide-toggle-bar {
+  border-radius: 15px !important;
+  height: 16px !important;
+}
+
+.mat-slide-toggle-thumb-container {
+  top: -2px !important;
+}
+
+.mat-slide-toggle[ioToggle].mat-checked:not(.mat-disabled)
+  .mat-slide-toggle-bar {
+  background-color: #287cf2;
+}
+
+.mat-slide-toggle[ioToggle].mat-checked:not(.mat-disabled)
+  .mat-slide-toggle-thumb {
+  background-color: #fff;
+}
+
+.mat-slide-toggle[themeToggle].mat-checked:not(.mat-disabled)
+  .mat-slide-toggle-bar {
+  background-color: black;
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb,
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: white !important;
+}

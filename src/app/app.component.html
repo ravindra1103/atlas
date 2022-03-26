@@ -1,0 +1,13 @@
+<div>
+  <mat-drawer-container autosize>
+    <mat-drawer mode="side" opened>
+      <div class="sideNavBg">
+        <app-side-nav [isToggled]="isToggled"></app-side-nav>
+      </div>
+    </mat-drawer>
+    <div class="mat-app-background">
+      <app-header (toggleEmitter)="onToggle();" (themeToggleEmitter)="onThemeToggle()"></app-header>
+      <app-sections [isToggled]="isToggled"></app-sections>
+    </div>
+  </mat-drawer-container>
+</div>

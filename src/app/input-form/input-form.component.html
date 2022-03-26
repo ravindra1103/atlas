@@ -1,0 +1,96 @@
+  <div class="minHeightPadding bgCommonInputForm" [ngClass]="inputFormData.disabledDiv ? 'disabledDiv' : ''">
+  <label class="formLabel formNameLableCommon">{{ inputFormData.label }}</label>
+  
+  <div *ngIf="inputFormData.showUnits" class="inputUnit">
+    Unit 1
+  </div>
+
+  <div class="items">
+    <div *ngFor="let inputField of inputFormData.inputRecordsToAccept">
+      <div [ngSwitch]="inputField.type">
+        <div *ngSwitchCase="'number'" class="inputField">
+          <span class="whiteSpaceNoWrap">
+            <label class="label inputFieldLabelCommon">{{ inputField.label }}</label>
+            <span [matTooltip]="inputField.infoMessage"
+             *ngIf="inputField.infoMessage" [matTooltipPosition]="'below'">
+              <mat-icon class="infoIcon" >
+                info
+              </mat-icon>
+            </span>
+          </span>
+          <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+            <input matInput type="number" required [(ngModel)]="inputField.valueToBind" />
+          </mat-form-field>
+        </div>
+
+        <div *ngSwitchCase="'dropdown'" class="inputField">
+          <span class="whiteSpaceNoWrap">
+            <label class="label inputFieldLabelCommon">{{ inputField.label }}</label>
+            <span [matTooltip]="inputField.infoMessage"
+            *ngIf="inputField.infoMessage" [matTooltipPosition]="'below'">
+             <mat-icon class="infoIcon" >
+               info
+             </mat-icon>
+           </span>
+          </span>
+          <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+            <mat-select [(ngModel)]="inputField.selectedValueToBind">
+              <mat-option
+                *ngFor="let valueToDisplay of inputField.valueToBind"
+                [value]="valueToDisplay"
+                >{{ valueToDisplay }}</mat-option
+              >
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div *ngSwitchCase="'currency'" class="inputField">
+          <span class="whiteSpaceNoWrap">
+            <label class="label inputFieldLabelCommon">{{ inputField.label }}</label>
+            <span [matTooltip]="inputField.infoMessage"
+            *ngIf="inputField.infoMessage" [matTooltipPosition]="'below'">
+             <mat-icon class="infoIcon" >
+               info
+             </mat-icon>
+           </span>
+          </span>
+          <mat-form-field appearance="outline" [ngClass]="getClassToApply()" >
+            <input matInput type="number" placeholder="0" required [(ngModel)]="inputField.valueToBind"/>
+            <span matPrefix>$&nbsp;</span>
+          </mat-form-field>
+        </div>
+
+        <div *ngSwitchCase="'percent'" class="inputField">
+          <span class="whiteSpaceNoWrap">
+            <label class="label inputFieldLabelCommon">{{ inputField.label }}</label>
+            <span [matTooltip]="inputField.infoMessage"
+            *ngIf="inputField.infoMessage" [matTooltipPosition]="'below'">
+             <mat-icon class="infoIcon" >
+               info
+             </mat-icon>
+           </span>
+          </span>
+          <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+            <input matInput type="number" placeholder="0" [(ngModel)]="inputField.valueToBind"/>
+            <span matSuffix>%&nbsp;</span>
+          </mat-form-field>
+        </div>
+
+        <div *ngSwitchCase="'text'" class="inputField">
+          <span class="whiteSpaceNoWrap">
+            <label class="label inputFieldLabelCommon">{{ inputField.label }}</label>
+            <span [matTooltip]="inputField.infoMessage"
+            *ngIf="inputField.infoMessage" [matTooltipPosition]="'below'">
+             <mat-icon class="infoIcon" >
+               info
+             </mat-icon>
+           </span>
+          </span>
+          <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+            <input matInput type="text" [(ngModel)]="inputField.valueToBind"/>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

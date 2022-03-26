@@ -1,0 +1,19 @@
+<div style="min-width: 70px;" *ngIf="!isToggled">
+    <div class="singleIconSideNav"><img src="/assets/images/logo_2.png" alt="image" class="singleGlobe"/></div>
+
+    <div class="displyFlex singleProductWrapper" *ngFor="let product of products" [attr.selected]="product.isSelected">
+        <div class="singleProduct"><img [src]="'/assets/images/'+product.imageName" alt="image" class="imgCommon"/></div>
+    </div>
+</div>
+
+<div style="min-width: 220px;" *ngIf="isToggled">
+    <div class="displyFlex mainLogo">
+        <div><img src="/assets/images/globe_logo_single.png" alt="image" class="mainLogoWidth"/></div>
+    </div>
+   
+    <div class="displyFlex singleProductWrapper" *ngFor="let product of products" [attr.selected]="product.isSelected">
+        <div class="singleProduct"><img [src]="'/assets/images/'+product.imageName" alt="image" class="imgCommon"/></div>
+        <div class="fontColor marginProductName">{{ product.name}}</div>
+    </div>
+    
+</div>

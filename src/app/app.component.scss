@@ -1,0 +1,23 @@
+@use '@angular/material' as mat;
+
+::ng-deep .mat-app-background {
+  // background-color: #F5F9FA;
+}
+
+::ng-deep .mat-tab-header {
+  border-bottom: 0px solid transparent;
+}
+
+.appSectionsMargin {
+    margin: 35px;
+}
+
+.sideNavBg {
+  background-color: #364150;
+  height: 100%;
+}
+
+::ng-deep .mat-drawer {
+  background-color: unset;
+}
+

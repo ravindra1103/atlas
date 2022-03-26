@@ -1,0 +1,76 @@
+table {
+    width: 100%;
+    max-height: 500px;
+    overflow: auto !important;
+  }
+
+.rangeCell {
+    font-weight: 600;
+}
+
+
+.warningIcon {
+    color: red ;
+}
+
+.warningMessageBg {
+    background: #FDDFDF75;
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    margin: auto;
+    width: 90%;
+    margin-top: 10px;
+}
+
+.message {
+    margin-top: 5px;
+    margin-left: 20px;
+}
+
+.spaceBeforeTable {
+    margin: 15px 15px 0 15px;
+}
+
+::ng-deep tr.mat-header-row {
+    height: 39px !important;
+}
+
+.minHeightPadding {
+    min-height: 400px;
+  }
+
+::ng-deep  td.mat-cell:first-of-type {
+    text-align: left;
+}
+
+::ng-deep  tr.mat-row {
+    height: 30px !important;
+}
+
+::ng-deep th.mat-header-cell:first-of-type,
+td.mat-cell:first-of-type,
+td.mat-footer-cell:first-of-type {
+  padding-left: 10px !important;
+}
+
+::ng-deep th.mat-header-cell:last-of-type,
+td.mat-cell:last-of-type,
+td.mat-footer-cell:last-of-type {
+  padding-right: 10px !important;
+}
+
+tr[messageTableHeader]
+{
+    display: flex;
+    padding-top: 13px;
+}
+
+.margin15Px {
+    margin: 15px;
+}
+
+.highlightPadding {
+    padding: 5px;
+    border-radius: 4px;
+}

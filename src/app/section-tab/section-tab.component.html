@@ -1,0 +1,45 @@
+<div class="formsWrapper">
+  <div
+    *ngFor="let singleForm of singleSectionTab.inputFormsToAccept"
+    class="singleFormWrapper"
+  >
+    <div *ngIf="singleForm.label !== 'Property Economics'">
+      <app-input-form
+        [inputFormData]="singleForm"
+        [isToggled]="isToggled"
+      ></app-input-form>
+    </div>
+
+    <div
+      *ngIf="
+        singleForm.label === 'Property Economics' &&
+        singleSectionTab.singleSectionName.labelValue === 'LTR'
+      "
+    >
+      <app-input-form
+        [inputFormData]="singleForm"
+        [isToggled]="isToggled"
+      ></app-input-form>
+    </div>
+    <div
+      *ngIf="
+        singleForm.label === 'Property Economics' &&
+        singleSectionTab.singleSectionName.labelValue !== 'LTR'
+      "
+    >
+      <app-property-economics-other
+        [inputFormData]="singleForm"
+        [isToggled]="isToggled"
+      ></app-property-economics-other>
+    </div>
+  </div>
+  <div class="singleFormWrapperView bgCommonInputForm">
+    <app-rate-stack></app-rate-stack>
+  </div>
+  <div class="singleFormWrapperView bgCommonInputForm">
+    <app-eligibility-loan-terms></app-eligibility-loan-terms>
+  </div>
+  <div class="singleFormWrapperView bgCommonInputForm">
+    <app-calculated-values></app-calculated-values>
+  </div>
+</div>
