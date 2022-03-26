@@ -170,9 +170,9 @@ const getInputFormsLtr = () => {
           type: CommonConstants.dropdownType,
           label: 'Lease Type',
           isMandatory: false,
-          keyToRead: 'lease_type',
-          valueToBind: ['Long Term'],
-          selectedValueToBind: 'Long Term'
+          valueToBind: ['Long Term', 'Short Term', 'Unoccupied'],
+          selectedValueToBind: 'Long Term',
+          keyToRead: 'lease_type'
         },
       ] as RecordInput[],
     },
@@ -196,6 +196,7 @@ const getInputFormsBridge = () => {
           isMandatory: true,
           valueToBind: ['Purchase', 'Delayed Purchase', 'Cash Out'],
           selectedValueToBind: 'Purchase',
+          keyToRead: 'loan_purpose'
         },
         {
           type: CommonConstants.numberType,
@@ -282,9 +283,7 @@ const getInputFormsBridge = () => {
       ] as RecordInput[],
     },
     {
-      label: 'Property Economics',
-      disabledDiv: false,
-      twoColumnLayout: true,
+      label: 'Exit Strategy',
       inputRecordsToAccept: [
         {
           type: CommonConstants.currencyType,
@@ -305,6 +304,9 @@ const getInputFormsBridge = () => {
           type: CommonConstants.dropdownType,
           label: 'Lease Type',
           isMandatory: false,
+          valueToBind: ['Long Term', 'Short Term', 'Unoccupied'],
+          selectedValueToBind: 'Long Term',
+          keyToRead: 'lease_type'
         },
       ] as RecordInput[],
     },
@@ -429,19 +431,23 @@ const getRehab = () => {
       twoColumnLayout: true,
       inputRecordsToAccept: [
         {
+          type: CommonConstants.dropdownType,
+          label: 'Exit Strategy',
+          isMandatory: false,
+          valueToBind: ['Hold', 'Sell'],
+          selectedValueToBind: 'Hold',
+          keyToRead:'exit_strategy'
+        },
+        {
           type: CommonConstants.currencyType,
-          label: 'Market Rent',
+          label: 'Gross Rents',
           isMandatory: false,
         },
         {
           type: CommonConstants.currencyType,
-          label: 'In-Place Rent',
+          label: 'Profitability',
           isMandatory: false,
-        },
-        {
-          type: CommonConstants.numberType,
-          label: 'Sq Ft',
-          isMandatory: false,
+          infoMessage: 'Amount of profit after a year of expenses and costs of selling at ARV'
         },
         {
           type: CommonConstants.dropdownType,
@@ -455,16 +461,16 @@ const getRehab = () => {
 };
 
 export const data = [
-  {
-    inputFormsToAccept: getInputFormsLtr(),
-    singleSectionName: { key: 'ltr', labelValue: 'LTR' },
-  },
-  {
-    inputFormsToAccept: getInputFormsBridge(),
-    singleSectionName: { key: 'bridgeLoan', labelValue: 'Bridge Loan' },
-  },
-  {
-    inputFormsToAccept: getRehab(),
-    singleSectionName: { key: 'rehab', labelValue: 'Rehab' },
-  },
+  // {
+  //   inputFormsToAccept: getInputFormsLtr(),
+  //   singleSectionName: { key: 'ltr', labelValue: 'LTR' },
+  // },
+  // {
+  //   inputFormsToAccept: getInputFormsBridge(),
+  //   singleSectionName: { key: 'bridgeLoan', labelValue: 'Bridge Loan' },
+  // },
+  // {
+  //   inputFormsToAccept: getRehab(),
+  //   singleSectionName: { key: 'rehab', labelValue: 'Rehab' },
+  // },
 ] as SingleSectionTab[];

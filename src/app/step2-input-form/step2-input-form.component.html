@@ -1,0 +1,186 @@
+<div
+  class="minHeightPadding bgCommonInputForm"
+  [ngClass]="disableDiv ? 'disabledDiv' : ''"
+>
+  <label class="formLabel formNameLableCommon">{{ formLabel }}</label>
+  <form [formGroup]="step2InputForm">
+    <div class="items">
+      <div class="inputField">
+        <span class="whiteSpaceNoWrap">
+          <label class="label inputFieldLabelCommon">Loan Amount</label>
+        </span>
+        <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+          <input
+            matInput
+            type="number"
+            placeholder="0"
+            required
+            formControlName="loan_amount"
+          />
+          <span matPrefix>$&nbsp;</span>
+        </mat-form-field>
+      </div>
+
+      <div class="inputField" *ngIf="tabNameSelected ==='LTR'">
+        <span class="whiteSpaceNoWrap">
+          <label class="label inputFieldLabelCommon">PPP Type</label>
+          <span
+            [matTooltip]="'The penalty is the same all years'"
+            [matTooltipPosition]="'below'"
+          >
+            <mat-icon class="infoIcon"> info </mat-icon>
+          </span>
+        </span>
+        <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+          <mat-select formControlName="ppp_type">
+            <mat-option
+              *ngFor="let valueToDisplay of pppTypes"
+              [value]="valueToDisplay"
+              >{{ valueToDisplay }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="inputField" *ngIf="tabNameSelected ==='LTR'">
+        <span class="whiteSpaceNoWrap">
+          <label class="label inputFieldLabelCommon">PPP Term</label>
+          <mat-icon class="infoIcon"> info </mat-icon>
+        </span>
+        <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+          <mat-select formControlName="ppp_term">
+            <mat-option
+              *ngFor="let valueToDisplay of pppTerms"
+              [value]="valueToDisplay"
+              >{{ valueToDisplay }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="inputField" *ngIf="tabNameSelected !=='LTR'">
+        <span class="whiteSpaceNoWrap">
+          <label class="label inputFieldLabelCommon">No. Units</label>
+        </span>
+        <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+          <input
+            matInput
+            type="number"
+            required
+            formControlName="units"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="inputField" *ngIf="tabNameSelected !=='LTR'">
+        <span class="whiteSpaceNoWrap">
+          <label class="label inputFieldLabelCommon">Zip Code</label>
+        </span>
+        <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+          <input matInput type="number" required formControlName="zip_code" />
+        </mat-form-field>
+      </div>
+
+
+      <div class="inputField">
+        <span class="whiteSpaceNoWrap">
+          <label class="label inputFieldLabelCommon">Annual Taxes</label>
+        </span>
+        <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+          <input
+            matInput
+            type="number"
+            placeholder="0"
+            required
+            formControlName="annual_taxes"
+          />
+          <span matPrefix>$&nbsp;</span>
+        </mat-form-field>
+      </div>
+
+      <div class="inputField">
+        <span class="whiteSpaceNoWrap">
+          <label class="label inputFieldLabelCommon">Annual HOI</label>
+        </span>
+        <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+          <input
+            matInput
+            type="number"
+            placeholder="0"
+            required
+            formControlName="annual_hoi"
+          />
+          <span matPrefix>$&nbsp;</span>
+        </mat-form-field>
+      </div>
+
+      <div class="inputField">
+        <span class="whiteSpaceNoWrap">
+          <label class="label inputFieldLabelCommon">Annual Other</label>
+        </span>
+        <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+          <input
+            matInput
+            type="number"
+            placeholder="0"
+            required
+            formControlName="annual_other"
+          />
+          <span matPrefix>$&nbsp;</span>
+        </mat-form-field>
+      </div>
+
+      <div class="inputField">
+        <span class="whiteSpaceNoWrap">
+          <label class="label inputFieldLabelCommon">Orig. Pts</label>
+        </span>
+        <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+          <input
+            matInput
+            type="number"
+            required
+            formControlName="origination_points"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="inputField">
+        <span class="whiteSpaceNoWrap">
+          <label class="label inputFieldLabelCommon">Broker Pts</label>
+        </span>
+        <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+          <input
+            matInput
+            type="number"
+            required
+            formControlName="broker_points"
+          />
+        </mat-form-field>
+      </div>
+
+      <div class="inputField">
+        <span class="whiteSpaceNoWrap">
+          <label class="label inputFieldLabelCommon">Other Costs</label>
+          <span
+            [matTooltip]="
+              '$1,250 Processing & Underwriting + est. $2,500 other fees + est. 1% for title'
+            "
+            [matTooltipPosition]="'below'"
+          >
+            <mat-icon class="infoIcon"> info </mat-icon>
+          </span>
+        </span>
+        <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+          <input
+            matInput
+            type="number"
+            placeholder="0"
+            required
+            formControlName="other_costs"
+          />
+          <span matPrefix>$&nbsp;</span>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</div>

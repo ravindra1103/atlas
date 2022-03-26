@@ -1,4 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
@@ -6,7 +12,10 @@ import { FormControl } from '@angular/forms';
   templateUrl: './rate-stack.component.html',
   styleUrls: ['./rate-stack.component.scss'],
 })
-export class RateStackComponent implements OnInit {
+export class RateStackComponent implements OnInit, OnChanges {
+  @Input()
+  rateStackResponseReceived: any;
+
   dataSource: any;
   displayedColumns: string[] = [];
 
@@ -15,21 +24,42 @@ export class RateStackComponent implements OnInit {
 
   constructor() {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    let newDataToBind = [];
+    if (this.rateStackResponseReceived?.length) {
+      for (let rateRow of this.rateStackResponseReceived) {
+        newDataToBind.push({
+          rate: rateRow['rate'],
+          dscr: rateRow['dscr'],
+          piti: rateRow['piti'],
+          price: rateRow['price'],
+          disc_prem: rateRow['disc'],
+        });
+      }
+      this.dataSource = newDataToBind;
+    }
+  }
+
   ngOnInit(): void {
     this.displayedColumns = ['rate', 'dscr', 'piti', 'price', 'disc_prem'];
-
-    this.dataSource = [
-      {
-        rate: '4.5%',
-        dscr: '0.14',
-        piti: '$3,546.8',
-        price: '-3',
-        disc_prem: '$721,000',
-      },
-    ];
   }
 
   switchState() {
     this.switchClicked = !this.switchClicked;
+    if (this.switchClicked) {
+      let newDataToBind = [];
+      if (this.rateStackResponseReceived?.length) {
+        for (let rateRow of this.rateStackResponseReceived) {
+          newDataToBind.push({
+            rate: rateRow['rate'],
+            dscr: rateRow['io_dscr'],
+            piti: rateRow['io_piti'],
+            price: rateRow['io_price'],
+            disc_prem: rateRow['io_disc'],
+          });
+        }
+        this.dataSource = newDataToBind;
+      }
+    }
   }
 }

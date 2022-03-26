@@ -31,8 +31,10 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import { SideNavComponent } from './side-nav/side-nav.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { HttpClientModule } from '@angular/common/http';
-import { PropertyEconomicsOtherComponent } from './property-economics-other/property-economics-other.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import { Step1InputFormComponent } from './step1-input-form/step1-input-form.component';
+import { Step2InputFormComponent } from './step2-input-form/step2-input-form.component';
+import { PropertyEconomicsInputFormComponent } from './property-economics-input-form/property-economics-input-form.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,9 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     EligibilityLoanTermsComponent,
     CalculatedValuesComponent,
     SideNavComponent,
-    PropertyEconomicsOtherComponent
+    Step1InputFormComponent,
+    Step2InputFormComponent,
+    PropertyEconomicsInputFormComponent
   ],
   imports: [
     BrowserModule,

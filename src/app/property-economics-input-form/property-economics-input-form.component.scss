@@ -1,0 +1,95 @@
+.inputField {
+    display: inline-grid;
+    flex-basis: 50%;
+    text-align: left;
+    padding: 0 5px;
+  }
+  
+  .label {
+    font-weight: 500;
+    line-height: 16px;
+  }
+  
+  ::ng-deep .mat-form-field-infix {
+    width: 85px !important;
+  }
+  
+  .items {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .minHeightPadding {
+    min-height: 276px;
+    padding: 10px;
+  }
+  
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-prefix,
+  .mat-form-field-appearance-outline .mat-form-field-suffix {
+    top: unset !important;
+  }
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-suffix {
+    top: unset !important;
+  }
+  
+  ::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0 0 0.5em 0 !important;
+  }
+  
+  ::ng-deep .mat-form-field-appearance-outline .mat-select-arrow-wrapper {
+    transform: unset !important;
+  }
+  
+  ::ng-deep .mat-form-field {
+    width: 95px !important;
+  }
+  
+  .width93Px {
+    width: 93px !important;
+  }
+  
+  .width105Px {
+    width: 105px !important;
+  }
+  
+  .disabledDiv {
+    pointer-events: none;
+    opacity: 0.4;
+  }
+  
+  .width145Px {
+    width: 145px !important;
+  }
+  
+  .width160Px {
+    width: 160px !important;
+  }
+  
+  .infoIcon {
+    font-size: 10px;
+    cursor: pointer;
+    height: 10px;
+    width: 10px;
+    padding-left: 5px;
+  }
+  
+  .whiteSpaceNoWrap {
+      white-space: nowrap;
+  }
+  
+  .flexDisplay {
+    display: flex;
+  }
+
+  .sell {
+    text-align: left;
+    padding: 10px 0px 10px 10px;
+    margin-top: -15px;
+  }
+
+  .inputUnit {
+    text-align: left;
+    padding-bottom: 10px;
+    padding-left: 5px;
+  }
+  

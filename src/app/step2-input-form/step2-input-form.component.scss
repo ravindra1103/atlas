@@ -1,7 +1,9 @@
 .inputField {
-    display: table-caption;
+    display: inline-grid;
     text-align: left;
     padding: 0 5px;
+   // flex-basis: 33.33%;
+
   }
   
   .label {
@@ -19,7 +21,7 @@
   }
   
   .minHeightPadding {
-    min-height: 400px;
+    min-height: 276px;
     padding: 10px;
   }
   
@@ -73,15 +75,12 @@
   }
   
   .whiteSpaceNoWrap {
-      white-space: nowrap;
+    white-space: nowrap;
   }
   
-  .flexDisplay {
-    display: flex;
-  }
-
-  .sell {
+  .inputUnit {
     text-align: left;
-    padding: 10px 0px 10px 10px;
-    margin-top: -15px;
+    padding-bottom: 10px;
+    padding-left: 5px;
   }
+  
