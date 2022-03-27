@@ -1,40 +1,32 @@
 <div class="formsWrapper">
-  <div
-    *ngFor="let singleForm of singleSectionTab.inputFormsToAccept"
-    class="singleFormWrapper"
-  >
-    <div *ngIf="singleForm.label !== 'Property Economics'">
-      <app-input-form
-        [inputFormData]="singleForm"
+  <div class="inputFormsContainer">
+    <div class="singleFormWrapper">
+      <app-step1-input-form
         [isToggled]="isToggled"
-      ></app-input-form>
+        [tabNameSelected]="tabNameSelected"
+        [dataToFillInForms]="dataToFillInForms"
+      ></app-step1-input-form>
     </div>
 
-    <div
-      *ngIf="
-        singleForm.label === 'Property Economics' &&
-        singleSectionTab.singleSectionName.labelValue === 'LTR'
-      "
-    >
-      <app-input-form
-        [inputFormData]="singleForm"
+    <div class="singleFormWrapper">
+      <app-step2-input-form
         [isToggled]="isToggled"
-      ></app-input-form>
+        [tabNameSelected]="tabNameSelected"
+        [dataToFillInForms]="dataToFillInForms"
+      ></app-step2-input-form>
     </div>
-    <div
-      *ngIf="
-        singleForm.label === 'Property Economics' &&
-        singleSectionTab.singleSectionName.labelValue !== 'LTR'
-      "
-    >
-      <app-property-economics-other
-        [inputFormData]="singleForm"
+
+    <div class="singleFormWrapper">
+      <app-property-economics-input-form
         [isToggled]="isToggled"
-      ></app-property-economics-other>
+        [tabNameSelected]="tabNameSelected"
+        [dataToFillInForms]="dataToFillInForms"
+      ></app-property-economics-input-form>
     </div>
   </div>
+
   <div class="singleFormWrapperView bgCommonInputForm">
-    <app-rate-stack></app-rate-stack>
+    <app-rate-stack [rateStackResponseReceived]="rateStackResponseReceived"></app-rate-stack>
   </div>
   <div class="singleFormWrapperView bgCommonInputForm">
     <app-eligibility-loan-terms></app-eligibility-loan-terms>

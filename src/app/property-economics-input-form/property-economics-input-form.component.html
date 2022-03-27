@@ -1,0 +1,246 @@
+<div
+  class="minHeightPadding bgCommonInputForm"
+  [ngClass]="disableDiv ? 'disabledDiv' : ''"
+>
+  <label class="formLabel formNameLableCommon">Property Economics</label>
+
+  <div *ngIf="tabNameSelected === 'LTR'">
+    <div *ngIf="!showSingleReplicaLayout">
+      <!-- <div class="inputUnit">Unit 1</div> -->
+      <form [formGroup]="propertyEconomicsInputForm">
+        <div formArrayName="multiReplicaLayout">
+            <div class="form-group"
+                 *ngFor="let item of [].constructor(replicasToShow || 0); let i = index">
+                 <div class="inputUnit">Unit {{i + 1}}</div>
+                 <div class="flexDisplay">
+                    <div class="inputField">
+                    <span class="whiteSpaceNoWrap">
+                        <label class="label inputFieldLabelCommon">Market Rent</label>
+                    </span>
+                    <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+                        <input
+                        matInput
+                        type="number"
+                        placeholder="0"
+                        [formControlName]="getName(i + '0')"
+                        />
+                        <span matPrefix>$&nbsp;</span>
+                    </mat-form-field>
+                    </div>
+      
+                <div class="inputField">
+                  <span class="whiteSpaceNoWrap">
+                    <label class="label inputFieldLabelCommon">In-Place Rent</label>
+                  </span>
+                  <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+                    <input
+                      matInput
+                      type="number"
+                      placeholder="0"
+                      [formControlName]="getName(i + '1')"
+                    />
+                    <span matPrefix>$&nbsp;</span>
+                  </mat-form-field>
+                </div>
+                </div>
+      
+              <div class="flexDisplay">
+                <div class="inputField">
+                  <span class="whiteSpaceNoWrap">
+                    <label class="label inputFieldLabelCommon">Sq Ft</label>
+                  </span>
+                  <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+                    <input
+                      matInput
+                      type="number"
+                      placeholder="0"
+                      [formControlName]="getName(i + '2')"
+                    />
+                    <span matPrefix>$&nbsp;</span>
+                  </mat-form-field>
+                </div>
+      
+                <div class="inputField">
+                  <span class="whiteSpaceNoWrap">
+                    <label class="label inputFieldLabelCommon">Lease Type</label>
+                  </span>
+                  <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+                    <mat-select [formControlName]="getName(i + '3')">
+                      <mat-option
+                        *ngFor="let valueToDisplay of leaseTypes"
+                        [value]="valueToDisplay"
+                        >{{ valueToDisplay }}</mat-option
+                      >
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="showSingleReplicaLayout">
+      <form [formGroup]="propertyEconomicsInputForm">
+         <div formGroupName="singleReplicaLayout">
+            <div class="flexDisplay">
+            <div class="inputField">
+                <span class="whiteSpaceNoWrap">
+                <label class="label inputFieldLabelCommon">Gross Rent</label>
+                </span>
+                <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+                <input
+                    matInput
+                    type="number"
+                    placeholder="0"
+                    formControlName="gross_rent"
+                />
+                <span matPrefix>$&nbsp;</span>
+                </mat-form-field>
+            </div>
+
+            <div class="inputField">
+                <span class="whiteSpaceNoWrap">
+                <label class="label inputFieldLabelCommon"
+                    >Expense ratio Amt.</label
+                >
+                </span>
+                <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+                <input
+                    matInput
+                    type="number"
+                    placeholder="0"
+                    formControlName="expense-ratio-amount"
+                />
+                <span matPrefix>$&nbsp;</span>
+                </mat-form-field>
+            </div>
+            </div>
+            <div class="flexDisplay">
+            <div class="inputField">
+                <span class="whiteSpaceNoWrap">
+                <label class="label inputFieldLabelCommon">Reserves</label>
+                </span>
+                <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+                <input
+                    matInput
+                    type="number"
+                    placeholder="0"
+                    formControlName="reserves"
+                />
+                <span matPrefix>$&nbsp;</span>
+                </mat-form-field>
+            </div>
+
+            <div class="flexDisplay">
+                <div class="inputField">
+                <span class="whiteSpaceNoWrap">
+                    <label class="label inputFieldLabelCommon">NOI</label>
+                </span>
+                <mat-form-field
+                    appearance="outline"
+                    [ngClass]="getClassToApply()"
+                >
+                    <input
+                    matInput
+                    type="number"
+                    placeholder="0"
+                    formControlName="noi"
+                    />
+                    <span matPrefix>$&nbsp;</span>
+                </mat-form-field>
+                </div>
+            </div>
+            </div>
+          </div>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="tabNameSelected !== 'LTR'">
+    <form [formGroup]="propertyEconomicsInputFormNonLtr">
+      <div>
+        <div class="flexDisplay">
+          <div class="inputField">
+            <span class="whiteSpaceNoWrap">
+              <label class="label inputFieldLabelCommon">Exit Strategy</label>
+            </span>
+            <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+              <mat-select formControlName="exit_strategy">
+                <mat-option
+                  *ngFor="let valueToDisplay of exitStrategy"
+                  [value]="valueToDisplay"
+                  >{{ valueToDisplay }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="inputField">
+            <span class="whiteSpaceNoWrap">
+              <label class="label inputFieldLabelCommon">Gross Rents</label>
+            </span>
+            <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+              <input
+                matInput
+                type="number"
+                placeholder="0"
+                formControlName="gross_rent"
+              />
+              <span matPrefix>$&nbsp;</span>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="sell">SELL</div>
+
+        <div class="flexDisplay">
+          <div class="inputField">
+            <span class="whiteSpaceNoWrap">
+              <label class="label inputFieldLabelCommon">Profitablity $</label>
+              <span
+                [matTooltip]="
+                  'Amount of profit after a year of expenses and costs of selling at ARV'
+                "
+                [matTooltipPosition]="'below'"
+              >
+                <mat-icon class="infoIcon"> info </mat-icon>
+              </span>
+            </span>
+            <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+              <input
+                matInput
+                type="text"
+                formControlName="profitability_amount"
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="inputField">
+            <span class="whiteSpaceNoWrap">
+              <label class="label inputFieldLabelCommon">Profitablity %</label>
+              <span
+                [matTooltip]="
+                  'Percentage of profit after a year of expenses and costs of selling at ARV'
+                "
+                [matTooltipPosition]="'below'"
+              >
+                <mat-icon class="infoIcon"> info </mat-icon>
+              </span>
+            </span>
+            <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+              <input
+                matInput
+                type="number"
+                placeholder="0"
+                formControlName="profitability_percent"
+              />
+              <span matSuffix>%&nbsp;</span>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="sell">HOLD</div>
+      </div>
+    </form>
+  </div>
+</div>

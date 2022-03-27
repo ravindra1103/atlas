@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { data as savedData } from '../data/ui-metadata';
-import { CommonConstants } from '../shared/constants';
+import { FormService } from '../shared/form.service';
 import { SingleSectionName, SingleSectionTab } from '../shared/interfaces';
 
 @Component({
@@ -17,11 +18,17 @@ export class SectionsComponent implements OnInit {
   typeSelected: string = this.typesOfLoan[0];
   atlasId: any;
   data: any = [...savedData];
+  tabNameSelected: string = 'LTR';
+  formDataEnteredByUser: any = {} as any;
+  activatedSub: Subscription = {} as Subscription;
+  rateStackResponseReceived: any;
 
   @Input()
   isToggled: boolean = false;
 
-  constructor(private http: HttpClient) {}
+  dataToFillInForms: any = {};
+
+  constructor(private http: HttpClient, private formsService: FormService) {}
 
   ngOnInit(): void {
     this.sections = [
@@ -31,10 +38,43 @@ export class SectionsComponent implements OnInit {
     ];
 
     this.tabDataToDisplay = this.getTabDataByIndex(0);
+
+    this.activatedSub = this.formsService.dataChangeEmitter.subscribe(
+      (changesReceived) => {
+        if (changesReceived?.key !== 'property_enomomics_multi') {
+          this.formDataEnteredByUser = {
+            input: {
+              loan_inputs: {
+                product_type: this.tabNameSelected,
+                ...(this.formDataEnteredByUser?.input?.loan_inputs || {}),
+                ...changesReceived['data'],
+              },
+              property_economics: {
+                ...(this.formDataEnteredByUser.input?.property_economics || {}),
+              },
+            },
+          };
+        } else {
+          this.formDataEnteredByUser = {
+            input: {
+              ...this.formDataEnteredByUser.input,
+              property_economics: {
+                property_units: [...changesReceived['data']],
+              },
+            },
+          };
+        }
+        console.log(
+          'after receiving new event, formDataEnteredByUser:',
+          this.formDataEnteredByUser
+        );
+      }
+    );
   }
 
   onTabChange(event: number) {
     this.tabDataToDisplay = this.getTabDataByIndex(event);
+    this.tabNameSelected = this.sections[event].labelValue;
   }
 
   getTabDataByIndex(index: number = 0): SingleSectionTab {
@@ -51,40 +91,27 @@ export class SectionsComponent implements OnInit {
   }
 
   getPricingById() {
-    console.log('atlasId', this.atlasId);
-    this.http
-      .get(
-        `http://pricingengineapi.azurewebsites.net/api/Price/GetLoanInputs/${this.atlasId}`
-      )
-      .subscribe((response: any) => {
-        const availableTabData = this.data.find(
-          (singleDataObj: SingleSectionTab) =>
-            singleDataObj.singleSectionName.labelValue ===
-            response.loan_inputs.product_type
-        );
-        this.fillObjectWithApiValues(availableTabData, response);
-      });
+    if (this.atlasId) {
+      this.http
+        .get(
+          `https://pricingengineapi.azurewebsites.net/api/Price/GetLoanInputs/${this.atlasId}`
+        )
+        .subscribe((response: any) => {
+          this.dataToFillInForms = response;
+        });
+    }
+    if (!this.atlasId && this.typeSelected === 'New Loan') {
+      this.http
+        .post(`https://pricingengineapi.azurewebsites.net/api/Price/GetPrice`, {
+          ...this.formDataEnteredByUser,
+        })
+        .subscribe((response: any) => {
+          this.rateStackResponseReceived = response;
+        });
+    }
   }
 
-  fillObjectWithApiValues(singleTabData: SingleSectionTab, response: any) {
-    for (let singleInputFormToAccept of singleTabData.inputFormsToAccept) {
-      for (let singleInputRecord of singleInputFormToAccept.inputRecordsToAccept) {
-        if (singleInputRecord.type === CommonConstants.dropdownType)
-        {
-          if (singleInputFormToAccept.label === "Property Economics")
-            singleInputRecord.selectedValueToBind = response.property_economics.property_units[0][singleInputRecord.keyToRead || ''];
-          else
-            singleInputRecord.selectedValueToBind =
-              response.loan_inputs[singleInputRecord.keyToRead || ''];
-        }
-        else {
-          if (singleInputFormToAccept.label === "Property Economics")
-            singleInputRecord.valueToBind = response.property_economics.property_units[0][singleInputRecord.keyToRead || ''];
-          else
-          singleInputRecord.valueToBind =
-            response.loan_inputs[singleInputRecord.keyToRead || ''];
-        }
-      }
-    }
+  ngOnDestroy(): void {
+    this.activatedSub?.unsubscribe();
   }
 }

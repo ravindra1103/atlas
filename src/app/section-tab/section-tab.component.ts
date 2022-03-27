@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { SingleSectionTab } from '../shared/interfaces';
 
 @Component({
@@ -12,7 +12,16 @@ export class SectionTabComponent implements OnInit {
   singleSectionTab: SingleSectionTab = {} as SingleSectionTab;
 
   @Input()
+  dataToFillInForms: any;
+
+  @Input()
   isToggled: boolean = false;
+
+  @Input()
+  tabNameSelected: string = '';
+
+  @Input()
+  rateStackResponseReceived: any;
   
   constructor() { }
 

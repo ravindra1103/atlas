@@ -92,7 +92,7 @@ export class EligibilityLoanTermsComponent implements OnInit {
     );
 
     this.http
-      .get(`http://pricingengineapi.azurewebsites.net/api/ConfigureEligibility`)
+      .get(`https://pricingengineapi.azurewebsites.net/api/ConfigureEligibility`)
       .subscribe((response: any) => {
         if (response?.data?.length) this.dataToLoad = response.data || [];
         this.dataToLoad[0].highlight = true;

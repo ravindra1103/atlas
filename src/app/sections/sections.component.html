@@ -1,5 +1,4 @@
 <div>
-  
   <div class="bodySection commonBgThemeBased bgTabCommon paddingLeft5Percent">
     <mat-tab-group
       mat-align-tabs="start"
@@ -13,23 +12,35 @@
   </div>
   <div class="pricingButton">
     <mat-form-field appearance="outline" class="loanType">
-      <mat-select (selectionChange)="typeChanged($event)" [value]="typeSelected">
-        <mat-option
-          *ngFor="let type of typesOfLoan"
-          [value]="type"
-          >{{ type }}</mat-option
-        >
+      <mat-select
+        (selectionChange)="typeChanged($event)"
+        [value]="typeSelected"
+      >
+        <mat-option *ngFor="let type of typesOfLoan" [value]="type">{{
+          type
+        }}</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="outline" class="loanType">
-      <input matInput type="number" placeholder="Enter Atlas ID" [disabled]="typeSelected !== 'Existing Loan'" [(ngModel)]="atlasId"/>
+      <input
+        matInput
+        type="number"
+        placeholder="Enter Atlas ID"
+        [disabled]="typeSelected !== 'Existing Loan'"
+        [(ngModel)]="atlasId"
+      />
     </mat-form-field>
-    <button mat-flat-button  color="primary" (click)="getPricingById()">
+    <button mat-flat-button color="primary" (click)="getPricingById()">
       Get Pricing
     </button>
   </div>
   <div class="bodySection">
-    <app-section-tab [singleSectionTab]="tabDataToDisplay" [isToggled]="isToggled"></app-section-tab>
+    <app-section-tab
+      [singleSectionTab]="tabDataToDisplay"
+      [isToggled]="isToggled"
+      [tabNameSelected]="tabNameSelected"
+      [dataToFillInForms]="dataToFillInForms"
+      [rateStackResponseReceived]="rateStackResponseReceived"
+    ></app-section-tab>
   </div>
-
 </div>
