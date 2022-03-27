@@ -18,7 +18,7 @@ export class SectionsComponent implements OnInit {
   typeSelected: string = this.typesOfLoan[0];
   atlasId: any;
   data: any = [...savedData];
-  tabNameSelected:string = "LTR";
+  tabNameSelected: string = 'LTR';
   formDataEnteredByUser: any = {} as any;
   activatedSub: Subscription = {} as Subscription;
   rateStackResponseReceived: any;
@@ -38,37 +38,38 @@ export class SectionsComponent implements OnInit {
     ];
 
     this.tabDataToDisplay = this.getTabDataByIndex(0);
-    
-    this.activatedSub = this.formsService.dataChangeEmitter.subscribe((changesReceived) => {
 
-      if (changesReceived?.key !== 'property_enomomics') {
-        this.formDataEnteredByUser = {
-          input: {
-            'loan_inputs': {
-              product_type: this.tabNameSelected,
-              ...(this.formDataEnteredByUser?.input?.loan_inputs || {}),
-              ...changesReceived['data']
+    this.activatedSub = this.formsService.dataChangeEmitter.subscribe(
+      (changesReceived) => {
+        if (changesReceived?.key !== 'property_enomomics_multi') {
+          this.formDataEnteredByUser = {
+            input: {
+              loan_inputs: {
+                product_type: this.tabNameSelected,
+                ...(this.formDataEnteredByUser?.input?.loan_inputs || {}),
+                ...changesReceived['data'],
+              },
+              property_economics: {
+                ...(this.formDataEnteredByUser.input?.property_economics || {}),
+              },
             },
-            'property_economics': {
-              ...(this.formDataEnteredByUser.input?.property_economics || {})
-            }
-          }
-        };
-      }
-      else {
-        this.formDataEnteredByUser = {
-          input: {
-            ...this.formDataEnteredByUser.input,
-            property_economics: {
-              property_units: [
-                ...changesReceived['data']
-              ]
-            }
-          }          
+          };
+        } else {
+          this.formDataEnteredByUser = {
+            input: {
+              ...this.formDataEnteredByUser.input,
+              property_economics: {
+                property_units: [...changesReceived['data']],
+              },
+            },
+          };
         }
+        console.log(
+          'after receiving new event, formDataEnteredByUser:',
+          this.formDataEnteredByUser
+        );
       }
-      //console.log('after receiving new event, formDataEnteredByUser:', this.formDataEnteredByUser);
-    });
+    );
   }
 
   onTabChange(event: number) {
@@ -92,21 +93,21 @@ export class SectionsComponent implements OnInit {
   getPricingById() {
     if (this.atlasId) {
       this.http
-      .get(
-        `https://pricingengineapi.azurewebsites.net/api/Price/GetLoanInputs/${this.atlasId}`
-      )
-      .subscribe((response: any) => {
-        this.dataToFillInForms = response;
-      });
+        .get(
+          `https://pricingengineapi.azurewebsites.net/api/Price/GetLoanInputs/${this.atlasId}`
+        )
+        .subscribe((response: any) => {
+          this.dataToFillInForms = response;
+        });
     }
-    if (!this.atlasId && this.typeSelected === 'New Loan')
-    {
-      this.http.post(`https://pricingengineapi.azurewebsites.net/api/Price/GetPrice`, {
-        ...this.formDataEnteredByUser
-      }).subscribe((response: any) => {
-        this.rateStackResponseReceived = response;
-        debugger;
-      });
+    if (!this.atlasId && this.typeSelected === 'New Loan') {
+      this.http
+        .post(`https://pricingengineapi.azurewebsites.net/api/Price/GetPrice`, {
+          ...this.formDataEnteredByUser,
+        })
+        .subscribe((response: any) => {
+          this.rateStackResponseReceived = response;
+        });
     }
   }
 

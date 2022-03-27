@@ -22,6 +22,8 @@
   .minHeightPadding {
     min-height: 276px;
     padding: 10px;
+    max-height: 276px;
+    overflow: auto;
   }
   
   ::ng-deep .mat-form-field-appearance-outline .mat-form-field-prefix,

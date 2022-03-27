@@ -6,27 +6,27 @@
 
   <div *ngIf="tabNameSelected === 'LTR'">
     <div *ngIf="!showSingleReplicaLayout">
-      <div class="inputUnit">Unit 1</div>
+      <!-- <div class="inputUnit">Unit 1</div> -->
       <form [formGroup]="propertyEconomicsInputForm">
         <div formArrayName="multiReplicaLayout">
             <div class="form-group"
-                 *ngFor="let hobbyControl of getControls(); let i = index">
-
-            <div class="flexDisplay">
-                <div class="inputField">
-                  <span class="whiteSpaceNoWrap">
-                    <label class="label inputFieldLabelCommon">Market Rent</label>
-                  </span>
-                  <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
-                    <input
-                      matInput
-                      type="number"
-                      placeholder="0"
-                      [formControlName]="'market_rent_' + i"
-                    />
-                    <span matPrefix>$&nbsp;</span>
-                  </mat-form-field>
-                </div>
+                 *ngFor="let item of [].constructor(replicasToShow || 0); let i = index">
+                 <div class="inputUnit">Unit {{i + 1}}</div>
+                 <div class="flexDisplay">
+                    <div class="inputField">
+                    <span class="whiteSpaceNoWrap">
+                        <label class="label inputFieldLabelCommon">Market Rent</label>
+                    </span>
+                    <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
+                        <input
+                        matInput
+                        type="number"
+                        placeholder="0"
+                        [formControlName]="getName(i + '0')"
+                        />
+                        <span matPrefix>$&nbsp;</span>
+                    </mat-form-field>
+                    </div>
       
                 <div class="inputField">
                   <span class="whiteSpaceNoWrap">
@@ -37,12 +37,12 @@
                       matInput
                       type="number"
                       placeholder="0"
-                      [formControlName]="'in_place_rent_' + i"
+                      [formControlName]="getName(i + '1')"
                     />
                     <span matPrefix>$&nbsp;</span>
                   </mat-form-field>
                 </div>
-              </div>
+                </div>
       
               <div class="flexDisplay">
                 <div class="inputField">
@@ -54,7 +54,7 @@
                       matInput
                       type="number"
                       placeholder="0"
-                      [formControlName]="'sq_ft_' + i"
+                      [formControlName]="getName(i + '2')"
                     />
                     <span matPrefix>$&nbsp;</span>
                   </mat-form-field>
@@ -65,7 +65,7 @@
                     <label class="label inputFieldLabelCommon">Lease Type</label>
                   </span>
                   <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
-                    <mat-select [formControlName]="'lease_type_' + i">
+                    <mat-select [formControlName]="getName(i + '3')">
                       <mat-option
                         *ngFor="let valueToDisplay of leaseTypes"
                         [value]="valueToDisplay"
@@ -77,8 +77,6 @@
               </div>
             </div>
         </div>
-
-        
       </form>
     </div>
 
