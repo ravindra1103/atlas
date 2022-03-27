@@ -41,7 +41,7 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
       
       if (this.dataToFillInForms.loan_inputs['loan_purpose'] !== 'Purchase')
         this.showAcquisitionDate = true;
-        
+
       this.step1InputForm.setValue({
         fico: this.dataToFillInForms.loan_inputs['fico'],
         loan_purpose: this.dataToFillInForms.loan_inputs['loan_purpose'],
@@ -50,7 +50,11 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
         appraised_value: this.dataToFillInForms.loan_inputs['appraised_value'],
         purchase_price: this.dataToFillInForms.loan_inputs['purchase_price'],
         upb:  this.dataToFillInForms.loan_inputs['upb'],
-        ...this.getExtraFieldResponseValues()
+        units: this.dataToFillInForms.loan_inputs['units'] || 0,
+        zip_code: this.dataToFillInForms.loan_inputs['zip_code'] || '-',
+        acquisition_date: this.dataToFillInForms.loan_inputs['acquisition_date'] || '-',
+        rehab_amount: this.dataToFillInForms.loan_inputs['rehab_amount'],
+        arv: this.dataToFillInForms.loan_inputs['arv'],
       })
     }
   }
@@ -64,7 +68,11 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
       appraised_value: new FormControl(null),
       purchase_price: new FormControl(null),
       upb: new FormControl(null),
-      ...this.getExtraFields() as {[key: string]: AbstractControl}
+      units: new FormControl(null),
+      zip_code: new FormControl(null),
+      acquisition_date: new FormControl(null),
+      rehab_amount: new FormControl(null),
+      arv: new FormControl(null),
     });
 
     this.step1InputForm.valueChanges.subscribe(formChanges => {
@@ -74,50 +82,6 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
       });
     });
     this.showAcquisitionDate = false
-  }
-
-  getExtraFieldResponseValues() {
-    switch(this.tabNameSelected) {
-      case 'LTR': 
-      return {
-        'units': this.dataToFillInForms.loan_inputs['units'] || 0,
-        'zip_code': this.dataToFillInForms.loan_inputs['zip_code'] || '-',
-        'acquisition_date': this.dataToFillInForms.loan_inputs['acquisition_date'] || '-',
-      };
-      case 'Bridge Loan':
-        return {
-          'acquisition_date': this.dataToFillInForms.loan_inputs['acquisition_date']
-        };
-      case 'Rehab':
-        return {
-          'rehab_amount': this.dataToFillInForms.loan_inputs['rehab_amount'],
-          'arv': this.dataToFillInForms.loan_inputs['arv'],
-          'acquisition_date': this.dataToFillInForms.loan_inputs['acquisition_date'],
-        };
-      default: return {};
-    }
-  }
-
-  getExtraFields() {
-    switch(this.tabNameSelected) {
-      case 'LTR': 
-      return {
-        'units': new FormControl(null),
-        'zip_code': new FormControl(null),
-        'acquisition_date': new FormControl(null),
-      };
-      case 'Bridge Loan':
-        return {
-          'acquisition_date': new FormControl(null),
-        };
-      case 'Rehab':
-        return {
-          'rehab_amount': new FormControl(null),
-          'arv': new FormControl(null),
-          'acquisition_date': new FormControl(null),
-        };
-      default: return {};
-    }
   }
 
   getClassToApply() {

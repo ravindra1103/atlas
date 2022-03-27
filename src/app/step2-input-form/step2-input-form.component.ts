@@ -56,7 +56,10 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
           this.dataToFillInForms.loan_inputs['origination_points'],
         broker_points: this.dataToFillInForms.loan_inputs['broker_points'],
         other_costs: this.dataToFillInForms.loan_inputs['other_costs'],
-        ...this.getExtraFieldResponseValues(),
+        ppp_type: this.dataToFillInForms.loan_inputs['ppp_type'],
+        ppp_term: this.dataToFillInForms.loan_inputs['ppp_term'],
+        units: this.dataToFillInForms.loan_inputs['units'],
+        zip_code: this.dataToFillInForms.loan_inputs['zip_code'],
       });
     }
   }
@@ -70,7 +73,10 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
       origination_points: new FormControl(null),
       broker_points: new FormControl(null),
       other_costs: new FormControl(null),
-      ...(this.getExtraFields() as { [key: string]: AbstractControl }),
+      units: new FormControl(null),
+      zip_code: new FormControl(null),
+      ppp_type: new FormControl('Hard'),
+      ppp_term: new FormControl('60 Mos.'),
     });
     this.step2InputForm.valueChanges.subscribe(formChanges => this.formsService.dataChangeEmitter.next(
       {
@@ -86,42 +92,5 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
   getClassToApply() {
     if (this.isToggled) return 'width93Px';
     return 'width105Px';
-  }
-
-  getExtraFields() {
-    switch (this.tabNameSelected) {
-      case 'LTR':
-        return {
-          ppp_type: new FormControl('Hard'),
-          ppp_term: new FormControl('60 Mos.'),
-        };
-      case 'Bridge Loan':
-      case 'Rehab':
-        return {
-          units: new FormControl(null),
-          zip_code: new FormControl(null),
-        };
-      default:
-        return {};
-    }
-  }
-
-  getExtraFieldResponseValues() {
-    switch (this.tabNameSelected) {
-      case 'LTR':
-        return {
-          ppp_type: this.dataToFillInForms.loan_inputs['ppp_type'],
-          ppp_term: this.dataToFillInForms.loan_inputs['ppp_term'],
-        };
-      case 'Bridge Loan':
-      case 'Rehab':
-        return {
-          units:
-            this.dataToFillInForms.loan_inputs['units'],
-          zip_code: this.dataToFillInForms.loan_inputs['zip_code'],
-        };
-      default:
-        return {};
-    }
   }
 }
