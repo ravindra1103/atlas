@@ -38,6 +38,10 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
 
   populateFormIfDataAvailable() {
     if (Object.keys(this.dataToFillInForms).length) {
+      
+      if (this.dataToFillInForms.loan_inputs['loan_purpose'] !== 'Purchase')
+        this.showAcquisitionDate = true;
+        
       this.step1InputForm.setValue({
         fico: this.dataToFillInForms.loan_inputs['fico'],
         loan_purpose: this.dataToFillInForms.loan_inputs['loan_purpose'],
@@ -137,7 +141,7 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
 
   onChangePropertyType(event: any) {
     if (event.value !== '5+ Units') {
-      
+
     }
   }
 }

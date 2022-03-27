@@ -154,9 +154,9 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
           this.replicasToShow !== eventData.data['units']
         ) {
           this.replicasToShow = eventData.data['units'];
-          (<FormArray>(
-            this.propertyEconomicsInputForm.get('multiReplicaLayout')
-          )).clear();
+          // (<FormArray>(
+          //   this.propertyEconomicsInputForm.get('multiReplicaLayout')
+          // )).clear();
 
           this.counter = 0;
           for (let i = 0; i < this.replicasToShow || 0; i++) {
@@ -202,9 +202,10 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
 
   getDataToEmit(formChanges: any) {
     if (!this.showSingleReplicaLayout) {
-      const dataToReturn = [
-        ...(this.dataToFillInForms?.property_economics?.property_units || []),
-      ];
+      // const dataToReturn = [
+      //   ...(this.dataToFillInForms?.property_economics?.property_units || []),
+      // ];
+      const dataToReturn = [];
       let count = 0;
       for (let i = 0; i < this.replicasToShow; i++) {
         dataToReturn.push({
