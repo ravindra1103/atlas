@@ -26,12 +26,13 @@
   </div>
 
   <div class="singleFormWrapperView bgCommonInputForm">
-    <app-rate-stack [rateStackResponseReceived]="rateStackResponseReceived"></app-rate-stack>
+    <app-rate-stack [rateStackResponseReceived]="rateStackResponseReceived" (onRateStackSelectedRow)="onRateStackSelectedRow($event)"></app-rate-stack>
   </div>
   <div class="singleFormWrapperView bgCommonInputForm">
-    <app-eligibility-loan-terms></app-eligibility-loan-terms>
+    <app-eligibility-loan-terms [tabNameSelected]="getKeyByName(tabNameSelected)"></app-eligibility-loan-terms>
   </div>
   <div class="singleFormWrapperView bgCommonInputForm">
-    <app-calculated-values></app-calculated-values>
+    <app-calculated-values [dataOfClickedRow]="rowToPass"></app-calculated-values>
   </div>
 </div>
+

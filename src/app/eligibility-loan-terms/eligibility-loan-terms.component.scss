@@ -32,6 +32,12 @@ table {
     margin: 15px 15px 0 15px;
 }
 
+.elibilityScroll {
+    min-height: 380px;
+    max-height: 380px;
+    overflow: auto;
+}
+
 ::ng-deep tr.mat-header-row {
     height: 39px !important;
 }

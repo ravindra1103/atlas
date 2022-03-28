@@ -1,4 +1,4 @@
-<div class="minHeightPadding commonBgThemeBased">
+<div class="commonBgThemeBased">
 <div class="borderBottomTabs">
   <div class="tabsContainerCommon">
     <mat-tab-group
@@ -11,37 +11,73 @@
     </mat-tab-group>
   </div>
 </div>
-  <div *ngIf="selectedTabIndex === 0" class="spaceBeforeTable">
-    <table mat-table [dataSource]="dataToLoad">
+  <div *ngIf="selectedTabIndex === 0" class="spaceBeforeTable elibilityScroll">
+    <table mat-table [dataSource]="dataToLoad" *ngIf="tabNameSelected !== 'rehab'">
       <ng-container matColumnDef="fico_range">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let element" class="rangeCell">
-          {{ element.fico_range }}
+          {{ element.fico_range}}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="purchase">
         <th mat-header-cell *matHeaderCellDef>Purchase</th>
         <td mat-cell *matCellDef="let element" class="blackShade">
-          <span [ngClass]="element.highlight ? 'commonBg highlightPadding':''">{{ element.purchase }}</span>
+          <span [ngClass]="element.highlight?.highlightpurchase ? 'commonBg highlightPadding':''">{{ element.purchase}}</span>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="rate_term">
         <th mat-header-cell *matHeaderCellDef>Rate/Term</th>
         <td mat-cell *matCellDef="let element" class="blackShade">
-          {{ element.rate_term }}
+          <span [ngClass]="element.highlight?.highlightrate_term ? 'commonBg highlightPadding':''">{{ element.rate_term }}</span>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="cashout">
         <th mat-header-cell *matHeaderCellDef>Cash Out</th>
         <td mat-cell *matCellDef="let element" class="blackShade">
-          {{ element.cashout }}
+          <span [ngClass]="element.highlight?.highlightcashout ? 'commonBg highlightPadding':''">
+          {{ element.cashout}}
+          </span>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <table mat-table [dataSource]="dataToLoad"  *ngIf="tabNameSelected === 'rehab'">
+      <ng-container matColumnDef="experience">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element" class="rangeCell">
+          {{ element.experience }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="ltarv">
+        <th mat-header-cell *matHeaderCellDef>Ltarv</th>
+        <td mat-cell *matCellDef="let element" class="blackShade">
+          <span>{{element.ltarv }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="ltv">
+        <th mat-header-cell *matHeaderCellDef>Ltv</th>
+        <td mat-cell *matCellDef="let element" class="blackShade">
+          <span>{{ element.ltv }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="rehab_level">
+        <th mat-header-cell *matHeaderCellDef>Rehab Level</th>
+        <td mat-cell *matCellDef="let element" class="blackShade">
+          <span>
+          {{element.rehab_level}}
+          </span>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsRehab"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumnsRehab"></tr>
     </table>
   </div>
   <div *ngIf="selectedTabIndex === 1" class="margin15Px">
@@ -49,7 +85,9 @@
       <ng-container matColumnDef="message">
         <th mat-header-cell *matHeaderCellDef>Message</th>
         <td mat-cell *matCellDef="let element">
+          <span>
           {{ element.message }}
+          </span>
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumnsTab2" messageTableHeader></tr>
