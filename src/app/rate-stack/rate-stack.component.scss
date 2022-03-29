@@ -93,3 +93,8 @@ td.mat-cell:first-of-type {
   left: 8px;
   top: 12px;
 }
+
+.highlightRow td{
+  border-bottom: 2px solid red;
+  border-top: 2px solid red;
+}

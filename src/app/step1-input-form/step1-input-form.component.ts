@@ -54,7 +54,7 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
         zip_code: this.dataToFillInForms.loan_inputs['zip_code'] || '-',
         acquisition_date: this.dataToFillInForms.loan_inputs['acquisition_date'] || '-',
         rehab_amount: this.dataToFillInForms.loan_inputs['rehab_amount'],
-        arv: this.dataToFillInForms.loan_inputs['arv'],
+        arv: this.dataToFillInForms.loan_inputs['arv'] || '',
       })
     }
   }

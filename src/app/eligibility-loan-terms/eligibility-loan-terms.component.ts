@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { FormService } from '../shared/form.service';
 
 @Component({
   selector: 'app-eligibility-loan-terms',
   templateUrl: './eligibility-loan-terms.component.html',
   styleUrls: ['./eligibility-loan-terms.component.scss'],
 })
-export class EligibilityLoanTermsComponent implements OnInit {
+export class EligibilityLoanTermsComponent implements OnInit, OnChanges {
   tabsToShow: string[] = ['Eligibility', 'Messages'];
   dataToLoad: any = [];
   messageToLoad: any = [];
@@ -18,62 +19,22 @@ export class EligibilityLoanTermsComponent implements OnInit {
     'rate_term',
     'cashout',
   ];
+  displayedColumnsRehab: string[] = [
+    'experience',
+    'ltarv',
+    'ltv',
+    'rehab_level',
+  ];
   displayedColumnsTab2: string[] = ['message'];
+  apiResponse: any;
+  maxLtvSelectedPercent: any = 0;
 
-  constructor(private http: HttpClient) {}
+  @Input()
+  tabNameSelected: string = 'LTR';
+
+  constructor(private http: HttpClient, private formsService: FormService) {}
 
   ngOnInit(): void {
-    this.dataToLoad.push(
-      {
-        fico_range: '740-850',
-        purchase: '80%',
-        rate_term: '80%',
-        cashout: '75%',
-        highlight: true,
-      },
-      {
-        fico_range: '720-739',
-        purchase: '80%',
-        rate_term: '80%',
-        cashout: '75%',
-      },
-      {
-        fico_range: '700-750',
-        purchase: '80%',
-        rate_term: '80%',
-        cashout: '75%',
-      },
-      {
-        fico_range: '640-650',
-        purchase: '70%',
-        rate_term: '70%',
-        cashout: '75%',
-      },
-      {
-        fico_range: '540-650',
-        purchase: '80%',
-        rate_term: '80%',
-        cashout: '75%',
-      },
-      {
-        fico_range: '440-550',
-        purchase: '70%',
-        rate_term: '60%',
-        cashout: '75%',
-      },
-      {
-        fico_range: '440-450',
-        purchase: '80%',
-        rate_term: '80%',
-        cashout: '75%',
-      },
-      {
-        fico_range: 'Foriegn National',
-        purchase: '60%',
-        rate_term: '60%',
-        cashout: '65%',
-      }
-    );
     this.messageToLoad.push(
       'FICO Score Should Be More Than 600',
       'FICO-2 Score Should Be More Than 600'
@@ -92,14 +53,63 @@ export class EligibilityLoanTermsComponent implements OnInit {
     );
 
     this.http
-      .get(`https://pricingengineapi.azurewebsites.net/api/ConfigureEligibility`)
+      .get(
+        `https://pricingengineapi.azurewebsites.net/api/ConfigureEligibility`
+      )
       .subscribe((response: any) => {
-        if (response?.data?.length) this.dataToLoad = response.data || [];
-        this.dataToLoad[0].highlight = true;
+        if (Object.keys(response)?.length) {
+          this.dataToLoad = response[this.tabNameSelected] || [];
+          this.apiResponse = response;
+        }
       });
+
+    this.formsService.dataChangeEmitter.subscribe((eventData: any) => {
+      if (eventData.key === 'step1') {
+        const ficoValueEntered = eventData.data['fico'];
+        const loanpurpose = eventData.data['loan_purpose'];
+        this.getHighLightColumn(ficoValueEntered, loanpurpose);
+      }
+    });
+  }
+
+  getHighLightColumn(fico: string, loanPurpose: string) {
+    let singleRow, nums;
+    for (let i = 0; i < this.dataToLoad?.length || 0; i++) {
+      singleRow = this.dataToLoad[i];
+      nums = singleRow['fico_range'].split('-');
+      singleRow['highlight'] = {};
+      let attrNameToUse = this.getAttrName(loanPurpose);
+
+      if (nums[0] <= fico && nums[1] >= fico) {
+        singleRow['highlight']['highlight' +attrNameToUse] = true;
+        this.maxLtvSelectedPercent = singleRow[attrNameToUse];
+      }
+      else {
+        singleRow['highlight']['highlight' + attrNameToUse] = false;
+        this.maxLtvSelectedPercent = 0;
+      }
+    }
+  }
+
+  ngOnChanges() {
+    if (this.apiResponse)
+      this.dataToLoad = this.apiResponse[this.tabNameSelected];
   }
 
   onTabChange(tabValue: number) {
     this.selectedTabIndex = tabValue;
+  }
+
+  getAttrName(purpose: string) {
+    switch (purpose) {
+      case 'Purchase':
+        return 'purchase';
+      case 'Rate/Term':
+        return 'rate_term';
+      case 'Cash Out':
+        return 'cashout';
+      default:
+        return '';
+    }
   }
 }

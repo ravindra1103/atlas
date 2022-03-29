@@ -22,9 +22,24 @@ export class SectionTabComponent implements OnInit {
 
   @Input()
   rateStackResponseReceived: any;
+
+  rowToPass: any = {};
   
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  getKeyByName(name: string) {
+    switch(name) {
+      case 'LTR': return 'ltr';
+      case 'Bridge Loan': return 'bridge';
+      case 'Rehab': return 'rehab';
+      default: return 'ltr';
+    }
+  }
+
+  onRateStackSelectedRow(eventData: any) {
+    this.rowToPass = eventData;
   }
 }

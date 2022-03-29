@@ -5,7 +5,7 @@ import {
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { FormService } from '../shared/form.service';
 
 @Component({
@@ -154,9 +154,6 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
           this.replicasToShow !== eventData.data['units']
         ) {
           this.replicasToShow = eventData.data['units'];
-          // (<FormArray>(
-          //   this.propertyEconomicsInputForm.get('multiReplicaLayout')
-          // )).clear();
 
           this.counter = 0;
           for (let i = 0; i < this.replicasToShow || 0; i++) {
@@ -191,7 +188,6 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
     
       this.propertyEconomicsInputFormNonLtr.valueChanges.subscribe(
         (formChanges) => {
-        debugger;
           this.formsService.dataChangeEmitter.next({
             key: 'property_enomomics_single',
             data: this.getDataToEmitForNonLtr(formChanges),
