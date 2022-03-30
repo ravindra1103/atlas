@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  environmentName: 'PROD',
+  apiUrl: 'https://pricingengineapi.azurewebsites.net/api'
 };
