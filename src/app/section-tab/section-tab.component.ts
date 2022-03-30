@@ -23,6 +23,8 @@ export class SectionTabComponent implements OnInit {
   @Input()
   rateStackResponseReceived: any;
 
+  @Input() formDataEnteredByUser: any;
+  
   rowToPass: any = {};
   
   constructor() { }

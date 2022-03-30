@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { FormService } from '../shared/form.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-eligibility-loan-terms',
@@ -54,7 +55,7 @@ export class EligibilityLoanTermsComponent implements OnInit, OnChanges {
 
     this.http
       .get(
-        `https://pricingengineapi.azurewebsites.net/api/ConfigureEligibility`
+        `${environment.apiUrl}/ConfigureEligibility`
       )
       .subscribe((response: any) => {
         if (Object.keys(response)?.length) {
@@ -83,6 +84,7 @@ export class EligibilityLoanTermsComponent implements OnInit, OnChanges {
       if (nums[0] <= fico && nums[1] >= fico) {
         singleRow['highlight']['highlight' +attrNameToUse] = true;
         this.maxLtvSelectedPercent = singleRow[attrNameToUse];
+        localStorage.setItem('maxLtvSelectedPercent', singleRow[attrNameToUse]);
       }
       else {
         singleRow['highlight']['highlight' + attrNameToUse] = false;
@@ -104,6 +106,8 @@ export class EligibilityLoanTermsComponent implements OnInit, OnChanges {
     switch (purpose) {
       case 'Purchase':
         return 'purchase';
+      case 'Delayed Purchase':
+          return 'purchase';        
       case 'Rate/Term':
         return 'rate_term';
       case 'Cash Out':

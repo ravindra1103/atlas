@@ -56,6 +56,29 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
         rehab_amount: this.dataToFillInForms.loan_inputs['rehab_amount'],
         arv: this.dataToFillInForms.loan_inputs['arv'] || '',
       })
+    } else {
+      this.step1InputForm = new FormGroup({
+        fico: new FormControl(null),
+        loan_purpose: new FormControl('Purchase'),
+        experience: new FormControl(null),
+        property_type: new FormControl('SFR'),
+        appraised_value: new FormControl(null),
+        purchase_price: new FormControl(null),
+        upb: new FormControl(null),
+        units: new FormControl(null),
+        zip_code: new FormControl(null),
+        acquisition_date: new FormControl(null),
+        rehab_amount: new FormControl(null),
+        arv: new FormControl(null),
+      });
+  
+      this.step1InputForm.valueChanges.subscribe(formChanges => {
+        this.formsService.dataChangeEmitter.next({
+          key: 'step1',
+          data: formChanges
+        });
+      });
+      this.showAcquisitionDate = false
     }
   }
 
