@@ -25,7 +25,18 @@ export class SectionsComponent implements OnInit {
     ltv: '-',
     propertyValue: '-',
     maxLoanAmount: '-',
-    tiAmount: '-'
+    tiAmount: '-',
+    loanPurpose: '-',
+    loan_amount: '-',
+    rate: '-',
+    fico: '-',
+    dscr: '-',
+    property_type: '-',
+    piti: '-',
+    disc: '-',
+    totalRents: '-',
+    totalCost: '-',
+    cashTo: '-'
   };
   activatedSub: Subscription = {} as Subscription;
   rateStackResponseReceived: any;
@@ -127,15 +138,18 @@ export class SectionsComponent implements OnInit {
   onRowToPass(data: any) {
     console.log(this.rateStackResponseReceived);
     console.log(this.formDataEnteredByUser);
-    this.rowToPass = data;
-    console.log(this.rowToPass);
+    console.log(data);
     const { input : { loan_inputs : {
       appraised_value,
       purchase_price,
       loan_amount,
       annual_hoi,
-      annual_taxes
+      annual_taxes,
+      loan_purpose,
+      fico,
+      property_type
     }}} = this.formDataEnteredByUser;
+    const { rate, dscr, piti, disc_prem: disc } = data;
     const maxLtvSelectedPercentValue = localStorage.getItem('maxLtvSelectedPercent');
     let maxLtvSelectedPercent = 0;
     const value = maxLtvSelectedPercentValue?.slice(0, -1);
@@ -147,7 +161,18 @@ export class SectionsComponent implements OnInit {
       ltv: loan_amount*1.0/propertyValue,
       propertyValue,
       maxLoanAmount: maxLtvSelectedPercent * propertyValue,
-      tiAmount: ((annual_taxes * 1.0) + annual_hoi)/12
+      tiAmount: ((annual_taxes * 1.0) + annual_hoi)/12,
+      loan_purpose,
+      loan_amount,
+      rate,
+      fico,
+      dscr,
+      property_type,
+      piti,
+      disc,
+      totalRents: '-',
+      totalCost: '-',
+      cashTo: '-'
     };
   }
 }
