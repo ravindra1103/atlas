@@ -37,7 +37,7 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
   counter = 0;
   mapOfCounter = new Map();
 
-  constructor(private formsService: FormService) {}
+  constructor(private formsService: FormService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.tabNameSelected === 'LTR') {
@@ -48,6 +48,7 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
   }
 
   populateFormIfDataAvailableLtr() {
+    console.log("this.dataToFillInForms.populateFormIfDataAvailableLtr", this.dataToFillInForms)
     if (Object.keys(this.dataToFillInForms).length) {
       this.replicasToShow = this.dataToFillInForms.loan_inputs.units || 0;
       this.showSingleReplicaLayout =
@@ -108,6 +109,76 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
           noi: this.dataToFillInForms.loan_inputs['noi'],
         });
       }
+    } else {
+      this.propertyEconomicsInputForm = new FormGroup({
+        singleReplicaLayout: new FormGroup({
+          gross_rent: new FormControl(null),
+          'expense-ratio-amount': new FormControl(null),
+          reserves: new FormControl(null),
+          noi: new FormControl(null),
+        }),
+        multiReplicaLayout: new FormArray([]),
+      });
+
+      this.propertyEconomicsInputFormNonLtr = new FormGroup({
+        exit_strategy: new FormControl('Hold'),
+        gross_rent: new FormControl(null),
+        profitability_amount: new FormControl(null),
+        profitability_percent: new FormControl(null),
+      });
+
+      this.formsService.dataChangeEmitter.subscribe((eventData: any) => {
+        if (eventData.key === 'step1') {
+          this.disableDiv =
+            !eventData.data['fico'] || !eventData.data['appraised_value'];
+
+          this.showSingleReplicaLayout =
+            eventData.data['property_type'] === '5+ Units';
+          if (
+            eventData.data['units'] != null &&
+            this.replicasToShow !== eventData.data['units']
+          ) {
+            this.replicasToShow = eventData.data['units'];
+
+            this.counter = 0;
+            for (let i = 0; i < this.replicasToShow || 0; i++) {
+              (<FormArray>(
+                this.propertyEconomicsInputForm.get('multiReplicaLayout')
+              )).push(new FormControl(null));
+              (<FormArray>(
+                this.propertyEconomicsInputForm.get('multiReplicaLayout')
+              )).push(new FormControl(null));
+              (<FormArray>(
+                this.propertyEconomicsInputForm.get('multiReplicaLayout')
+              )).push(new FormControl(null));
+              (<FormArray>(
+                this.propertyEconomicsInputForm.get('multiReplicaLayout')
+              )).push(new FormControl('Long Term'));
+              this.mapOfCounter.set(`${i}0`, this.counter++);
+              this.mapOfCounter.set(`${i}1`, this.counter++);
+              this.mapOfCounter.set(`${i}2`, this.counter++);
+              this.mapOfCounter.set(`${i}3`, this.counter++);
+            }
+          }
+        }
+      });
+
+      this.propertyEconomicsInputForm.valueChanges.subscribe((formChanges) => {
+        this.formsService.dataChangeEmitter.next({
+          key: this.showSingleReplicaLayout ? 'property_enomomics_single_ltr' : 'property_enomomics_multi',
+          //@ts-ignore
+          data: this.showSingleReplicaLayout ? this.getDataToEmit(formChanges) : [...this.getDataToEmit(formChanges)],
+        });
+      });
+
+      this.propertyEconomicsInputFormNonLtr.valueChanges.subscribe(
+        (formChanges) => {
+          this.formsService.dataChangeEmitter.next({
+            key: 'property_enomomics_single',
+            data: this.getDataToEmitForNonLtr(formChanges),
+          });
+        }
+      );
     }
   }
 
@@ -121,6 +192,76 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
         profitability_percent:
           this.dataToFillInForms.loan_inputs['profitability_percent'],
       });
+    } else {
+      this.propertyEconomicsInputForm = new FormGroup({
+        singleReplicaLayout: new FormGroup({
+          gross_rent: new FormControl(null),
+          'expense-ratio-amount': new FormControl(null),
+          reserves: new FormControl(null),
+          noi: new FormControl(null),
+        }),
+        multiReplicaLayout: new FormArray([]),
+      });
+
+      this.propertyEconomicsInputFormNonLtr = new FormGroup({
+        exit_strategy: new FormControl('Hold'),
+        gross_rent: new FormControl(null),
+        profitability_amount: new FormControl(null),
+        profitability_percent: new FormControl(null),
+      });
+
+      this.formsService.dataChangeEmitter.subscribe((eventData: any) => {
+        if (eventData.key === 'step1') {
+          this.disableDiv =
+            !eventData.data['fico'] || !eventData.data['appraised_value'];
+
+          this.showSingleReplicaLayout =
+            eventData.data['property_type'] === '5+ Units';
+          if (
+            eventData.data['units'] != null &&
+            this.replicasToShow !== eventData.data['units']
+          ) {
+            this.replicasToShow = eventData.data['units'];
+
+            this.counter = 0;
+            for (let i = 0; i < this.replicasToShow || 0; i++) {
+              (<FormArray>(
+                this.propertyEconomicsInputForm.get('multiReplicaLayout')
+              )).push(new FormControl(null));
+              (<FormArray>(
+                this.propertyEconomicsInputForm.get('multiReplicaLayout')
+              )).push(new FormControl(null));
+              (<FormArray>(
+                this.propertyEconomicsInputForm.get('multiReplicaLayout')
+              )).push(new FormControl(null));
+              (<FormArray>(
+                this.propertyEconomicsInputForm.get('multiReplicaLayout')
+              )).push(new FormControl('Long Term'));
+              this.mapOfCounter.set(`${i}0`, this.counter++);
+              this.mapOfCounter.set(`${i}1`, this.counter++);
+              this.mapOfCounter.set(`${i}2`, this.counter++);
+              this.mapOfCounter.set(`${i}3`, this.counter++);
+            }
+          }
+        }
+      });
+
+      this.propertyEconomicsInputForm.valueChanges.subscribe((formChanges) => {
+        this.formsService.dataChangeEmitter.next({
+          key: this.showSingleReplicaLayout ? 'property_enomomics_single_ltr' : 'property_enomomics_multi',
+          //@ts-ignore
+          data: this.showSingleReplicaLayout ? this.getDataToEmit(formChanges) : [...this.getDataToEmit(formChanges)],
+        });
+      });
+
+      this.propertyEconomicsInputFormNonLtr.valueChanges.subscribe(
+        (formChanges) => {
+          this.formsService.dataChangeEmitter.next({
+            key: 'property_enomomics_single',
+            data: this.getDataToEmitForNonLtr(formChanges),
+          });
+        }
+      );
     }
   }
 
@@ -178,22 +319,22 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
       }
     });
 
-      this.propertyEconomicsInputForm.valueChanges.subscribe((formChanges) => {
-        this.formsService.dataChangeEmitter.next({
-          key: this.showSingleReplicaLayout ?  'property_enomomics_single_ltr' : 'property_enomomics_multi',
-          //@ts-ignore
-          data: this.showSingleReplicaLayout ? this.getDataToEmit(formChanges) : [...this.getDataToEmit(formChanges)],
-        });
+    this.propertyEconomicsInputForm.valueChanges.subscribe((formChanges) => {
+      this.formsService.dataChangeEmitter.next({
+        key: this.showSingleReplicaLayout ? 'property_enomomics_single_ltr' : 'property_enomomics_multi',
+        //@ts-ignore
+        data: this.showSingleReplicaLayout ? this.getDataToEmit(formChanges) : [...this.getDataToEmit(formChanges)],
       });
-    
-      this.propertyEconomicsInputFormNonLtr.valueChanges.subscribe(
-        (formChanges) => {
-          this.formsService.dataChangeEmitter.next({
-            key: 'property_enomomics_single',
-            data: this.getDataToEmitForNonLtr(formChanges),
-          });
-        }
-      );
+    });
+
+    this.propertyEconomicsInputFormNonLtr.valueChanges.subscribe(
+      (formChanges) => {
+        this.formsService.dataChangeEmitter.next({
+          key: 'property_enomomics_single',
+          data: this.getDataToEmitForNonLtr(formChanges),
+        });
+      }
+    );
   }
 
   getDataToEmitForNonLtr(formChanges: any) {
@@ -201,8 +342,8 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
       exit_strategy: formChanges['exit_strategy'],
       profitability_amount:
         formChanges['profitability_amount'],
-        profitability_percent: formChanges['profitability_percent'],
-        mf_gross_rents: formChanges['gross_rent'],
+      profitability_percent: formChanges['profitability_percent'],
+      mf_gross_rents: formChanges['gross_rent'],
     };
   }
 

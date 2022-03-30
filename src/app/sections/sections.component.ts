@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { data as savedData } from '../data/ui-metadata';
 import { FormService } from '../shared/form.service';
 import { SingleSectionName, SingleSectionTab } from '../shared/interfaces';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-sections',
@@ -64,10 +65,6 @@ export class SectionsComponent implements OnInit {
             },
           };
         }
-        console.log(
-          'after receiving new event, formDataEnteredByUser:',
-          this.formDataEnteredByUser
-        );
       }
     );
   }
@@ -87,14 +84,18 @@ export class SectionsComponent implements OnInit {
         (loan) => loan.toLowerCase() === selectedLoanText.value.toLowerCase()
       ) || '';
 
-    if (this.typeSelected === 'New Loan') this.atlasId = '';
+    if (this.typeSelected === 'New Loan') {
+      console.log("came here");
+      this.atlasId = '';
+      this.dataToFillInForms = {};
+    }
   }
 
   getPricingById() {
     if (this.atlasId) {
       this.http
         .get(
-          `https://pricingengineapi.azurewebsites.net/api/Price/GetLoanInputs/${this.atlasId}`
+          `${environment.apiUrl}/Price/GetLoanInputs/${this.atlasId}`
         )
         .subscribe((response: any) => {
           this.dataToFillInForms = response;
@@ -102,7 +103,7 @@ export class SectionsComponent implements OnInit {
     }
     if (!this.atlasId && this.typeSelected === 'New Loan') {
       this.http
-        .post(`https://pricingengineapi.azurewebsites.net/api/Price/GetPrice`, {
+        .post(`${environment.apiUrl}/Price/GetPrice`, {
           ...this.formDataEnteredByUser,
         })
         .subscribe((response: any) => {
