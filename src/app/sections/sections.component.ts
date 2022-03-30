@@ -21,11 +21,30 @@ export class SectionsComponent implements OnInit {
   data: any = [...savedData];
   tabNameSelected: string = 'LTR';
   formDataEnteredByUser: any = {} as any;
+  calculatedValues: any = {
+    ltv: '-',
+    propertyValue: '-',
+    maxLoanAmount: '-',
+    tiAmount: '-',
+    loanPurpose: '-',
+    loan_amount: '-',
+    rate: '-',
+    fico: '-',
+    dscr: '-',
+    property_type: '-',
+    piti: '-',
+    disc: '-',
+    totalRents: '-',
+    totalCost: '-',
+    cashTo: '-'
+  };
   activatedSub: Subscription = {} as Subscription;
   rateStackResponseReceived: any;
 
   @Input()
   isToggled: boolean = false;
+
+  rowToPass: any = {};
 
   dataToFillInForms: any = {};
 
@@ -114,5 +133,46 @@ export class SectionsComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.activatedSub?.unsubscribe();
+  }
+
+  onRowToPass(data: any) {
+    console.log(this.rateStackResponseReceived);
+    console.log(this.formDataEnteredByUser);
+    console.log(data);
+    const { input : { loan_inputs : {
+      appraised_value,
+      purchase_price,
+      loan_amount,
+      annual_hoi,
+      annual_taxes,
+      loan_purpose,
+      fico,
+      property_type
+    }}} = this.formDataEnteredByUser;
+    const { rate, dscr, piti, disc_prem: disc } = data;
+    const maxLtvSelectedPercentValue = localStorage.getItem('maxLtvSelectedPercent');
+    let maxLtvSelectedPercent = 0;
+    const value = maxLtvSelectedPercentValue?.slice(0, -1);
+    if (value) {
+      maxLtvSelectedPercent = +value;
+    }
+    let propertyValue = Math.min(appraised_value, purchase_price);
+    this.calculatedValues = {
+      ltv: loan_amount*1.0/propertyValue,
+      propertyValue,
+      maxLoanAmount: maxLtvSelectedPercent * propertyValue,
+      tiAmount: ((annual_taxes * 1.0) + annual_hoi)/12,
+      loan_purpose,
+      loan_amount,
+      rate,
+      fico,
+      dscr,
+      property_type,
+      piti,
+      disc,
+      totalRents: '-',
+      totalCost: '-',
+      cashTo: '-'
+    };
   }
 }

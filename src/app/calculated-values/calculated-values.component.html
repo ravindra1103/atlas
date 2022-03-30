@@ -15,25 +15,25 @@
         <mat-grid-tile class="topLeft">
           <div class="cellWrapper">
             <div class="calcDLabel">LTV</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.ltv}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile class="topRight">
           <div class="cellWrapper">
             <div class="calcDLabel">Property Value</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.propertyValue}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile class="bottomLeft">
           <div class="cellWrapper">
             <div class="calcDLabel">Max Loan Amount</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.maxLoanAmount}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile class="bottomRight">
           <div class="cellWrapper">
             <div class="calcDLabel">T&I Amount</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.tiAmount}}</div>
           </div>
         </mat-grid-tile>
       </mat-grid-list>
@@ -44,79 +44,79 @@
         <mat-grid-tile [colspan]="'4'" class="topLeft">
           <div class="cellWrapper">
             <div class="calcDLabel">Loan Purpose</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.loan_purpose}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="'4'">
           <div class="cellWrapper">
             <div class="calcDLabel">LTV</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.ltv}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="'4'" class="topRight">
           <div class="cellWrapper">
             <div class="calcDLabel">Loan Amount</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.loan_amount}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="'4'">
           <div class="cellWrapper">
             <div class="calcDLabel">Rate</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.rate}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="'4'">
           <div class="cellWrapper">
             <div class="calcDLabel">FICO</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.fico}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="'4'">
           <div class="cellWrapper">
             <div class="calcDLabel">DSCR</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.dscr}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="'4'">
           <div class="cellWrapper">
             <div class="calcDLabel">Property Type</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.property_type}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="'4'">
           <div class="cellWrapper">
             <div class="calcDLabel">PITI</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.piti}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="'4'">
           <div class="cellWrapper">
             <div class="calcDLabel">Property Value</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.propertyValue}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="'4'">
           <div class="cellWrapper">
             <div class="calcDLabel">Disc./(Prem)</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.disc}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="'8'">
           <div class="cellWrapper">
             <div class="calcDLabel">Total Rents / Gross Rents</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.totalRents}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="'4'" class="bottomLeft">
           <div class="cellWrapper">
             <div class="calcDLabel">Total Cost</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.totalCost}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="'8'" class="bottomRight">
           <div class="cellWrapper">
             <div class="calcDLabel">Cash To/(From)</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.cashTo}}</div>
           </div>
         </mat-grid-tile>
       </mat-grid-list>

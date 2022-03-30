@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { SingleSectionTab } from '../shared/interfaces';
 
 @Component({
@@ -24,8 +24,10 @@ export class SectionTabComponent implements OnInit {
   rateStackResponseReceived: any;
 
   @Input() formDataEnteredByUser: any;
+
+  @Input() calculatedValues: any;
   
-  rowToPass: any = {};
+  @Output() onRowSelection = new EventEmitter();
   
   constructor() { }
 
@@ -42,6 +44,6 @@ export class SectionTabComponent implements OnInit {
   }
 
   onRateStackSelectedRow(eventData: any) {
-    this.rowToPass = eventData;
+    this.onRowSelection.emit(eventData);
   }
 }
