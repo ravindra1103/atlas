@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
     environmentName: 'QA',
-    apiUrl: 'https://pricingengineapi.azurewebsites.net/api',
+    apiUrl: 'https://pricingengineapiqa.azurewebsites.net/api',
   };
   
