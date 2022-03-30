@@ -16,13 +16,15 @@ export class CalculatedValuesComponent implements OnInit, OnChanges {
 
   @Input() rateStackResponseReceived: any;
 
+  @Input() formDataEnteredByUser: any;
+
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
     // TODO: Calculate the value here
     console.log('data clicked available-', this.dataOfClickedRow);
     console.log("this.rateStackResponseReceived", this.rateStackResponseReceived);
-    console.log("this.dataToFillInForms", this.dataToFillInForms);
+    console.log("this.formDataEnteredByUser", this.formDataEnteredByUser);
   }
 
   ngOnInit(): void {

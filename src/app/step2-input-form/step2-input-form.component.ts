@@ -58,8 +58,8 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
         other_costs: this.dataToFillInForms.loan_inputs['other_costs'],
         ppp_type: this.dataToFillInForms.loan_inputs['ppp_type'],
         ppp_term: this.dataToFillInForms.loan_inputs['ppp_term'],
-        units: this.dataToFillInForms.loan_inputs['units'],
-        zip_code: this.dataToFillInForms.loan_inputs['zip_code'],
+        step2_units: this.dataToFillInForms.loan_inputs['step2_units'],
+        step2_zip_code: this.dataToFillInForms.loan_inputs['step2_zip_code'],
       });
     } else {
       this.step2InputForm = new FormGroup({
@@ -70,8 +70,8 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
         origination_points: new FormControl(null),
         broker_points: new FormControl(null),
         other_costs: new FormControl(null),
-        units: new FormControl(null),
-        zip_code: new FormControl(null),
+        step2_units: new FormControl(0),
+        step2_zip_code: new FormControl(null),
         ppp_type: new FormControl('Hard'),
         ppp_term: new FormControl('60 Mos.'),
       });
@@ -96,8 +96,8 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
       origination_points: new FormControl(null),
       broker_points: new FormControl(null),
       other_costs: new FormControl(null),
-      units: new FormControl(null),
-      zip_code: new FormControl(null),
+      step2_units: new FormControl(0),
+      step2_zip_code: new FormControl(null),
       ppp_type: new FormControl('Hard'),
       ppp_term: new FormControl('60 Mos.'),
     });
