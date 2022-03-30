@@ -15,25 +15,25 @@
         <mat-grid-tile class="topLeft">
           <div class="cellWrapper">
             <div class="calcDLabel">LTV</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.ltv}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile class="topRight">
           <div class="cellWrapper">
             <div class="calcDLabel">Property Value</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.propertyValue}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile class="bottomLeft">
           <div class="cellWrapper">
             <div class="calcDLabel">Max Loan Amount</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.maxLoanAmount}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile class="bottomRight">
           <div class="cellWrapper">
             <div class="calcDLabel">T&I Amount</div>
-            <div class="calcDValue">-</div>
+            <div class="calcDValue">{{calculatedValues?.tiAmount}}</div>
           </div>
         </mat-grid-tile>
       </mat-grid-list>
