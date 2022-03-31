@@ -29,6 +29,8 @@ export class SectionTabComponent implements OnInit {
   
   @Output() onRowSelection = new EventEmitter();
   
+  @Input() messages: any;
+  
   constructor() { }
 
   ngOnInit(): void {

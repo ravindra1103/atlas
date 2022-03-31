@@ -21,6 +21,7 @@ export class SectionsComponent implements OnInit {
   data: any = [...savedData];
   tabNameSelected: string = 'LTR';
   formDataEnteredByUser: any = {} as any;
+  messages: any = '';
   calculatedValues: any = {
     ltv: '-',
     propertyValue: '-',
@@ -158,10 +159,10 @@ export class SectionsComponent implements OnInit {
     }
     let propertyValue = Math.min(appraised_value, purchase_price);
     this.calculatedValues = {
-      ltv: loan_amount*1.0/propertyValue,
-      propertyValue,
-      maxLoanAmount: maxLtvSelectedPercent * propertyValue,
-      tiAmount: ((annual_taxes * 1.0) + annual_hoi)/12,
+      ltv: (loan_amount*1.0/propertyValue).toFixed(2),
+      propertyValue: (propertyValue * 1.0).toFixed(2),
+      maxLoanAmount: (maxLtvSelectedPercent * propertyValue * 1.0).toFixed(2),
+      tiAmount: (((annual_taxes * 1.0) + annual_hoi)/12).toFixed(2),
       loan_purpose,
       loan_amount,
       rate,

@@ -30,7 +30,7 @@
     (onRateStackSelectedRow)="onRateStackSelectedRow($event)"></app-rate-stack>
   </div>
   <div class="singleFormWrapperView bgCommonInputForm">
-    <app-eligibility-loan-terms [tabNameSelected]="getKeyByName(tabNameSelected)"></app-eligibility-loan-terms>
+    <app-eligibility-loan-terms [messages]="messages" [tabNameSelected]="getKeyByName(tabNameSelected)"></app-eligibility-loan-terms>
   </div>
   <div class="singleFormWrapperView bgCommonInputForm">
     <app-calculated-values 

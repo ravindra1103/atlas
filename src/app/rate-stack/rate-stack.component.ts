@@ -71,6 +71,21 @@ export class RateStackComponent implements OnInit, OnChanges {
         }
         this.dataSource = newDataToBind;
       }
+    }else {
+      let newDataToBind = [];
+      if (this.rateStackResponseReceived?.length) {
+        for (let rateRow of this.rateStackResponseReceived) {
+          newDataToBind.push({
+            id: count++,
+            rate: rateRow['rate'],
+            dscr: rateRow['dscr'],
+            piti: rateRow['piti'],
+            price: rateRow['price'],
+            disc_prem: rateRow['disc'],
+          });
+        }
+        this.dataSource = newDataToBind;
+      }
     }
   }
 

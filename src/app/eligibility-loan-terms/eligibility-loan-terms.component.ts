@@ -33,6 +33,8 @@ export class EligibilityLoanTermsComponent implements OnInit, OnChanges {
   @Input()
   tabNameSelected: string = 'LTR';
 
+  @Input() messages: any;
+  
   constructor(private http: HttpClient, private formsService: FormService) {}
 
   ngOnInit(): void {
