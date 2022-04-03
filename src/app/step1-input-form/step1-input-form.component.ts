@@ -1,5 +1,16 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { data } from '../data/ui-metadata';
 import { FormService } from '../shared/form.service';
 import { InputForm, RecordInput, SingleSectionTab } from '../shared/interfaces';
@@ -27,7 +38,12 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
   showUPB: boolean = false;
   showAcquisitionDate: boolean = false;
 
-  loanPurpose: string[] = ['Purchase', 'Delayed Purchase', 'Rate/Term', 'Cash Out'];
+  loanPurpose: string[] = [
+    'Purchase',
+    'Delayed Purchase',
+    'Rate/Term',
+    'Cash Out',
+  ];
   propertyType: string[] = ['SFR', 'Condo', '2-4 Unit', '5+ Units'];
 
   constructor(private formsService: FormService) {}
@@ -38,7 +54,6 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
 
   populateFormIfDataAvailable() {
     if (Object.keys(this.dataToFillInForms).length) {
-      
       if (this.dataToFillInForms.loan_inputs['loan_purpose'] !== 'Purchase')
         this.showAcquisitionDate = true;
 
@@ -49,18 +64,20 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
         property_type: this.dataToFillInForms.loan_inputs['property_type'],
         appraised_value: this.dataToFillInForms.loan_inputs['appraised_value'],
         purchase_price: this.dataToFillInForms.loan_inputs['purchase_price'],
-        upb:  this.dataToFillInForms.loan_inputs['upb'],
+        upb: this.dataToFillInForms.loan_inputs['upb'],
         units: this.dataToFillInForms.loan_inputs['units'] || 0,
         zip_code: this.dataToFillInForms.loan_inputs['zip_code'] || '-',
-        acquisition_date: this.dataToFillInForms.loan_inputs['acquisition_date'] || '-',
+        acquisition_date:
+          this.dataToFillInForms.loan_inputs['acquisition_date'] || '-',
         rehab_amount: this.dataToFillInForms.loan_inputs['rehab_amount'],
         arv: this.dataToFillInForms.loan_inputs['arv'] || '',
-      })
+      });
     } else {
+      this.step1InputForm.reset();
       this.step1InputForm = new FormGroup({
         fico: new FormControl(null),
         loan_purpose: new FormControl('Purchase'),
-        experience: new FormControl(null),
+        experience: new FormControl(0),
         property_type: new FormControl('SFR'),
         appraised_value: new FormControl(null),
         purchase_price: new FormControl(null),
@@ -71,14 +88,22 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
         rehab_amount: new FormControl(null),
         arv: new FormControl(null),
       });
-  
-      this.step1InputForm.valueChanges.subscribe(formChanges => {
+
+      this.step1InputForm.valueChanges.subscribe((formChanges) => {
         this.formsService.dataChangeEmitter.next({
           key: 'step1',
-          data: formChanges
+          data: formChanges,
         });
       });
-      this.showAcquisitionDate = false
+
+      this.step1InputForm.statusChanges.subscribe((status) => {
+        debugger;
+        this.formsService.statusChangeEmitter.next({
+          key: 'step1',
+          status,
+        });
+      });
+      this.showAcquisitionDate = false;
     }
   }
 
@@ -86,7 +111,7 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
     this.step1InputForm = new FormGroup({
       fico: new FormControl(null),
       loan_purpose: new FormControl('Purchase'),
-      experience: new FormControl(null),
+      experience: new FormControl(0),
       property_type: new FormControl('SFR'),
       appraised_value: new FormControl(null),
       purchase_price: new FormControl(null),
@@ -98,13 +123,20 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
       arv: new FormControl(null),
     });
 
-    this.step1InputForm.valueChanges.subscribe(formChanges => {
+    this.step1InputForm.valueChanges.subscribe((formChanges) => {
       this.formsService.dataChangeEmitter.next({
         key: 'step1',
-        data: formChanges
+        data: formChanges,
       });
     });
-    this.showAcquisitionDate = false
+    this.showAcquisitionDate = false;
+    this.step1InputForm.statusChanges.subscribe((status) => {
+      debugger;
+      this.formsService.statusChangeEmitter.next({
+        key: 'step1',
+        status,
+      });
+    });
   }
 
   getClassToApply() {
@@ -113,22 +145,13 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
   }
 
   onChangeLoanPurchase(event: any) {
-    if (event.value !== 'Purchase')
-      this.showAcquisitionDate = true;
-    else 
-      this.showAcquisitionDate = false;
+    if (event.value !== 'Purchase') this.showAcquisitionDate = true;
+    else this.showAcquisitionDate = false;
 
-    if(['Purchase', 'Delayed Purchase'].includes(event.value)) {
+    if (['Purchase', 'Delayed Purchase'].includes(event.value)) {
       this.showUPB = false;
-    }
-    else if (['Rate/Term','Cash Out'].includes(event.value)) {
+    } else if (['Rate/Term', 'Cash Out'].includes(event.value)) {
       this.showUPB = true;
-    }
-  }
-
-  onChangePropertyType(event: any) {
-    if (event.value !== '5+ Units') {
-
     }
   }
 }

@@ -30,7 +30,7 @@
         [(ngModel)]="atlasId"
       />
     </mat-form-field>
-    <button mat-flat-button color="primary" (click)="getPricingById()">
+    <button mat-flat-button color="primary" (click)="getPricingById()" [disabled]="!enablePricingButton">
       Get Pricing
     </button>
   </div>
