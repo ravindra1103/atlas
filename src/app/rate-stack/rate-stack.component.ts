@@ -23,7 +23,7 @@ export class RateStackComponent implements OnInit, OnChanges {
 
   toggleControl = new FormControl(false);
   switchClicked = false;
-  selectedRowIndex:number =  -1;
+  selectedRowIndex: number = -1;
 
   @Output()
   onRateStackSelectedRow = new EventEmitter();
@@ -32,7 +32,7 @@ export class RateStackComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     let newDataToBind = [];
-    let count = 0;
+    let count = 0, indexOfPar;
     if (this.rateStackResponseReceived?.length) {
       for (let rateRow of this.rateStackResponseReceived) {
         newDataToBind.push({
@@ -43,8 +43,13 @@ export class RateStackComponent implements OnInit, OnChanges {
           price: rateRow['price'],
           disc_prem: rateRow['disc'],
         });
+        if (rateRow['is_par'] === 1) {
+          indexOfPar = count - 1;
+        }
       }
       this.dataSource = newDataToBind;
+      this.selectedRowIndex = indexOfPar || 0;
+      this.onRateStackSelectedRow.emit(this.dataSource[this.selectedRowIndex]);
     }
   }
 
@@ -71,7 +76,7 @@ export class RateStackComponent implements OnInit, OnChanges {
         }
         this.dataSource = newDataToBind;
       }
-    }else {
+    } else {
       let newDataToBind = [];
       if (this.rateStackResponseReceived?.length) {
         for (let rateRow of this.rateStackResponseReceived) {

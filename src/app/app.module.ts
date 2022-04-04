@@ -35,6 +35,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { Step1InputFormComponent } from './step1-input-form/step1-input-form.component';
 import { Step2InputFormComponent } from './step2-input-form/step2-input-form.component';
 import { PropertyEconomicsInputFormComponent } from './property-economics-input-form/property-economics-input-form.component';
+import { OnlynumberDirective } from './directives/number.directive';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { PropertyEconomicsInputFormComponent } from './property-economics-input-
     SideNavComponent,
     Step1InputFormComponent,
     Step2InputFormComponent,
-    PropertyEconomicsInputFormComponent
+    PropertyEconomicsInputFormComponent,
+    OnlynumberDirective
   ],
   imports: [
     BrowserModule,

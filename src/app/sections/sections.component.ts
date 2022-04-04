@@ -37,9 +37,10 @@ export class SectionsComponent implements OnInit {
     disc: '-',
     totalRents: '-',
     totalCost: '-',
-    cashTo: '-'
+    cashTo: '-',
   };
   activatedSub: Subscription = {} as Subscription;
+  activatedSubStatus: Subscription = {} as Subscription;
   rateStackResponseReceived: any;
 
   @Input()
@@ -48,6 +49,10 @@ export class SectionsComponent implements OnInit {
   rowToPass: any = {};
 
   dataToFillInForms: any = {};
+
+  enablePricingButton: boolean = false;
+
+  aggregatedStatus: any = {};
 
   constructor(private http: HttpClient, private formsService: FormService) {}
 
@@ -62,7 +67,8 @@ export class SectionsComponent implements OnInit {
 
     this.activatedSub = this.formsService.dataChangeEmitter.subscribe(
       (changesReceived) => {
-        if (changesReceived?.key !== 'property_enomomics_multi') {
+        
+        if (changesReceived?.key !== 'property_economics_multi') {
           this.formDataEnteredByUser = {
             input: {
               loan_inputs: {
@@ -85,6 +91,22 @@ export class SectionsComponent implements OnInit {
             },
           };
         }
+        console.log('this.formDataEnteredByUser - ', this.formDataEnteredByUser);
+      }
+    );
+
+    this.activatedSubStatus = this.formsService.statusChangeEmitter.subscribe(
+      (statusChanges) => {
+        if (this.typeSelected === 'New Loan') {
+          this.aggregatedStatus = {
+            ...this.aggregatedStatus,
+            [statusChanges['key']]: statusChanges['status'],
+          };
+          this.enablePricingButton =
+            this.aggregatedStatus['step1'] === 'VALID' &&
+            this.aggregatedStatus['step2'] === 'VALID' &&
+            this.aggregatedStatus['property_economics'] === 'VALID';
+        }
       }
     );
   }
@@ -92,6 +114,8 @@ export class SectionsComponent implements OnInit {
   onTabChange(event: number) {
     this.tabDataToDisplay = this.getTabDataByIndex(event);
     this.tabNameSelected = this.sections[event].labelValue;
+    if (this.typeSelected === 'New Loan')
+      this.enablePricingButton = false;
   }
 
   getTabDataByIndex(index: number = 0): SingleSectionTab {
@@ -105,18 +129,20 @@ export class SectionsComponent implements OnInit {
       ) || '';
 
     if (this.typeSelected === 'New Loan') {
-      console.log("came here");
+      console.log('came here');
       this.atlasId = '';
       this.dataToFillInForms = {};
+      this.enablePricingButton = false;
+    }
+    else {
+      this.enablePricingButton = true;
     }
   }
 
   getPricingById() {
     if (this.atlasId) {
       this.http
-        .get(
-          `${environment.apiUrl}/Price/GetLoanInputs/${this.atlasId}`
-        )
+        .get(`${environment.apiUrl}/Price/GetLoanInputs/${this.atlasId}`)
         .subscribe((response: any) => {
           this.dataToFillInForms = response;
         });
@@ -134,24 +160,31 @@ export class SectionsComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.activatedSub?.unsubscribe();
+    this.activatedSubStatus?.unsubscribe();
   }
 
   onRowToPass(data: any) {
     console.log(this.rateStackResponseReceived);
     console.log(this.formDataEnteredByUser);
     console.log(data);
-    const { input : { loan_inputs : {
-      appraised_value,
-      purchase_price,
-      loan_amount,
-      annual_hoi,
-      annual_taxes,
-      loan_purpose,
-      fico,
-      property_type
-    }}} = this.formDataEnteredByUser;
+    const {
+      input: {
+        loan_inputs: {
+          appraised_value,
+          purchase_price,
+          loan_amount,
+          annual_hoi,
+          annual_taxes,
+          loan_purpose,
+          fico,
+          property_type,
+        },
+      },
+    } = this.formDataEnteredByUser;
     const { rate, dscr, piti, disc_prem: disc } = data;
-    const maxLtvSelectedPercentValue = localStorage.getItem('maxLtvSelectedPercent');
+    const maxLtvSelectedPercentValue = localStorage.getItem(
+      'maxLtvSelectedPercent'
+    );
     let maxLtvSelectedPercent = 0;
     const value = maxLtvSelectedPercentValue?.slice(0, -1);
     if (value) {
@@ -159,10 +192,10 @@ export class SectionsComponent implements OnInit {
     }
     let propertyValue = Math.min(appraised_value, purchase_price);
     this.calculatedValues = {
-      ltv: (loan_amount*1.0/propertyValue).toFixed(2),
+      ltv: ((loan_amount * 1.0) / propertyValue).toFixed(2),
       propertyValue: (propertyValue * 1.0).toFixed(2),
       maxLoanAmount: (maxLtvSelectedPercent * propertyValue * 1.0).toFixed(2),
-      tiAmount: (((annual_taxes * 1.0) + annual_hoi)/12).toFixed(2),
+      tiAmount: ((annual_taxes * 1.0 + annual_hoi) / 12).toFixed(2),
       loan_purpose,
       loan_amount,
       rate,
@@ -173,7 +206,7 @@ export class SectionsComponent implements OnInit {
       disc,
       totalRents: '-',
       totalCost: '-',
-      cashTo: '-'
+      cashTo: '-',
     };
   }
 }

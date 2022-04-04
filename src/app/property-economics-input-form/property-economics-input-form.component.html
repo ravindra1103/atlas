@@ -23,6 +23,7 @@
                         type="number"
                         placeholder="0"
                         [formControlName]="getName(i + '0')"
+                        required
                         />
                         <span matPrefix>$&nbsp;</span>
                     </mat-form-field>
@@ -38,6 +39,7 @@
                       type="number"
                       placeholder="0"
                       [formControlName]="getName(i + '1')"
+                      required
                     />
                     <span matPrefix>$&nbsp;</span>
                   </mat-form-field>
@@ -55,6 +57,7 @@
                       type="number"
                       placeholder="0"
                       [formControlName]="getName(i + '2')"
+                      required
                     />
                     <span matPrefix>$&nbsp;</span>
                   </mat-form-field>
@@ -94,6 +97,7 @@
                     type="number"
                     placeholder="0"
                     formControlName="gross_rent"
+                    required
                 />
                 <span matPrefix>$&nbsp;</span>
                 </mat-form-field>
@@ -111,6 +115,7 @@
                     type="number"
                     placeholder="0"
                     formControlName="expense-ratio-amount"
+                    required
                 />
                 <span matPrefix>$&nbsp;</span>
                 </mat-form-field>
@@ -127,6 +132,7 @@
                     type="number"
                     placeholder="0"
                     formControlName="reserves"
+                    required
                 />
                 <span matPrefix>$&nbsp;</span>
                 </mat-form-field>
@@ -146,6 +152,7 @@
                     type="number"
                     placeholder="0"
                     formControlName="noi"
+                    required
                     />
                     <span matPrefix>$&nbsp;</span>
                 </mat-form-field>
@@ -186,6 +193,7 @@
                 type="number"
                 placeholder="0"
                 formControlName="gross_rent"
+                required
               />
               <span matPrefix>$&nbsp;</span>
             </mat-form-field>
@@ -212,6 +220,7 @@
                 matInput
                 type="text"
                 formControlName="profitability_amount"
+                required
               />
             </mat-form-field>
           </div>
@@ -234,6 +243,7 @@
                 type="number"
                 placeholder="0"
                 formControlName="profitability_percent"
+                required
               />
               <span matSuffix>%&nbsp;</span>
             </mat-form-field>
