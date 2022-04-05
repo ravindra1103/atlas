@@ -28,7 +28,7 @@ export class RateStackComponent implements OnInit, OnChanges {
   @Output()
   onRateStackSelectedRow = new EventEmitter();
 
-  constructor() {}
+  constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
     let newDataToBind = [];
@@ -42,6 +42,7 @@ export class RateStackComponent implements OnInit, OnChanges {
           piti: rateRow['piti'],
           price: rateRow['price'],
           disc_prem: rateRow['disc'],
+          approval_code: rateRow['approval_code']
         });
         if (rateRow['is_par'] === 1) {
           indexOfPar = count - 1;

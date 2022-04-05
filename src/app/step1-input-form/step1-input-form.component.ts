@@ -46,7 +46,7 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
   ];
   propertyType: string[] = ['SFR', 'Condo', '2-4 Unit', '5+ Units'];
 
-  constructor(private formsService: FormService) {}
+  constructor(private formsService: FormService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.populateFormIfDataAvailable();
@@ -97,7 +97,6 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
       });
 
       this.step1InputForm.statusChanges.subscribe((status) => {
-        debugger;
         this.formsService.statusChangeEmitter.next({
           key: 'step1',
           status,
@@ -131,7 +130,6 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
     });
     this.showAcquisitionDate = false;
     this.step1InputForm.statusChanges.subscribe((status) => {
-      debugger;
       this.formsService.statusChangeEmitter.next({
         key: 'step1',
         status,

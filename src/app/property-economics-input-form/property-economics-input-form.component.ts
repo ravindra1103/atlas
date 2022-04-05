@@ -179,7 +179,6 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
 
       this.propertyEconomicsInputFormNonLtr.valueChanges.subscribe(
         (formChanges) => {
-          debugger;
           this.formsService.dataChangeEmitter.next({
             key: 'property_economics_single',
             data: this.getDataToEmitForNonLtr(formChanges),
@@ -196,10 +195,10 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
 
       this.propertyEconomicsInputFormNonLtr.statusChanges.subscribe((status) => {
         if (this.tabNameSelected !== 'LTR')
-        this.formsService.statusChangeEmitter.next({
-          key: 'property_economics',
-          status
-        });
+          this.formsService.statusChangeEmitter.next({
+            key: 'property_economics',
+            status
+          });
       });
     }
   }
@@ -279,7 +278,6 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
 
       this.propertyEconomicsInputFormNonLtr.valueChanges.subscribe(
         (formChanges) => {
-          debugger;
           this.formsService.dataChangeEmitter.next({
             key: 'property_economics_single',
             data: this.getDataToEmitForNonLtr(formChanges),
@@ -293,13 +291,13 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
           status
         });
       });
-      
+
       this.propertyEconomicsInputFormNonLtr.statusChanges.subscribe((status) => {
         if (this.tabNameSelected !== 'LTR')
-        this.formsService.statusChangeEmitter.next({
-          key: 'property_economics',
-          status
-        });
+          this.formsService.statusChangeEmitter.next({
+            key: 'property_economics',
+            status
+          });
       });
     }
   }
@@ -369,7 +367,6 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
 
     this.propertyEconomicsInputFormNonLtr.valueChanges.subscribe(
       (formChanges) => {
-        debugger;
         this.formsService.dataChangeEmitter.next({
           key: 'property_economics_single',
           data: this.getDataToEmitForNonLtr(formChanges),
@@ -380,18 +377,18 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
 
     this.propertyEconomicsInputFormNonLtr.statusChanges.subscribe((status) => {
       if (this.tabNameSelected !== 'LTR')
-      this.formsService.statusChangeEmitter.next({
-        key: 'property_economics',
-        status
-      });
+        this.formsService.statusChangeEmitter.next({
+          key: 'property_economics',
+          status
+        });
     });
 
     this.propertyEconomicsInputForm.statusChanges.subscribe((status) => {
       if (this.tabNameSelected === 'LTR')
-      this.formsService.statusChangeEmitter.next({
-        key: 'property_economics',
-        status
-      });
+        this.formsService.statusChangeEmitter.next({
+          key: 'property_economics',
+          status
+        });
     });
   }
 
