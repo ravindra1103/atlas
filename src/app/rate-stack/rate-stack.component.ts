@@ -33,6 +33,8 @@ export class RateStackComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     let newDataToBind = [];
     let count = 0, indexOfPar;
+    const goal = 1;
+    let is_par = Infinity
     if (this.rateStackResponseReceived?.length) {
       for (let rateRow of this.rateStackResponseReceived) {
         newDataToBind.push({
@@ -44,8 +46,12 @@ export class RateStackComponent implements OnInit, OnChanges {
           disc_prem: rateRow['disc'],
           approval_code: rateRow['approval_code']
         });
-        if (rateRow['is_par'] === 1) {
+        if (rateRow['is_par'] === goal) {
+          is_par = rateRow['is_par'];
           indexOfPar = count - 1;
+        } else if (Math.abs(rateRow['is_par'] - goal) < Math.abs(is_par - goal)) {
+          indexOfPar = count - 1;
+          is_par = rateRow['is_par'];
         }
       }
       this.dataSource = newDataToBind;
