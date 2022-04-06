@@ -38,6 +38,7 @@ export class SectionsComponent implements OnInit {
     totalRents: '-',
     totalCost: '-',
     cashTo: '-',
+    approvalCode: '-'
   };
   activatedSub: Subscription = {} as Subscription;
   activatedSubStatus: Subscription = {} as Subscription;
@@ -54,7 +55,7 @@ export class SectionsComponent implements OnInit {
 
   aggregatedStatus: any = {};
 
-  constructor(private http: HttpClient, private formsService: FormService) {}
+  constructor(private http: HttpClient, private formsService: FormService) { }
 
   ngOnInit(): void {
     this.sections = [
@@ -67,7 +68,7 @@ export class SectionsComponent implements OnInit {
 
     this.activatedSub = this.formsService.dataChangeEmitter.subscribe(
       (changesReceived) => {
-        
+
         if (changesReceived?.key !== 'property_economics_multi') {
           this.formDataEnteredByUser = {
             input: {
@@ -148,6 +149,17 @@ export class SectionsComponent implements OnInit {
         });
     }
     if (!this.atlasId && this.typeSelected === 'New Loan') {
+      const { input: { loan_inputs: { loan_amount, appraised_value, purchase_price, annual_taxes, annual_hoi, annual_other } } } = this.formDataEnteredByUser;
+      this.formDataEnteredByUser.input.loan_inputs = {
+        ...this.formDataEnteredByUser.input.loan_inputs,
+        LTV: loan_amount / Math.min(appraised_value, purchase_price),
+        TI: (annual_taxes + annual_hoi) / 12,
+        TIA: (annual_taxes + annual_hoi + annual_other) / 12,
+        ARV: 0,
+        ILTV: 0,
+        LTC: 0,
+        LTARV: 0
+      }
       this.http
         .post(`${environment.apiUrl}/Price/GetPrice`, {
           ...this.formDataEnteredByUser,
@@ -178,10 +190,13 @@ export class SectionsComponent implements OnInit {
           loan_purpose,
           fico,
           property_type,
+          broker_points = 0,
+          origination_points = 0,
+          other_costs = 0
         },
       },
     } = this.formDataEnteredByUser;
-    const { rate, dscr, piti, disc_prem: disc } = data;
+    const { rate, dscr, piti, disc_prem: disc, approval_code } = data;
     const maxLtvSelectedPercentValue = localStorage.getItem(
       'maxLtvSelectedPercent'
     );
@@ -191,6 +206,7 @@ export class SectionsComponent implements OnInit {
       maxLtvSelectedPercent = +value;
     }
     let propertyValue = Math.min(appraised_value, purchase_price);
+    const totalCost = ((broker_points + origination_points) * loan_amount) + other_costs + (disc || 0);
     this.calculatedValues = {
       ltv: ((loan_amount * 1.0) / propertyValue).toFixed(2),
       propertyValue: (propertyValue * 1.0).toFixed(2),
@@ -204,9 +220,10 @@ export class SectionsComponent implements OnInit {
       property_type,
       piti,
       disc,
-      totalRents: '-',
+      totalRents: totalCost,
       totalCost: '-',
-      cashTo: '-',
+      cashTo: loan_amount - purchase_price - totalCost,
+      approvalCode: approval_code
     };
   }
 }
