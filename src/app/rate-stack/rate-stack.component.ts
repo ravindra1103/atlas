@@ -38,6 +38,7 @@ export class RateStackComponent implements OnInit, OnChanges {
     if (this.rateStackResponseReceived?.length) {
       for (let rateRow of this.rateStackResponseReceived) {
         newDataToBind.push({
+          ...rateRow,
           id: count++,
           rate: rateRow['rate'],
           dscr: rateRow['dscr'],

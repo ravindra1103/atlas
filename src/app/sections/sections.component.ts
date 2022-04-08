@@ -41,6 +41,7 @@ export class SectionsComponent implements OnInit {
   formDataEnteredByUser: any = {} as any;
   messages: any = '';
   calculatedValues: any = DEFAULT_CALCULATED_VALUES;
+  selectedRow: any = {};
   activatedSub: Subscription = {} as Subscription;
   activatedSubStatus: Subscription = {} as Subscription;
   rateStackResponseReceived: any;
@@ -132,6 +133,7 @@ export class SectionsComponent implements OnInit {
 
     this.rateStackResponseReceived = [];
     this.dataUpdated = false;
+    this.selectedRow = {};
 
     if (this.typeSelected === 'New Loan') {
       console.log('came here');
@@ -200,6 +202,7 @@ export class SectionsComponent implements OnInit {
   onAtlasIdChange(): void {
     this.dataToFillInForms = {};
     this.calculatedValues = DEFAULT_CALCULATED_VALUES;
+    this.selectedRow = {};
     this.dataUpdated = false;
   }
 
@@ -256,5 +259,87 @@ export class SectionsComponent implements OnInit {
       cashTo: loan_amount - purchase_price - totalCost,
       approvalCode: approval_code
     };
+    this.selectedRow = data;
+  }
+
+  onLockRate(): void {
+    const eligibilityDetails = JSON.parse(localStorage.getItem('maxLtvSelectedDetails') || '')
+    this.http
+      .post(`${environment.apiUrl}/Quote/LockRate`, {
+        rateStackViewModel: {
+          "stackRuleId": 0,
+          "atlasId": this.selectedRow.atlas_id,
+          "atlasRunId": 0,
+          "rate": this.selectedRow.rate,
+          "dscr": this.selectedRow.dscr,
+          "piti": this.selectedRow.piti,
+          "price": this.selectedRow.price,
+          "dsicPrem": this.selectedRow.disc_prem,
+          "isIOEnabled": true,
+          "isParRate": true,
+          "isLockRate": true,
+          // "status": "string",
+          // "createdDate": "2022-04-08T19:46:22.461Z",
+          // "updatedDate": "2022-04-08T19:46:22.461Z"
+        },
+        "eligibilityViewModels": [
+          {
+            "eligibilityId": 0,
+            "atlasId": 0,
+            "atlasRunId": 0,
+            "ficoRange": eligibilityDetails.ficoRange,
+            // "purchase": "string",
+            // "rateTerm": "string",
+            // "cashOut": "string",
+            "isLockRate": true,
+            "rateStackId": 0,
+            // "status": "string",
+            // "createdDate": "2022-04-08T19:46:22.461Z",
+            // "updatedDate": "2022-04-08T19:46:22.461Z"
+          }
+        ],
+        "loanTermViewModel": {
+          "loanTermId": 0,
+          "atlasId": 0,
+          "atlasRunId": 0,
+          "loanPurpose": this.calculatedValues.loan_purpose,
+          "loanAmount": this.calculatedValues.loan_amount,
+          "fico": this.calculatedValues.fico,
+          "propertyType": this.calculatedValues.property_type,
+          "propertyValue": +this.calculatedValues.propertyValue,
+          "grossRents": this.calculatedValues.totalRents,
+          "ltv": +this.calculatedValues.ltv,
+          "rate": this.calculatedValues.rate,
+          "cashToOrFrom": this.calculatedValues.cashTo,
+          "dscr": this.calculatedValues.dscr,
+          "piti": (+this.calculatedValues.piti).toFixed(0),
+          "discPrem": this.selectedRow.disc_prem,
+          "totalCost": this.calculatedValues.totalCost,
+          "isLockRate": true,
+          "rateStackId": 0,
+          // "status": "string",
+          // "createdDate": "2022-04-08T19:46:22.461Z",
+          // "updatedDate": "2022-04-08T19:46:22.461Z"
+        },
+        "calculatedValueViewModel": {
+          "calculatedValueId": 0,
+          "atlasId": 0,
+          "atlasRunId": 0,
+          "ltv": +this.calculatedValues.ltv,
+          "maxLoanAmount": +this.calculatedValues.maxLoanAmount,
+          "totalPoints": 0,
+          "propertyValue": +this.calculatedValues.propertyValue,
+          "tiAmount": (+this.calculatedValues.tiAmount).toFixed(0),
+          "totalClosingCosts": (+this.calculatedValues.totalCost).toFixed(0),
+          "isLockRate": true,
+          "rateStackId": 0,
+          // "status": "string",
+          // "createdDate": "2022-04-08T19:46:22.461Z",
+          // "updatedDate": "2022-04-08T19:46:22.461Z"
+        }
+      })
+      .subscribe((response: any) => {
+        this.rateStackResponseReceived = response;
+      });
   }
 }

@@ -42,7 +42,8 @@
     <app-calculated-values 
     [formDataEnteredByUser]="formDataEnteredByUser"
     [calculatedValues]="calculatedValues"
-    [dataToFillInForms]="dataToFillInForms" [rateStackResponseReceived]="rateStackResponseReceived"></app-calculated-values>
+    [dataToFillInForms]="dataToFillInForms" [rateStackResponseReceived]="rateStackResponseReceived"
+    (onLockRate)="onLockRate.emit()"></app-calculated-values>
   </div>
 </div>
 
