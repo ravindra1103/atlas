@@ -222,6 +222,9 @@ export class SectionsComponent implements OnInit {
           origination_points = 0,
           other_costs = 0
         },
+        property_economics: {
+          property_units
+        }
       },
     } = this.formDataEnteredByUser;
     const { rate, dscr, piti, disc_prem: disc, approval_code } = data;
@@ -248,8 +251,8 @@ export class SectionsComponent implements OnInit {
       property_type,
       piti,
       disc,
-      totalRents: totalCost,
-      totalCost: '-',
+      totalRents: (property_units || []).reduce((acc: number, curr: { market_rent: number }) => (acc += curr.market_rent || 0), 0),
+      totalCost: totalCost,
       cashTo: loan_amount - purchase_price - totalCost,
       approvalCode: approval_code
     };

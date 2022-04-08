@@ -106,10 +106,9 @@
         </mat-grid-tile>
         <mat-grid-tile [colspan]="'4'" class="bottomLeft">
           <div class="cellWrapper">
-            <div class="calcDLabel">Approval Code</div>
-            <div class="calcDValue"
-              [attr.title]="calculatedValues?.approvalCode === '-' ? null: calculatedValues?.approvalCode">
-              {{calculatedValues?.approvalCode}}</div>
+            <div class="calcDLabel">Total Cost</div>
+            <div class="calcDValue">
+              {{calculatedValues?.totalCost}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile [colspan]="'8'" class="bottomRight">
