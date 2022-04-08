@@ -5,6 +5,8 @@
         [isToggled]="isToggled"
         [tabNameSelected]="tabNameSelected"
         [dataToFillInForms]="dataToFillInForms"
+        [isEdit]="isEdit"
+        (formUpdated)="formUpdated.emit()"
       ></app-step1-input-form>
     </div>
 
@@ -13,6 +15,8 @@
         [isToggled]="isToggled"
         [tabNameSelected]="tabNameSelected"
         [dataToFillInForms]="dataToFillInForms"
+        [isEdit]="isEdit"
+        (formUpdated)="formUpdated.emit()"
       ></app-step2-input-form>
     </div>
 
@@ -21,6 +25,8 @@
         [isToggled]="isToggled"
         [tabNameSelected]="tabNameSelected"
         [dataToFillInForms]="dataToFillInForms"
+        [isEdit]="isEdit"
+        (formUpdated)="formUpdated.emit()"
       ></app-property-economics-input-form>
     </div>
   </div>

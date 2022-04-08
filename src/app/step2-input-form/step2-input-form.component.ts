@@ -1,8 +1,10 @@
 import {
   Component,
+  EventEmitter,
   Input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
 } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
@@ -26,6 +28,10 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
   @Input()
   dataToFillInForms: any;
 
+  @Input() isEdit = false;
+
+  @Output() formUpdated = new EventEmitter();
+
   formLabel: string = 'Step 2';
   step2InputForm: FormGroup = {} as FormGroup;
 
@@ -39,7 +45,7 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
     'No PPP',
   ];
 
-  constructor(private formsService: FormService) {}
+  constructor(private formsService: FormService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     this.populateFormIfDataAvailable();
@@ -75,14 +81,20 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
         ppp_type: new FormControl('Hard'),
         ppp_term: new FormControl('60 Mos.'),
       });
-      this.step2InputForm.valueChanges.subscribe(formChanges => this.formsService.dataChangeEmitter.next(
-        {
-        key: 'step2',
-        data: formChanges
-      }));
+      this.step2InputForm.valueChanges.subscribe(formChanges => {
+        if (this.isEdit && (this.step2InputForm.touched || this.step2InputForm.dirty)) {
+          this.formUpdated.emit();
+        }
+
+        this.formsService.dataChangeEmitter.next(
+          {
+            key: 'step2',
+            data: formChanges
+          })
+      });
       this.formsService.dataChangeEmitter.subscribe((eventData: any) => {
         if (eventData.key === 'step1')
-          this.disableDiv = !eventData.data['fico'] ||  !eventData.data['appraised_value'];
+          this.disableDiv = !eventData.data['fico'] || !eventData.data['appraised_value'];
       });
       this.step2InputForm.statusChanges.subscribe((status) => {
         this.formsService.statusChangeEmitter.next({
@@ -110,13 +122,12 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
     this.step2InputForm.disable();
     this.step2InputForm.valueChanges.subscribe(formChanges => this.formsService.dataChangeEmitter.next(
       {
-      key: 'step2',
-      data: formChanges
-    }));
+        key: 'step2',
+        data: formChanges
+      }));
     this.formsService.dataChangeEmitter.subscribe((eventData: any) => {
-      if (eventData.key === 'step1')
-      {
-        this.disableDiv = !eventData.data['fico'] ||  !eventData.data['appraised_value'];
+      if (eventData.key === 'step1') {
+        this.disableDiv = !eventData.data['fico'] || !eventData.data['appraised_value'];
         this.disableDiv ? this.step2InputForm.disable() : this.step2InputForm.enable();
       }
     });

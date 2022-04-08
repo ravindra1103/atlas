@@ -1,8 +1,10 @@
 import {
   Component,
+  EventEmitter,
   Input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
 } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
@@ -25,6 +27,9 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
 
   @Input()
   dataToFillInForms: any = {};
+
+  @Input() isEdit = true;
+  @Output() formUpdated = new EventEmitter();
 
   formLabel: string = 'Property Economics';
   propertyEconomicsInputForm: FormGroup = {} as FormGroup;
@@ -170,6 +175,9 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
       });
 
       this.propertyEconomicsInputForm.valueChanges.subscribe((formChanges) => {
+        if (this.isEdit && (this.propertyEconomicsInputForm.touched || this.propertyEconomicsInputForm.dirty)) {
+          this.formUpdated.emit(true);
+        }
         this.formsService.dataChangeEmitter.next({
           key: this.showSingleReplicaLayout ? 'property_economics_single_ltr' : 'property_economics_multi',
           //@ts-ignore
@@ -179,6 +187,9 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
 
       this.propertyEconomicsInputFormNonLtr.valueChanges.subscribe(
         (formChanges) => {
+          if (this.isEdit && (this.propertyEconomicsInputForm.touched || this.propertyEconomicsInputForm.dirty)) {
+            this.formUpdated.emit(true);
+          }
           this.formsService.dataChangeEmitter.next({
             key: 'property_economics_single',
             data: this.getDataToEmitForNonLtr(formChanges),

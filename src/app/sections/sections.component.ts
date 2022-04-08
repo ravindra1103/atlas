@@ -44,6 +44,7 @@ export class SectionsComponent implements OnInit {
   activatedSub: Subscription = {} as Subscription;
   activatedSubStatus: Subscription = {} as Subscription;
   rateStackResponseReceived: any;
+  dataUpdated = false;
 
   @Input()
   isToggled: boolean = false;
@@ -130,6 +131,7 @@ export class SectionsComponent implements OnInit {
       ) || '';
 
     this.rateStackResponseReceived = [];
+    this.dataUpdated = false;
 
     if (this.typeSelected === 'New Loan') {
       console.log('came here');
@@ -145,49 +147,60 @@ export class SectionsComponent implements OnInit {
   }
 
   getPricingById() {
-    if (this.atlasId) {
+    if (this.atlasId && !this.dataUpdated) {
       this.http
         .get(`${environment.apiUrl}/Price/GetLoanInputs/${this.atlasId}`)
         .subscribe((response: any) => {
           this.dataToFillInForms = response;
         });
+      return;
     }
-    if (!this.atlasId && this.typeSelected === 'New Loan') {
-      const { input: { property_economics, loan_inputs: { loan_amount, appraised_value, purchase_price, annual_taxes, annual_hoi, annual_other } } } = this.formDataEnteredByUser;
-      // let mf_gross_rents = 0;
-      // if (property_economics?.property_units?.length) {
-      //   const initialValue = 0;
-      //   mf_gross_rents = property_economics.property_units.reduce(
-      //     (previousValue: any, currentValue: any) => {
-      //       return currentValue?.market_rent + currentValue?.in_place_rent;
-      //     },
-      //     initialValue
-      //   );
-      // }
-      this.formDataEnteredByUser.input.loan_inputs = {
-        ...this.formDataEnteredByUser.input.loan_inputs,
-        LTV: loan_amount / Math.min(appraised_value, purchase_price),
-        TI: (annual_taxes + annual_hoi) / 12,
-        TIA: (annual_taxes + annual_hoi + annual_other) / 12,
-        ARV: 0,
-        ILTV: 0,
-        LTC: 0,
-        LTARV: 0,
-        // mf_gross_rents
-      }
-      this.http
-        .post(`${environment.apiUrl}/Price/GetPrice`, {
-          ...this.formDataEnteredByUser,
-        })
-        .subscribe((response: any) => {
-          this.rateStackResponseReceived = response;
-        });
+    // if (!this.atlasId && this.typeSelected === 'New Loan') {
+    const { input: { property_economics, loan_inputs: { loan_amount, appraised_value, purchase_price, annual_taxes, annual_hoi, annual_other } } } = this.formDataEnteredByUser;
+    // let mf_gross_rents = 0;
+    // if (property_economics?.property_units?.length) {
+    //   const initialValue = 0;
+    //   mf_gross_rents = property_economics.property_units.reduce(
+    //     (previousValue: any, currentValue: any) => {
+    //       return currentValue?.market_rent + currentValue?.in_place_rent;
+    //     },
+    //     initialValue
+    //   );
+    // }
+    this.formDataEnteredByUser.input.loan_inputs = {
+      ...this.formDataEnteredByUser.input.loan_inputs,
+      LTV: loan_amount / Math.min(appraised_value, purchase_price),
+      TI: (annual_taxes + annual_hoi) / 12,
+      TIA: (annual_taxes + annual_hoi + annual_other) / 12,
+      ARV: 0,
+      ILTV: 0,
+      LTC: 0,
+      LTARV: 0,
+      // mf_gross_rents
     }
+
+    if (this.atlasId) {
+      this.formDataEnteredByUser.input.loan_inputs.atlasId = this.atlasId;
+    }
+    this.http
+      .post(`${environment.apiUrl}/Price/GetPrice`, {
+        ...this.formDataEnteredByUser,
+      })
+      .subscribe((response: any) => {
+        this.rateStackResponseReceived = response;
+      });
+    // }
   }
 
   ngOnDestroy(): void {
     this.activatedSub?.unsubscribe();
     this.activatedSubStatus?.unsubscribe();
+  }
+
+  onAtlasIdChange(): void {
+    this.dataToFillInForms = {};
+    this.calculatedValues = DEFAULT_CALCULATED_VALUES;
+    this.dataUpdated = false;
   }
 
   onRowToPass(data: any) {

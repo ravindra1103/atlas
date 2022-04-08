@@ -26,18 +26,22 @@ export class SectionTabComponent implements OnInit {
   @Input() formDataEnteredByUser: any;
 
   @Input() calculatedValues: any;
-  
+
   @Output() onRowSelection = new EventEmitter();
-  
+
   @Input() messages: any;
-  
+
+  @Output() formUpdated = new EventEmitter();
+
+  @Input() isEdit = false;
+
   constructor() { }
 
   ngOnInit(): void {
   }
 
   getKeyByName(name: string) {
-    switch(name) {
+    switch (name) {
       case 'LTR': return 'ltr';
       case 'Bridge Loan': return 'bridge';
       case 'Rehab': return 'rehab';
