@@ -149,16 +149,16 @@ export class SectionsComponent implements OnInit {
     }
     if (!this.atlasId && this.typeSelected === 'New Loan') {
       const { input: { property_economics, loan_inputs: { loan_amount, appraised_value, purchase_price, annual_taxes, annual_hoi, annual_other } } } = this.formDataEnteredByUser;
-      let mf_gross_rents = 0;
-      if (property_economics?.property_units?.length) {
-        const initialValue = 0;
-        mf_gross_rents = property_economics.property_units.reduce(
-          (previousValue: any, currentValue: any) => {
-            return currentValue?.market_rent + currentValue?.in_place_rent;
-          },
-          initialValue
-        );
-      }
+      // let mf_gross_rents = 0;
+      // if (property_economics?.property_units?.length) {
+      //   const initialValue = 0;
+      //   mf_gross_rents = property_economics.property_units.reduce(
+      //     (previousValue: any, currentValue: any) => {
+      //       return currentValue?.market_rent + currentValue?.in_place_rent;
+      //     },
+      //     initialValue
+      //   );
+      // }
       this.formDataEnteredByUser.input.loan_inputs = {
         ...this.formDataEnteredByUser.input.loan_inputs,
         LTV: loan_amount / Math.min(appraised_value, purchase_price),
@@ -168,7 +168,7 @@ export class SectionsComponent implements OnInit {
         ILTV: 0,
         LTC: 0,
         LTARV: 0,
-        mf_gross_rents
+        // mf_gross_rents
       }
       this.http
         .post(`${environment.apiUrl}/Price/GetPrice`, {
