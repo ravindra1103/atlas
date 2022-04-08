@@ -73,7 +73,7 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
         arv: this.dataToFillInForms.loan_inputs['arv'] || '',
       });
     } else {
-      this.step1InputForm.reset();
+      this.step1InputForm?.reset();
       this.step1InputForm = new FormGroup({
         fico: new FormControl(null),
         loan_purpose: new FormControl('Purchase'),

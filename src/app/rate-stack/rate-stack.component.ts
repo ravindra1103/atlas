@@ -57,6 +57,8 @@ export class RateStackComponent implements OnInit, OnChanges {
       this.dataSource = newDataToBind;
       this.selectedRowIndex = indexOfPar || 0;
       this.onRateStackSelectedRow.emit(this.dataSource[this.selectedRowIndex]);
+    } else {
+      this.dataSource = [];
     }
   }
 

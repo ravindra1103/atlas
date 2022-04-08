@@ -6,6 +6,24 @@ import { FormService } from '../shared/form.service';
 import { SingleSectionName, SingleSectionTab } from '../shared/interfaces';
 import { environment } from 'src/environments/environment';
 
+const DEFAULT_CALCULATED_VALUES = {
+  ltv: '-',
+  propertyValue: '-',
+  maxLoanAmount: '-',
+  tiAmount: '-',
+  loanPurpose: '-',
+  loan_amount: '-',
+  rate: '-',
+  fico: '-',
+  dscr: '-',
+  property_type: '-',
+  piti: '-',
+  disc: '-',
+  totalRents: '-',
+  totalCost: '-',
+  cashTo: '-',
+  approvalCode: '-'
+}
 @Component({
   selector: 'app-sections',
   templateUrl: './sections.component.html',
@@ -22,24 +40,7 @@ export class SectionsComponent implements OnInit {
   tabNameSelected: string = 'LTR';
   formDataEnteredByUser: any = {} as any;
   messages: any = '';
-  calculatedValues: any = {
-    ltv: '-',
-    propertyValue: '-',
-    maxLoanAmount: '-',
-    tiAmount: '-',
-    loanPurpose: '-',
-    loan_amount: '-',
-    rate: '-',
-    fico: '-',
-    dscr: '-',
-    property_type: '-',
-    piti: '-',
-    disc: '-',
-    totalRents: '-',
-    totalCost: '-',
-    cashTo: '-',
-    approvalCode: '-'
-  };
+  calculatedValues: any = DEFAULT_CALCULATED_VALUES;
   activatedSub: Subscription = {} as Subscription;
   activatedSubStatus: Subscription = {} as Subscription;
   rateStackResponseReceived: any;
@@ -128,6 +129,8 @@ export class SectionsComponent implements OnInit {
         (loan) => loan.toLowerCase() === selectedLoanText.value.toLowerCase()
       ) || '';
 
+    this.rateStackResponseReceived = [];
+
     if (this.typeSelected === 'New Loan') {
       console.log('came here');
       this.atlasId = '';
@@ -136,6 +139,8 @@ export class SectionsComponent implements OnInit {
     }
     else {
       this.enablePricingButton = true;
+      this.dataToFillInForms = {};
+      this.calculatedValues = DEFAULT_CALCULATED_VALUES;
     }
   }
 
@@ -220,7 +225,7 @@ export class SectionsComponent implements OnInit {
     this.calculatedValues = {
       ltv: ((loan_amount * 1.0) / propertyValue).toFixed(2),
       propertyValue: (propertyValue * 1.0).toFixed(2),
-      maxLoanAmount: (maxLtvSelectedPercent * propertyValue * 1.0).toFixed(2),
+      maxLoanAmount: (maxLtvSelectedPercent * propertyValue * 1.0 / 100).toFixed(2),
       tiAmount: ((annual_taxes * 1.0 + annual_hoi) / 12).toFixed(2),
       loan_purpose,
       loan_amount,
