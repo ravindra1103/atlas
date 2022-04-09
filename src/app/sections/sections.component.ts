@@ -6,6 +6,24 @@ import { FormService } from '../shared/form.service';
 import { SingleSectionName, SingleSectionTab } from '../shared/interfaces';
 import { environment } from 'src/environments/environment';
 
+const DEFAULT_CALCULATED_VALUES = {
+  ltv: '-',
+  propertyValue: '-',
+  maxLoanAmount: '-',
+  tiAmount: '-',
+  loanPurpose: '-',
+  loan_amount: '-',
+  rate: '-',
+  fico: '-',
+  dscr: '-',
+  property_type: '-',
+  piti: '-',
+  disc: '-',
+  totalRents: '-',
+  totalCost: '-',
+  cashTo: '-',
+  approvalCode: '-'
+}
 @Component({
   selector: 'app-sections',
   templateUrl: './sections.component.html',
@@ -22,27 +40,12 @@ export class SectionsComponent implements OnInit {
   tabNameSelected: string = 'LTR';
   formDataEnteredByUser: any = {} as any;
   messages: any = '';
-  calculatedValues: any = {
-    ltv: '-',
-    propertyValue: '-',
-    maxLoanAmount: '-',
-    tiAmount: '-',
-    loanPurpose: '-',
-    loan_amount: '-',
-    rate: '-',
-    fico: '-',
-    dscr: '-',
-    property_type: '-',
-    piti: '-',
-    disc: '-',
-    totalRents: '-',
-    totalCost: '-',
-    cashTo: '-',
-    approvalCode: '-'
-  };
+  calculatedValues: any = DEFAULT_CALCULATED_VALUES;
+  selectedRow: any = {};
   activatedSub: Subscription = {} as Subscription;
   activatedSubStatus: Subscription = {} as Subscription;
   rateStackResponseReceived: any;
+  dataUpdated = false;
 
   @Input()
   isToggled: boolean = false;
@@ -128,6 +131,10 @@ export class SectionsComponent implements OnInit {
         (loan) => loan.toLowerCase() === selectedLoanText.value.toLowerCase()
       ) || '';
 
+    this.rateStackResponseReceived = [];
+    this.dataUpdated = false;
+    this.selectedRow = {};
+
     if (this.typeSelected === 'New Loan') {
       console.log('came here');
       this.atlasId = '';
@@ -136,53 +143,67 @@ export class SectionsComponent implements OnInit {
     }
     else {
       this.enablePricingButton = true;
+      this.dataToFillInForms = {};
+      this.calculatedValues = DEFAULT_CALCULATED_VALUES;
     }
   }
 
   getPricingById() {
-    if (this.atlasId) {
+    if (this.atlasId && !this.dataUpdated) {
       this.http
         .get(`${environment.apiUrl}/Price/GetLoanInputs/${this.atlasId}`)
         .subscribe((response: any) => {
           this.dataToFillInForms = response;
         });
+      return;
     }
-    if (!this.atlasId && this.typeSelected === 'New Loan') {
-      const { input: { property_economics, loan_inputs: { loan_amount, appraised_value, purchase_price, annual_taxes, annual_hoi, annual_other } } } = this.formDataEnteredByUser;
-      // let mf_gross_rents = 0;
-      // if (property_economics?.property_units?.length) {
-      //   const initialValue = 0;
-      //   mf_gross_rents = property_economics.property_units.reduce(
-      //     (previousValue: any, currentValue: any) => {
-      //       return currentValue?.market_rent + currentValue?.in_place_rent;
-      //     },
-      //     initialValue
-      //   );
-      // }
-      this.formDataEnteredByUser.input.loan_inputs = {
-        ...this.formDataEnteredByUser.input.loan_inputs,
-        LTV: loan_amount / Math.min(appraised_value, purchase_price),
-        TI: (annual_taxes + annual_hoi) / 12,
-        TIA: (annual_taxes + annual_hoi + annual_other) / 12,
-        ARV: 0,
-        ILTV: 0,
-        LTC: 0,
-        LTARV: 0,
-        // mf_gross_rents
-      }
-      this.http
-        .post(`${environment.apiUrl}/Price/GetPrice`, {
-          ...this.formDataEnteredByUser,
-        })
-        .subscribe((response: any) => {
-          this.rateStackResponseReceived = response;
-        });
+    // if (!this.atlasId && this.typeSelected === 'New Loan') {
+    const { input: { property_economics, loan_inputs: { loan_amount, appraised_value, purchase_price, annual_taxes, annual_hoi, annual_other } } } = this.formDataEnteredByUser;
+    // let mf_gross_rents = 0;
+    // if (property_economics?.property_units?.length) {
+    //   const initialValue = 0;
+    //   mf_gross_rents = property_economics.property_units.reduce(
+    //     (previousValue: any, currentValue: any) => {
+    //       return currentValue?.market_rent + currentValue?.in_place_rent;
+    //     },
+    //     initialValue
+    //   );
+    // }
+    this.formDataEnteredByUser.input.loan_inputs = {
+      ...this.formDataEnteredByUser.input.loan_inputs,
+      LTV: loan_amount / Math.min(appraised_value, purchase_price),
+      TI: (annual_taxes + annual_hoi) / 12,
+      TIA: (annual_taxes + annual_hoi + annual_other) / 12,
+      ARV: 0,
+      ILTV: 0,
+      LTC: 0,
+      LTARV: 0,
+      // mf_gross_rents
     }
+
+    if (this.atlasId) {
+      this.formDataEnteredByUser.input.loan_inputs.atlasId = this.atlasId;
+    }
+    this.http
+      .post(`${environment.apiUrl}/Price/GetPrice`, {
+        ...this.formDataEnteredByUser,
+      })
+      .subscribe((response: any) => {
+        this.rateStackResponseReceived = response;
+      });
+    // }
   }
 
   ngOnDestroy(): void {
     this.activatedSub?.unsubscribe();
     this.activatedSubStatus?.unsubscribe();
+  }
+
+  onAtlasIdChange(): void {
+    this.dataToFillInForms = {};
+    this.calculatedValues = DEFAULT_CALCULATED_VALUES;
+    this.selectedRow = {};
+    this.dataUpdated = false;
   }
 
   onRowToPass(data: any) {
@@ -204,6 +225,9 @@ export class SectionsComponent implements OnInit {
           origination_points = 0,
           other_costs = 0
         },
+        property_economics: {
+          property_units
+        }
       },
     } = this.formDataEnteredByUser;
     const { rate, dscr, piti, disc_prem: disc, approval_code } = data;
@@ -220,7 +244,7 @@ export class SectionsComponent implements OnInit {
     this.calculatedValues = {
       ltv: ((loan_amount * 1.0) / propertyValue).toFixed(2),
       propertyValue: (propertyValue * 1.0).toFixed(2),
-      maxLoanAmount: (maxLtvSelectedPercent * propertyValue * 1.0).toFixed(2),
+      maxLoanAmount: (maxLtvSelectedPercent * propertyValue * 1.0 / 100).toFixed(2),
       tiAmount: ((annual_taxes * 1.0 + annual_hoi) / 12).toFixed(2),
       loan_purpose,
       loan_amount,
@@ -230,10 +254,92 @@ export class SectionsComponent implements OnInit {
       property_type,
       piti,
       disc,
-      totalRents: totalCost,
-      totalCost: '-',
+      totalRents: (property_units || []).reduce((acc: number, curr: { market_rent: number }) => (acc += curr.market_rent || 0), 0),
+      totalCost: totalCost,
       cashTo: loan_amount - purchase_price - totalCost,
       approvalCode: approval_code
     };
+    this.selectedRow = data;
+  }
+
+  onLockRate(): void {
+    const eligibilityDetails = JSON.parse(localStorage.getItem('maxLtvSelectedDetails') || '')
+    this.http
+      .post(`${environment.apiUrl}/Quote/LockRate`, {
+        rateStackViewModel: {
+          "stackRuleId": 0,
+          "atlasId": this.selectedRow.atlas_id,
+          "atlasRunId": 0,
+          "rate": this.selectedRow.rate,
+          "dscr": this.selectedRow.dscr,
+          "piti": this.selectedRow.piti,
+          "price": this.selectedRow.price,
+          "dsicPrem": this.selectedRow.disc_prem,
+          "isIOEnabled": true,
+          "isParRate": true,
+          "isLockRate": true,
+          // "status": "string",
+          // "createdDate": "2022-04-08T19:46:22.461Z",
+          // "updatedDate": "2022-04-08T19:46:22.461Z"
+        },
+        "eligibilityViewModels": [
+          {
+            "eligibilityId": 0,
+            "atlasId": 0,
+            "atlasRunId": 0,
+            "ficoRange": eligibilityDetails.ficoRange,
+            // "purchase": "string",
+            // "rateTerm": "string",
+            // "cashOut": "string",
+            "isLockRate": true,
+            "rateStackId": 0,
+            // "status": "string",
+            // "createdDate": "2022-04-08T19:46:22.461Z",
+            // "updatedDate": "2022-04-08T19:46:22.461Z"
+          }
+        ],
+        "loanTermViewModel": {
+          "loanTermId": 0,
+          "atlasId": 0,
+          "atlasRunId": 0,
+          "loanPurpose": this.calculatedValues.loan_purpose,
+          "loanAmount": this.calculatedValues.loan_amount,
+          "fico": this.calculatedValues.fico,
+          "propertyType": this.calculatedValues.property_type,
+          "propertyValue": +this.calculatedValues.propertyValue,
+          "grossRents": this.calculatedValues.totalRents,
+          "ltv": +this.calculatedValues.ltv,
+          "rate": this.calculatedValues.rate,
+          "cashToOrFrom": this.calculatedValues.cashTo,
+          "dscr": this.calculatedValues.dscr,
+          "piti": (+this.calculatedValues.piti).toFixed(0),
+          "discPrem": this.selectedRow.disc_prem,
+          "totalCost": this.calculatedValues.totalCost,
+          "isLockRate": true,
+          "rateStackId": 0,
+          // "status": "string",
+          // "createdDate": "2022-04-08T19:46:22.461Z",
+          // "updatedDate": "2022-04-08T19:46:22.461Z"
+        },
+        "calculatedValueViewModel": {
+          "calculatedValueId": 0,
+          "atlasId": 0,
+          "atlasRunId": 0,
+          "ltv": +this.calculatedValues.ltv,
+          "maxLoanAmount": +this.calculatedValues.maxLoanAmount,
+          "totalPoints": 0,
+          "propertyValue": +this.calculatedValues.propertyValue,
+          "tiAmount": (+this.calculatedValues.tiAmount).toFixed(0),
+          "totalClosingCosts": (+this.calculatedValues.totalCost).toFixed(0),
+          "isLockRate": true,
+          "rateStackId": 0,
+          // "status": "string",
+          // "createdDate": "2022-04-08T19:46:22.461Z",
+          // "updatedDate": "2022-04-08T19:46:22.461Z"
+        }
+      })
+      .subscribe((response: any) => {
+        this.rateStackResponseReceived = response;
+      });
   }
 }

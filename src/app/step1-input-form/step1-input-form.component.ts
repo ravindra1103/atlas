@@ -1,8 +1,10 @@
 import {
   Component,
+  EventEmitter,
   Input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
 } from '@angular/core';
 import {
@@ -32,6 +34,10 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
 
   @Input()
   dataToFillInForms: any;
+
+  @Input() isEdit = false;
+
+  @Output() formUpdated = new EventEmitter();
 
   formLabel: string = 'Step 1';
   step1InputForm: FormGroup = {} as FormGroup;
@@ -73,7 +79,7 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
         arv: this.dataToFillInForms.loan_inputs['arv'] || '',
       });
     } else {
-      this.step1InputForm.reset();
+      this.step1InputForm?.reset();
       this.step1InputForm = new FormGroup({
         fico: new FormControl(null),
         loan_purpose: new FormControl('Purchase'),
@@ -90,6 +96,9 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
       });
 
       this.step1InputForm.valueChanges.subscribe((formChanges) => {
+        if (this.isEdit && (this.step1InputForm.touched || this.step1InputForm.dirty)) {
+          this.formUpdated.emit()
+        }
         this.formsService.dataChangeEmitter.next({
           key: 'step1',
           data: formChanges,

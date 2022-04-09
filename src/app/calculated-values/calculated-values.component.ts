@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-calculated-values',
@@ -17,6 +17,8 @@ export class CalculatedValuesComponent implements OnInit, OnChanges {
 
   @Input() calculatedValues: any;
 
+  @Output() onLockRate = new EventEmitter();
+
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -29,7 +31,7 @@ export class CalculatedValuesComponent implements OnInit, OnChanges {
   ngOnInit(): void {
   }
 
-  onTabChange(tabValue:any) {
+  onTabChange(tabValue: any) {
     this.selectedTab = tabValue;
   }
 }

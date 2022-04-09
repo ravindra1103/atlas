@@ -34,8 +34,8 @@ export class EligibilityLoanTermsComponent implements OnInit, OnChanges {
   tabNameSelected: string = 'LTR';
 
   @Input() messages: any;
-  
-  constructor(private http: HttpClient, private formsService: FormService) {}
+
+  constructor(private http: HttpClient, private formsService: FormService) { }
 
   ngOnInit(): void {
     this.messageToLoad.push(
@@ -84,9 +84,10 @@ export class EligibilityLoanTermsComponent implements OnInit, OnChanges {
       let attrNameToUse = this.getAttrName(loanPurpose);
 
       if (nums[0] <= fico && nums[1] >= fico) {
-        singleRow['highlight']['highlight' +attrNameToUse] = true;
+        singleRow['highlight']['highlight' + attrNameToUse] = true;
         this.maxLtvSelectedPercent = singleRow[attrNameToUse];
         localStorage.setItem('maxLtvSelectedPercent', singleRow[attrNameToUse]);
+        localStorage.setItem('maxLtvSelectedDetails', JSON.stringify({ col: attrNameToUse, range: singleRow['fico_range'] }));
       }
       else {
         singleRow['highlight']['highlight' + attrNameToUse] = false;
@@ -109,7 +110,7 @@ export class EligibilityLoanTermsComponent implements OnInit, OnChanges {
       case 'Purchase':
         return 'purchase';
       case 'Delayed Purchase':
-          return 'purchase';        
+        return 'purchase';
       case 'Rate/Term':
         return 'rate_term';
       case 'Cash Out':

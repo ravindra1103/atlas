@@ -28,6 +28,7 @@
         placeholder="Enter Atlas ID"
         [disabled]="typeSelected !== 'Existing Loan'"
         [(ngModel)]="atlasId"
+        (ngModelChange)="onAtlasIdChange()"
       />
     </mat-form-field>
     <button mat-flat-button color="primary" (click)="getPricingById()" [disabled]="!enablePricingButton">
@@ -43,8 +44,11 @@
       [rateStackResponseReceived]="rateStackResponseReceived"
       [formDataEnteredByUser]="formDataEnteredByUser"
       [calculatedValues]="calculatedValues"
+      [isEdit]="!!atlasId"
       (onRowSelection)="onRowToPass($event)"
+      (formUpdated)="dataUpdated = true"
       [messages]="messages"
+      (onLockRate)="onLockRate()"
     ></app-section-tab>
   </div>
 </div>
