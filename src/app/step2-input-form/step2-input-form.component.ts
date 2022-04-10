@@ -45,9 +45,20 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
     'No PPP',
   ];
 
-  constructor(private formsService: FormService) { }
+  constructor(private formsService: FormService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['dataToFillInForms'] && Object.keys(this.dataToFillInForms)?.length)
+     {
+        this.disableDiv = false;
+        this.step2InputForm?.enable();
+     }
+     
+    // this.disableDiv = changes['tabNameSelected'] && !Object.keys(this.dataToFillInForms)?.length;
+    //   // this.disableDiv = true;
+    //this.disableDiv = !!changes['tabNameSelected'];
+    // if (changes['tabNameSelected'])
+    //   this.disableDiv = true;
     this.populateFormIfDataAvailable();
   }
 
@@ -65,7 +76,8 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
         ppp_type: this.dataToFillInForms.loan_inputs['ppp_type'],
         ppp_term: this.dataToFillInForms.loan_inputs['ppp_term'],
         step2_units: this.dataToFillInForms.loan_inputs['step2_units'] || '',
-        step2_zip_code: this.dataToFillInForms.loan_inputs['step2_zip_code'] || ''
+        step2_zip_code:
+          this.dataToFillInForms.loan_inputs['step2_zip_code'] || '',
       });
     } else {
       this.step2InputForm = new FormGroup({
@@ -81,25 +93,29 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
         ppp_type: new FormControl('Hard'),
         ppp_term: new FormControl('60 Mos.'),
       });
-      this.step2InputForm.valueChanges.subscribe(formChanges => {
-        if (this.isEdit && (this.step2InputForm.touched || this.step2InputForm.dirty)) {
+      this.step2InputForm.valueChanges.subscribe((formChanges) => {
+        if (
+          this.isEdit &&
+          (this.step2InputForm.touched || this.step2InputForm.dirty)
+        ) {
           this.formUpdated.emit();
         }
 
-        this.formsService.dataChangeEmitter.next(
-          {
-            key: 'step2',
-            data: formChanges
-          })
+        this.omitValuesToNotEmit(formChanges);
+        this.formsService.dataChangeEmitter.next({
+          key: 'step2',
+          data: formChanges,
+        });
       });
       this.formsService.dataChangeEmitter.subscribe((eventData: any) => {
         if (eventData.key === 'step1')
-          this.disableDiv = !eventData.data['fico'] || !eventData.data['appraised_value'];
+          this.disableDiv =
+            !eventData.data['fico'] || !eventData.data['appraised_value'];
       });
       this.step2InputForm.statusChanges.subscribe((status) => {
         this.formsService.statusChangeEmitter.next({
           key: 'step2',
-          status
+          status: this.getStatus(),
         });
       });
     }
@@ -120,21 +136,28 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
       ppp_term: new FormControl('60 Mos.'),
     });
     this.step2InputForm.disable();
-    this.step2InputForm.valueChanges.subscribe(formChanges => this.formsService.dataChangeEmitter.next(
-      {
+
+    this.step2InputForm.valueChanges.subscribe((formChanges) => {
+      this.omitValuesToNotEmit(formChanges);
+      this.formsService.dataChangeEmitter.next({
         key: 'step2',
-        data: formChanges
-      }));
+        data: formChanges,
+      })
+    });
+
     this.formsService.dataChangeEmitter.subscribe((eventData: any) => {
       if (eventData.key === 'step1') {
-        this.disableDiv = !eventData.data['fico'] || !eventData.data['appraised_value'];
-        this.disableDiv ? this.step2InputForm.disable() : this.step2InputForm.enable();
+        this.disableDiv =
+          !eventData.data['fico'] || !eventData.data['appraised_value'];
+        this.disableDiv
+          ? this.step2InputForm.disable()
+          : this.step2InputForm.enable();
       }
     });
     this.step2InputForm.statusChanges.subscribe((status) => {
       this.formsService.statusChangeEmitter.next({
         key: 'step2',
-        status
+        status: this.getStatus(),
       });
     });
   }
@@ -142,5 +165,37 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
   getClassToApply() {
     if (this.isToggled) return 'width93Px';
     return 'width105Px';
+  }
+
+  getStatus() {
+    const step2Form = this.step2InputForm.value;
+    let isValid = false;
+
+    isValid =
+      step2Form.loan_amount &&
+      step2Form.annual_taxes &&
+      step2Form.annual_hoi &&
+      step2Form.annual_other &&
+      step2Form.origination_points &&
+      step2Form.broker_points &&
+      step2Form.other_costs;
+
+    if (!isValid) return 'INVALID';
+
+    if (this.tabNameSelected !== 'LTR') {
+      isValid = step2Form.step2_units && step2Form.step2_zip_code?.length === 5;
+    }
+    return isValid ? 'VALID' : 'INVALID';
+  }
+
+  omitValuesToNotEmit(formChanges: any) {
+    if (this.tabNameSelected === 'LTR') {
+      delete formChanges?.step2_units;
+      delete formChanges?.step2_zip_code;
+    }
+    else {
+      delete formChanges?.ppp_type;
+      delete formChanges?.ppp_term;
+    }
   }
 }

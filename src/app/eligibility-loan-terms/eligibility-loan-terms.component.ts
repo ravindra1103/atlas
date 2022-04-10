@@ -79,7 +79,7 @@ export class EligibilityLoanTermsComponent implements OnInit, OnChanges {
     let singleRow, nums;
     for (let i = 0; i < this.dataToLoad?.length || 0; i++) {
       singleRow = this.dataToLoad[i];
-      nums = singleRow['fico_range'].split('-');
+      nums = singleRow['fico_range']?.split('-');
       singleRow['highlight'] = {};
       let attrNameToUse = this.getAttrName(loanPurpose);
 

@@ -82,3 +82,15 @@
     padding-left: 5px;
   }
   
+  .date_container {        
+    float: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  ::ng-deep .mat-datepicker-toggle button{
+    float: left;
+    width: 0.5em !important;
+    height: 0.9em !important;
+  }

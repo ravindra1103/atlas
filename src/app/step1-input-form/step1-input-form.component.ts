@@ -7,15 +7,8 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
-import { data } from '../data/ui-metadata';
+import { FormControl, FormGroup } from '@angular/forms';
 import { FormService } from '../shared/form.service';
-import { InputForm, RecordInput, SingleSectionTab } from '../shared/interfaces';
 
 @Component({
   selector: 'app-step1-input-form',
@@ -52,7 +45,7 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
   ];
   propertyType: string[] = ['SFR', 'Condo', '2-4 Unit', '5+ Units'];
 
-  constructor(private formsService: FormService) { }
+  constructor(private formsService: FormService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     this.populateFormIfDataAvailable();
@@ -74,7 +67,7 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
         units: this.dataToFillInForms.loan_inputs['units'] || 0,
         zip_code: this.dataToFillInForms.loan_inputs['zip_code'] || '-',
         acquisition_date:
-          this.dataToFillInForms.loan_inputs['acquisition_date'] || '-',
+          this.dataToFillInForms.loan_inputs['acquisition_date'] || new Date(),
         rehab_amount: this.dataToFillInForms.loan_inputs['rehab_amount'],
         arv: this.dataToFillInForms.loan_inputs['arv'] || '',
       });
@@ -90,15 +83,23 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
         upb: new FormControl(null),
         units: new FormControl(null),
         zip_code: new FormControl(null),
-        acquisition_date: new FormControl(null),
+        acquisition_date: new FormControl(new Date()),
         rehab_amount: new FormControl(null),
         arv: new FormControl(null),
       });
 
       this.step1InputForm.valueChanges.subscribe((formChanges) => {
-        if (this.isEdit && (this.step1InputForm.touched || this.step1InputForm.dirty)) {
-          this.formUpdated.emit()
+        if (
+          this.isEdit &&
+          (this.step1InputForm.touched || this.step1InputForm.dirty)
+        ) {
+          this.formUpdated.emit();
         }
+        if (formChanges?.acquisition_date && this.isValidDate(formChanges.acquisition_date))
+        formChanges.acquisition_date =
+          formChanges?.acquisition_date?.toISOString();
+
+        this.omitValuesToNotEmit(formChanges);
         this.formsService.dataChangeEmitter.next({
           key: 'step1',
           data: formChanges,
@@ -106,9 +107,10 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
       });
 
       this.step1InputForm.statusChanges.subscribe((status) => {
+        //this.getStatus();
         this.formsService.statusChangeEmitter.next({
           key: 'step1',
-          status,
+          status: this.getStatus(),
         });
       });
       this.showAcquisitionDate = false;
@@ -126,12 +128,14 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
       upb: new FormControl(null),
       units: new FormControl(null),
       zip_code: new FormControl(null),
-      acquisition_date: new FormControl(null),
+      acquisition_date: new FormControl(new Date()),
       rehab_amount: new FormControl(null),
       arv: new FormControl(null),
     });
 
     this.step1InputForm.valueChanges.subscribe((formChanges) => {
+      formChanges.acquisition_date = formChanges.acquisition_date?.toISOString();
+      this.omitValuesToNotEmit(formChanges);
       this.formsService.dataChangeEmitter.next({
         key: 'step1',
         data: formChanges,
@@ -141,7 +145,7 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
     this.step1InputForm.statusChanges.subscribe((status) => {
       this.formsService.statusChangeEmitter.next({
         key: 'step1',
-        status,
+        status: this.getStatus(),
       });
     });
   }
@@ -161,4 +165,78 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
       this.showUPB = true;
     }
   }
+
+  getStatus() {
+    const step1Form = this.step1InputForm.value;
+    let isValid = false;
+
+    if (
+      step1Form.loan_purpose === 'Purchase' ||
+      step1Form.loan_purpose === 'Delayed Purchase'
+    ) {
+      isValid =
+        step1Form.fico &&
+        step1Form.experience &&
+        step1Form.appraised_value &&
+        step1Form.purchase_price;
+    } else if (
+      step1Form.loan_purpose === 'Rate/Term' ||
+      step1Form.loan_purpose === 'Cash Out'
+    ) {
+      isValid =
+        step1Form.fico &&
+        step1Form.experience &&
+        step1Form.appraised_value &&
+        step1Form.upb;
+    }
+
+    if (!isValid) return 'INVALID';
+
+    if (this.tabNameSelected === 'LTR') {
+      isValid = step1Form.units && step1Form.zip_code?.length === 5;
+    } else if (this.tabNameSelected === 'Rehab') {
+      isValid = step1Form.rehab_amount && step1Form.arv;
+    }
+
+    return isValid ? 'VALID' : 'INVALID';
+  }
+
+  omitValuesToNotEmit(formChanges: any) {
+    const step1Form = this.step1InputForm.value;
+
+    if (
+      step1Form.loan_purpose === 'Purchase' ||
+      step1Form.loan_purpose === 'Delayed Purchase'
+    ) {
+      delete formChanges?.upb;
+
+      if (step1Form.loan_purpose === 'Purchase')
+        delete formChanges?.acquisition_date;
+    } else if (
+      step1Form.loan_purpose === 'Rate/Term' ||
+      step1Form.loan_purpose === 'Cash Out'
+    ) {
+      delete formChanges?.purchase_price;
+    }
+
+    if (this.tabNameSelected !== 'Rehab') {
+      delete formChanges?.rehab_amount;
+      delete formChanges?.arv;
+    }
+    
+    if (this.tabNameSelected !== 'LTR') {
+      delete formChanges?.units;
+      delete formChanges?.zip_code;
+    }
+  }
+
+  isValidDate(strDate: any) {
+    if (strDate.length != 10) return false;
+    let dateParts = strDate.split("/");
+    let date = new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
+    if (date.getDate() == dateParts[0] && date.getMonth() == (dateParts[1] - 1) && date.getFullYear() == dateParts[2]) {
+        return true;
+    }
+    else return false;
+}
 }
