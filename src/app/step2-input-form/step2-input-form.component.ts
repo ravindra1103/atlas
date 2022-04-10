@@ -53,12 +53,6 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
         this.disableDiv = false;
         this.step2InputForm?.enable();
      }
-     
-    // this.disableDiv = changes['tabNameSelected'] && !Object.keys(this.dataToFillInForms)?.length;
-    //   // this.disableDiv = true;
-    //this.disableDiv = !!changes['tabNameSelected'];
-    // if (changes['tabNameSelected'])
-    //   this.disableDiv = true;
     this.populateFormIfDataAvailable();
   }
 

@@ -45,10 +45,6 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
   constructor(private formsService: FormService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    //this.disableDiv = !!changes['tabNameSelected'];
-    // if (changes['tabNameSelected'])
-    //   this.disableDiv = true;
-
     if (this.tabNameSelected === 'LTR') {
       this.populateFormIfDataAvailableLtr();
     } else {
