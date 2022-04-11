@@ -46,6 +46,7 @@ export class SectionsComponent implements OnInit {
   activatedSubStatus: Subscription = {} as Subscription;
   rateStackResponseReceived: any;
   dataUpdated = false;
+  isGetApiResponseReceived = false;
 
   @Input()
   isToggled: boolean = false;
@@ -71,7 +72,7 @@ export class SectionsComponent implements OnInit {
 
     this.activatedSub = this.formsService.dataChangeEmitter.subscribe(
       (changesReceived) => {
-
+        
         if (changesReceived?.key !== 'property_economics_multi') {
           this.formDataEnteredByUser = {
             input: {
@@ -95,12 +96,13 @@ export class SectionsComponent implements OnInit {
             },
           };
         }
+        //console.log('formDataEnteredByUser - ', this.formDataEnteredByUser);
       }
     );
 
     this.activatedSubStatus = this.formsService.statusChangeEmitter.subscribe(
       (statusChanges) => {
-        if (this.typeSelected === 'New Loan') {
+        if (this.typeSelected === 'New Loan' || this.isGetApiResponseReceived) {
           this.aggregatedStatus = {
             ...this.aggregatedStatus,
             [statusChanges['key']]: statusChanges['status'],
@@ -119,6 +121,7 @@ export class SectionsComponent implements OnInit {
     this.tabNameSelected = this.sections[event].labelValue;
     if (this.typeSelected === 'New Loan')
       this.enablePricingButton = false;
+      this.isGetApiResponseReceived = false;
   }
 
   getTabDataByIndex(index: number = 0): SingleSectionTab {
@@ -134,9 +137,9 @@ export class SectionsComponent implements OnInit {
     this.rateStackResponseReceived = [];
     this.dataUpdated = false;
     this.selectedRow = {};
+    this.isGetApiResponseReceived = false;
 
     if (this.typeSelected === 'New Loan') {
-      console.log('came here');
       this.atlasId = '';
       this.dataToFillInForms = {};
       this.enablePricingButton = false;
@@ -154,6 +157,7 @@ export class SectionsComponent implements OnInit {
         .get(`${environment.apiUrl}/Price/GetLoanInputs/${this.atlasId}`)
         .subscribe((response: any) => {
           this.dataToFillInForms = response;
+          this.isGetApiResponseReceived = true;
         });
       return;
     }
@@ -191,7 +195,6 @@ export class SectionsComponent implements OnInit {
       .subscribe((response: any) => {
         this.rateStackResponseReceived = response;
       });
-    // }
   }
 
   ngOnDestroy(): void {
@@ -204,6 +207,9 @@ export class SectionsComponent implements OnInit {
     this.calculatedValues = DEFAULT_CALCULATED_VALUES;
     this.selectedRow = {};
     this.dataUpdated = false;
+    this.isGetApiResponseReceived = false;
+    this.enablePricingButton = true;
+    this.rateStackResponseReceived = [];
   }
 
   onRowToPass(data: any) {
@@ -341,5 +347,9 @@ export class SectionsComponent implements OnInit {
       .subscribe((response: any) => {
         this.rateStackResponseReceived = response;
       });
+  }
+
+  formUpdated() {
+    this.dataUpdated = true;
   }
 }

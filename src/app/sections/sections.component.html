@@ -29,6 +29,7 @@
         [disabled]="typeSelected !== 'Existing Loan'"
         [(ngModel)]="atlasId"
         (ngModelChange)="onAtlasIdChange()"
+        required
       />
     </mat-form-field>
     <button mat-flat-button color="primary" (click)="getPricingById()" [disabled]="!enablePricingButton">
@@ -46,7 +47,7 @@
       [calculatedValues]="calculatedValues"
       [isEdit]="!!atlasId"
       (onRowSelection)="onRowToPass($event)"
-      (formUpdated)="dataUpdated = true"
+      (formUpdated)="formUpdated()"
       [messages]="messages"
       (onLockRate)="onLockRate()"
     ></app-section-tab>

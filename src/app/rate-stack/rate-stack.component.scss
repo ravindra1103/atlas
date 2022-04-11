@@ -98,3 +98,9 @@ td.mat-cell:first-of-type {
   border-bottom: 2px solid red;
   border-top: 2px solid red;
 }
+
+.rateStackScroll {
+  min-height: 380px;
+  max-height: 380px;
+  overflow: auto;
+}

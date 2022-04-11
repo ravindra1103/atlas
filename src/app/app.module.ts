@@ -36,6 +36,21 @@ import { Step1InputFormComponent } from './step1-input-form/step1-input-form.com
 import { Step2InputFormComponent } from './step2-input-form/step2-input-form.component';
 import { PropertyEconomicsInputFormComponent } from './property-economics-input-form/property-economics-input-form.component';
 import { OnlynumberDirective } from './directives/number.directive';
+import { DateAdapter, MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
+import { Platform } from '@angular/cdk/platform';
+import { CustomDateAdapter } from './shared/customdateadapter';
+
+export const MY_FORMATS = {
+  parse: {
+      dateInput: 'LL'
+  },
+  display: {
+      dateInput: 'YYYY-MM-DD',
+      monthYearLabel: 'YYYY',
+      dateA11yLabel: 'LL',
+      monthYearA11yLabel: 'YYYY'
+  }
+};
 
 @NgModule({
   declarations: [
@@ -77,9 +92,13 @@ import { OnlynumberDirective } from './directives/number.directive';
     FormsModule,
     MatTooltipModule,
     HttpClientModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
-  providers: [],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
+    {provide: DateAdapter, useClass: CustomDateAdapter, deps: [MAT_DATE_LOCALE, Platform]}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -77,7 +77,7 @@
           <label class="label inputFieldLabelCommon">Zip Code</label>
         </span>
         <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
-          <input matInput type="number" required formControlName="step2_zip_code" />
+          <input matInput type="text" required formControlName="step2_zip_code" required maxlength="5" minlength="5" appOnlynumber/>
         </mat-form-field>
       </div>
 
