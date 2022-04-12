@@ -33,7 +33,7 @@ export class RateStackComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     let newDataToBind = [];
     let count = 0, indexOfPar;
-    const goal = 1;
+    const goal = 0;
     let is_par = Infinity
     if (this.rateStackResponseReceived?.length) {
       for (let rateRow of this.rateStackResponseReceived) {
