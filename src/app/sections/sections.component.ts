@@ -182,6 +182,7 @@ export class SectionsComponent implements OnInit {
       ILTV: 0,
       LTC: 0,
       LTARV: 0,
+      property_value: Math.min(appraised_value, purchase_price)
       // mf_gross_rents
     }
 
