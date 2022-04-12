@@ -111,6 +111,7 @@
             type="number"
             formControlName="units"
             required
+            [ngClass]="getNgInvalidClassIfRequired()"
           />
         </mat-form-field>
       </div>

@@ -41,6 +41,7 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
   showSingleReplicaLayout = false;
   counter = 0;
   mapOfCounter = new Map();
+  maxPossibleReplicas = 4;
 
   constructor(private formsService: FormService) {}
 
@@ -147,7 +148,7 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
             eventData.data['units'] != null &&
             this.replicasToShow !== eventData.data['units']
           ) {
-            this.replicasToShow = eventData.data['units'];
+            this.replicasToShow = eventData.data['units'] > 4 ? this.maxPossibleReplicas : eventData.data['units'];
             (<FormArray>(
               this.propertyEconomicsInputForm.get('multiReplicaLayout')
             )).clear();
@@ -266,7 +267,7 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
             eventData.data['units'] != null &&
             this.replicasToShow !== eventData.data['units']
           ) {
-            this.replicasToShow = eventData.data['units'];
+            this.replicasToShow = eventData.data['units'] > 4 ? this.maxPossibleReplicas : eventData.data['units'];
             (<FormArray>(
               this.propertyEconomicsInputForm.get('multiReplicaLayout')
             )).clear();
@@ -363,7 +364,7 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
           eventData.data['units'] != null &&
           this.replicasToShow !== eventData.data['units']
         ) {
-          this.replicasToShow = eventData.data['units'];
+          this.replicasToShow = eventData.data['units'] > 4 ? this.maxPossibleReplicas : eventData.data['units'];
           (<FormArray>(
             this.propertyEconomicsInputForm.get('multiReplicaLayout')
           )).clear();
@@ -445,7 +446,7 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
       let count = 0;
       for (let i = 0; i < this.replicasToShow; i++) {
         dataToReturn.push({
-          unit_number: i,
+          unit_number: i + 1,
           market_rent: formChanges['multiReplicaLayout'][count++],
           in_place_rent: formChanges['multiReplicaLayout'][count++],
           sq_ft: formChanges['multiReplicaLayout'][count++],
