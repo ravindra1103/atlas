@@ -7,7 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormService } from '../shared/form.service';
 
 @Component({
@@ -81,7 +81,8 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
         appraised_value: new FormControl(null),
         purchase_price: new FormControl(null),
         upb: new FormControl(null),
-        units: new FormControl(null),
+        //@ts-ignore
+        units: new FormControl(null,[this.validateUnits.bind(this)]),
         zip_code: new FormControl(null),
         acquisition_date: new FormControl(new Date()),
         rehab_amount: new FormControl(null),
@@ -114,6 +115,15 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
         });
       });
       this.showAcquisitionDate = false;
+      
+      
+      this.step1InputForm?.controls['property_type']?.valueChanges.subscribe({
+        next: (value: any) => {
+          setTimeout(() => {
+            this.step1InputForm.controls['units'].updateValueAndValidity();
+          }, 100);
+        }
+      });
     }
   }
 
@@ -126,7 +136,8 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
       appraised_value: new FormControl(null),
       purchase_price: new FormControl(null),
       upb: new FormControl(null),
-      units: new FormControl(null),
+      //@ts-ignore
+      units: new FormControl(null, [this.validateUnits.bind(this)]),
       zip_code: new FormControl(null),
       acquisition_date: new FormControl(new Date()),
       rehab_amount: new FormControl(null),
@@ -147,6 +158,15 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
         key: 'step1',
         status: this.getStatus(),
       });
+    });
+
+    //@ts-ignore
+    this.step1InputForm?.controls['property_type']?.valueChanges.subscribe({
+      next: (value: any) => {
+        setTimeout(() => {
+          this.step1InputForm.controls['units'].updateValueAndValidity();
+        }, 100);
+      }
     });
   }
 
@@ -193,7 +213,8 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
     if (!isValid) return 'INVALID';
 
     if (this.tabNameSelected === 'LTR') {
-      isValid = step1Form.units && step1Form.zip_code?.length === 5;
+      isValid = step1Form.units && step1Form.zip_code?.length === 5 &&
+             this.step1InputForm?.controls['units']?.valid;
     } else if (this.tabNameSelected === 'Rehab') {
       isValid = step1Form.rehab_amount && step1Form.arv;
     }
@@ -238,5 +259,35 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
         return true;
     }
     else return false;
-}
+  }
+
+  validateUnits = (control: any)  => {
+    if (!this.step1InputForm || !this.step1InputForm?.value)
+      return null;
+    const step1Form = this.step1InputForm.value;
+    switch(step1Form.property_type) {
+      case 'SFR': 
+      case 'Condo': 
+        if (control.value !== 1) {
+          return {'invalidUnitValue': true};
+        }
+      break;
+      
+      case '2-4 Unit': 
+      if (control.value < 2 || control.value > 4) {
+        return {'invalidUnitValue': true};
+      }
+      break;
+    }
+    return null;
+  }
+
+  getNgInvalidClassIfRequired() {
+    const unitsControl = this.step1InputForm.get('units') || {};
+    if (unitsControl) {
+      //@ts-ignore
+      return (unitsControl.errors || {}).invalidUnitValue ? 'ng-invalid': '';
+    }
+    return '';
+  }
 }
