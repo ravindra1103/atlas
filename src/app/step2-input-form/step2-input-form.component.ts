@@ -76,11 +76,11 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
     } else {
       this.step2InputForm = new FormGroup({
         loan_amount: new FormControl(null),
-        annual_taxes: new FormControl(null),
-        annual_hoi: new FormControl(null),
-        annual_other: new FormControl(null),
-        origination_points: new FormControl(null),
-        broker_points: new FormControl(null),
+        annual_taxes: new FormControl(0),
+        annual_hoi: new FormControl(0),
+        annual_other: new FormControl(0),
+        origination_points: new FormControl(1),
+        broker_points: new FormControl(1),
         other_costs: new FormControl(null),
         step2_units: new FormControl(0),
         step2_zip_code: new FormControl(null),
@@ -118,11 +118,11 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.step2InputForm = new FormGroup({
       loan_amount: new FormControl(null),
-      annual_taxes: new FormControl(null),
-      annual_hoi: new FormControl(null),
-      annual_other: new FormControl(null),
-      origination_points: new FormControl(null),
-      broker_points: new FormControl(null),
+      annual_taxes: new FormControl(0),
+      annual_hoi: new FormControl(0),
+      annual_other: new FormControl(0),
+      origination_points: new FormControl(1),
+      broker_points: new FormControl(1),
       other_costs: new FormControl(null),
       step2_units: new FormControl(0),
       step2_zip_code: new FormControl(null),
@@ -167,9 +167,9 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
 
     isValid =
       step2Form.loan_amount &&
-      step2Form.annual_taxes &&
-      step2Form.annual_hoi &&
-      step2Form.annual_other &&
+      // step2Form.annual_taxes &&
+      // step2Form.annual_hoi &&
+      // step2Form.annual_other &&
       step2Form.origination_points &&
       step2Form.broker_points &&
       step2Form.other_costs;
