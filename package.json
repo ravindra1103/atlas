@@ -6,6 +6,7 @@
     "start": "ng serve",
     "build": "ng build --configuration dev",
     "build:qa": "ng build --configuration qa",
+    "build:uat": "ng build --configuration uat",
     "build:prod": "ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
