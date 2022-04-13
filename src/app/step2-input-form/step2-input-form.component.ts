@@ -154,6 +154,21 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
         status: this.getStatus(),
       });
     });
+    this.formsService.dataChangeEmitter.subscribe((eventData: any) => {
+      if (eventData.key === 'step1') {
+        const maxLtvSelectedPercentValue = localStorage.getItem(
+          'maxLtvSelectedPercent'
+        );
+        let maxLtvSelectedPercent = 0;
+        const value = maxLtvSelectedPercentValue?.slice(0, -1);
+        if (value) {
+          maxLtvSelectedPercent = +value;
+        }
+        if (maxLtvSelectedPercent && eventData.data['appraised_value']) {
+          this.step2InputForm.patchValue({ loan_amount: (maxLtvSelectedPercent * eventData.data['appraised_value']*1.0/100)});
+        }
+      }
+    });
   }
 
   getClassToApply() {
