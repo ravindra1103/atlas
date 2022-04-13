@@ -117,7 +117,14 @@
             <div class="calcDValue">{{calculatedValues?.cashTo}}</div>
           </div>
         </mat-grid-tile>
+        <mat-grid-tile [colspan]="'12'" class="bottomRight">
+          <div class="cellWrapper">
+            <div class="calcDLabel">Approval Code</div>
+            <div class="calcDValue">{{calculatedValues?.approvalCode}}</div>
+          </div>
+        </mat-grid-tile>
       </mat-grid-list>
+      
     </div>
   </div>
 
