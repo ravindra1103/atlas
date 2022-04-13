@@ -162,7 +162,7 @@ export class SectionsComponent implements OnInit {
       return;
     }
     // if (!this.atlasId && this.typeSelected === 'New Loan') {
-    const { input: { property_economics, loan_inputs: { loan_amount, appraised_value, purchase_price, annual_taxes, annual_hoi, annual_other, exit_strategy } } } = this.formDataEnteredByUser;
+    const { input: { property_economics, loan_inputs: { loan_amount, appraised_value, purchase_price, annual_taxes, annual_hoi, annual_other, exit_strategy, property_type, mf_expense_ratio, mf_gross_rents, mf_noi, mf_reserves } } } = this.formDataEnteredByUser;
     // let mf_gross_rents = 0;
     // if (property_economics?.property_units?.length) {
     //   const initialValue = 0;
@@ -183,8 +183,15 @@ export class SectionsComponent implements OnInit {
       LTC: 0,
       LTARV: 0,
       property_value: Math.min(appraised_value, purchase_price),
-      exit_strategy: this.tabNameSelected === 'LTR' ? null: exit_strategy
-      // mf_gross_rents
+      exit_strategy: this.tabNameSelected === 'LTR' ? null: exit_strategy,
+      mf_expense_ratio: property_type !== '5+ Units' ?  null : mf_expense_ratio, 
+      mf_gross_rents: property_type !== '5+ Units' ?  null : mf_gross_rents, 
+      mf_noi: property_type !== '5+ Units' ?  null : mf_noi, 
+      mf_reserves: property_type !== '5+ Units' ?  null : mf_reserves, 
+    }
+
+    if (property_type === '5+ Units') {
+      this.formDataEnteredByUser.input.property_economics = { property_units: [] };
     }
 
     if (this.atlasId) {
