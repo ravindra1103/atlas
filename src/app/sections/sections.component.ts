@@ -96,7 +96,7 @@ export class SectionsComponent implements OnInit {
             },
           };
         }
-        //console.log('formDataEnteredByUser - ', this.formDataEnteredByUser);
+        console.log('formDataEnteredByUser - ', this.formDataEnteredByUser);
       }
     );
 
@@ -162,7 +162,7 @@ export class SectionsComponent implements OnInit {
       return;
     }
     // if (!this.atlasId && this.typeSelected === 'New Loan') {
-    const { input: { property_economics, loan_inputs: { loan_amount, appraised_value, purchase_price, annual_taxes, annual_hoi, annual_other } } } = this.formDataEnteredByUser;
+    const { input: { property_economics, loan_inputs: { loan_amount, appraised_value, purchase_price, annual_taxes, annual_hoi, annual_other, exit_strategy } } } = this.formDataEnteredByUser;
     // let mf_gross_rents = 0;
     // if (property_economics?.property_units?.length) {
     //   const initialValue = 0;
@@ -182,7 +182,8 @@ export class SectionsComponent implements OnInit {
       ILTV: 0,
       LTC: 0,
       LTARV: 0,
-      property_value: Math.min(appraised_value, purchase_price)
+      property_value: Math.min(appraised_value, purchase_price),
+      exit_strategy: this.tabNameSelected === 'LTR' ? null: exit_strategy
       // mf_gross_rents
     }
 

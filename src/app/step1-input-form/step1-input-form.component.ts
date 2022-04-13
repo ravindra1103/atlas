@@ -108,7 +108,6 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
       });
 
       this.step1InputForm.statusChanges.subscribe((status) => {
-        //this.getStatus();
         this.formsService.statusChangeEmitter.next({
           key: 'step1',
           status: this.getStatus(),
