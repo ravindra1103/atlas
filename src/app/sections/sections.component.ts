@@ -195,7 +195,7 @@ export class SectionsComponent implements OnInit {
     }
 
     if (this.atlasId) {
-      this.formDataEnteredByUser.input.loan_inputs.atlasId = this.atlasId;
+      this.formDataEnteredByUser.input.loan_inputs.atlas_id = this.atlasId;
     }
     this.http
       .post(`${environment.apiUrl}/Price/GetPrice`, {
