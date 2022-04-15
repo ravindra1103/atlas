@@ -222,9 +222,9 @@ export class SectionsComponent implements OnInit {
   }
 
   onRowToPass(data: any) {
-    console.log(this.rateStackResponseReceived);
-    console.log(this.formDataEnteredByUser);
-    console.log(data);
+    // console.log(this.rateStackResponseReceived);
+    // console.log(this.formDataEnteredByUser);
+    // console.log(data);
     const {
       input: {
         loan_inputs: {
@@ -279,12 +279,15 @@ export class SectionsComponent implements OnInit {
 
   onLockRate(): void {
     const eligibilityDetails = JSON.parse(localStorage.getItem('maxLtvSelectedDetails') || '')
+    console.log("this.selectedRow", this.selectedRow);
     this.http
       .post(`${environment.apiUrl}/Quote/LockRate`, {
+        "atlasId": this.selectedRow.atlas_id,
+        "atlasRunId": this.selectedRow.run_id,
         rateStackViewModel: {
           "stackRuleId": 0,
           "atlasId": this.selectedRow.atlas_id,
-          "atlasRunId": 0,
+          "atlasRunId": this.selectedRow.run_id,
           "rate": this.selectedRow.rate,
           "dscr": this.selectedRow.dscr,
           "piti": this.selectedRow.piti,
@@ -293,53 +296,24 @@ export class SectionsComponent implements OnInit {
           "isIOEnabled": true,
           "isParRate": true,
           "isLockRate": true,
-          // "status": "string",
-          // "createdDate": "2022-04-08T19:46:22.461Z",
-          // "updatedDate": "2022-04-08T19:46:22.461Z"
         },
-        "eligibilityViewModels": [
+        eligibilityViewModels: [
           {
             "eligibilityId": 0,
-            "atlasId": 0,
-            "atlasRunId": 0,
-            "ficoRange": eligibilityDetails.ficoRange,
-            // "purchase": "string",
-            // "rateTerm": "string",
-            // "cashOut": "string",
+            "atlasId": this.selectedRow.atlas_id,
+            "atlasRunId": this.selectedRow.run_id,
+            "ficoRange": eligibilityDetails.range,
+            "purchase": null,
+            "rateTerm": null,
+            "cashOut": null,
             "isLockRate": true,
             "rateStackId": 0,
-            // "status": "string",
-            // "createdDate": "2022-04-08T19:46:22.461Z",
-            // "updatedDate": "2022-04-08T19:46:22.461Z"
           }
         ],
-        "loanTermViewModel": {
-          "loanTermId": 0,
-          "atlasId": 0,
-          "atlasRunId": 0,
-          "loanPurpose": this.calculatedValues.loan_purpose,
-          "loanAmount": this.calculatedValues.loan_amount,
-          "fico": this.calculatedValues.fico,
-          "propertyType": this.calculatedValues.property_type,
-          "propertyValue": +this.calculatedValues.propertyValue,
-          "grossRents": this.calculatedValues.totalRents,
-          "ltv": +this.calculatedValues.ltv,
-          "rate": this.calculatedValues.rate,
-          "cashToOrFrom": this.calculatedValues.cashTo,
-          "dscr": this.calculatedValues.dscr,
-          "piti": (+this.calculatedValues.piti).toFixed(0),
-          "discPrem": this.selectedRow.disc_prem,
-          "totalCost": this.calculatedValues.totalCost,
-          "isLockRate": true,
-          "rateStackId": 0,
-          // "status": "string",
-          // "createdDate": "2022-04-08T19:46:22.461Z",
-          // "updatedDate": "2022-04-08T19:46:22.461Z"
-        },
-        "calculatedValueViewModel": {
+        calculatedValueViewModel: {
           "calculatedValueId": 0,
-          "atlasId": 0,
-          "atlasRunId": 0,
+          "atlasId": this.selectedRow.atlas_id,
+          "atlasRunId": this.selectedRow.run_id,
           "ltv": +this.calculatedValues.ltv,
           "maxLoanAmount": +this.calculatedValues.maxLoanAmount,
           "totalPoints": 0,
@@ -348,9 +322,6 @@ export class SectionsComponent implements OnInit {
           "totalClosingCosts": (+this.calculatedValues.totalCost).toFixed(0),
           "isLockRate": true,
           "rateStackId": 0,
-          // "status": "string",
-          // "createdDate": "2022-04-08T19:46:22.461Z",
-          // "updatedDate": "2022-04-08T19:46:22.461Z"
         }
       })
       .subscribe((response: any) => {
