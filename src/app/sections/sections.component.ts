@@ -72,7 +72,7 @@ export class SectionsComponent implements OnInit {
 
     this.activatedSub = this.formsService.dataChangeEmitter.subscribe(
       (changesReceived) => {
-        
+
         if (changesReceived?.key !== 'property_economics_multi') {
           this.formDataEnteredByUser = {
             input: {
@@ -121,7 +121,7 @@ export class SectionsComponent implements OnInit {
     this.tabNameSelected = this.sections[event].labelValue;
     if (this.typeSelected === 'New Loan')
       this.enablePricingButton = false;
-      this.isGetApiResponseReceived = false;
+    this.isGetApiResponseReceived = false;
   }
 
   getTabDataByIndex(index: number = 0): SingleSectionTab {
@@ -183,11 +183,11 @@ export class SectionsComponent implements OnInit {
       LTC: 0,
       LTARV: 0,
       property_value: Math.min(appraised_value, purchase_price),
-      exit_strategy: this.tabNameSelected === 'LTR' ? null: exit_strategy,
-      mf_expense_ratio: property_type !== '5+ Units' ?  null : mf_expense_ratio, 
-      mf_gross_rents: property_type !== '5+ Units' ?  null : mf_gross_rents, 
-      mf_noi: property_type !== '5+ Units' ?  null : mf_noi, 
-      mf_reserves: property_type !== '5+ Units' ?  null : mf_reserves, 
+      exit_strategy: this.tabNameSelected === 'LTR' ? null : exit_strategy,
+      mf_expense_ratio: property_type !== '5+ Units' ? null : mf_expense_ratio,
+      mf_gross_rents: property_type !== '5+ Units' ? null : mf_gross_rents,
+      mf_noi: property_type !== '5+ Units' ? null : mf_noi,
+      mf_reserves: property_type !== '5+ Units' ? null : mf_reserves,
     }
 
     if (property_type === '5+ Units') {
@@ -272,56 +272,62 @@ export class SectionsComponent implements OnInit {
       totalRents: (property_units || []).reduce((acc: number, curr: { market_rent: number }) => (acc += curr.market_rent || 0), 0),
       totalCost: totalCost,
       cashTo: loan_amount - purchase_price - totalCost,
-      approvalCode: approval_code
+      approvalCode: approval_code,
+      total_points: ((broker_points + origination_points) * loan_amount)
     };
     this.selectedRow = data;
   }
 
   onLockRate(): void {
-    const eligibilityDetails = JSON.parse(localStorage.getItem('maxLtvSelectedDetails') || '')
-    console.log("this.selectedRow", this.selectedRow);
     this.http
-      .post(`${environment.apiUrl}/Quote/LockRate`, {
-        "atlasId": this.selectedRow.atlas_id,
-        "atlasRunId": this.selectedRow.run_id,
-        rateStackViewModel: {
-          "stackRuleId": 0,
-          "atlasId": this.selectedRow.atlas_id,
-          "atlasRunId": this.selectedRow.run_id,
+      .post(`${environment.apiUrl}/Rate/LockRate`, {
+        "atlas_id": this.selectedRow.atlas_id,
+        "run_id": this.selectedRow.run_id,
+        rate_data: {
           "rate": this.selectedRow.rate,
           "dscr": this.selectedRow.dscr,
           "piti": this.selectedRow.piti,
           "price": this.selectedRow.price,
-          "dsicPrem": this.selectedRow.disc_prem,
-          "isIOEnabled": true,
-          "isParRate": true,
-          "isLockRate": true,
+          "disc": this.selectedRow.disc,
+          "is_par": this.selectedRow.is_par,
+          "max_ltv": this.selectedRow.max_ltv,
+          "min_dscr": this.selectedRow.min_dscr,
+          "messages": this.selectedRow.messages,
+          "approval_code": this.selectedRow.approval_code,
+          "io_dscr": this.selectedRow.io_dscr,
+          "io_piti": this.selectedRow.io_piti,
+          "io_price": this.selectedRow.io_price,
+          "io_disc": this.selectedRow.io_disc,
+          "io_is_par": this.selectedRow.io_is_par,
+          "io_max_ltv": this.selectedRow.io_max_ltv,
+          "io_min_dscr": this.selectedRow.io_min_dscr,
+          "io_messages": this.selectedRow.io_messages,
+          "io_approval_code": this.selectedRow.io_approval_code,
+          "rate_sheet_id": this.selectedRow.rate_sheet_id,
         },
-        eligibilityViewModels: [
-          {
-            "eligibilityId": 0,
-            "atlasId": this.selectedRow.atlas_id,
-            "atlasRunId": this.selectedRow.run_id,
-            "ficoRange": eligibilityDetails.range,
-            "purchase": null,
-            "rateTerm": null,
-            "cashOut": null,
-            "isLockRate": true,
-            "rateStackId": 0,
-          }
-        ],
-        calculatedValueViewModel: {
-          "calculatedValueId": 0,
-          "atlasId": this.selectedRow.atlas_id,
-          "atlasRunId": this.selectedRow.run_id,
-          "ltv": +this.calculatedValues.ltv,
-          "maxLoanAmount": +this.calculatedValues.maxLoanAmount,
-          "totalPoints": 0,
-          "propertyValue": +this.calculatedValues.propertyValue,
-          "tiAmount": (+this.calculatedValues.tiAmount).toFixed(0),
-          "totalClosingCosts": (+this.calculatedValues.totalCost).toFixed(0),
-          "isLockRate": true,
-          "rateStackId": 0,
+        loan_terms:
+        {
+          "loan_purpose": this.calculatedValues.loan_purpose,
+          "loan_amount": this.calculatedValues.loan_amount,
+          "fico": this.calculatedValues.fico,
+          "property_type": this.calculatedValues.property_type,
+          "property_value": +this.calculatedValues.propertyValue,
+          "gross_rents": this.calculatedValues.totalRents,
+          "LTV": +this.calculatedValues.ltv,
+          "rate": +this.selectedRow.rate,
+          "cash_to_from": this.selectedRow.cashTo,
+          "DSCR": this.selectedRow.dscr,
+          "PITI": this.selectedRow.piti,
+          "DiscPrem": this.selectedRow.disc_prem,
+          "total_cost": this.calculatedValues.totalCost
+        },
+        calculated_values: {  
+          "LTV": +this.calculatedValues.ltv,
+          "max_loan_amount": +this.calculatedValues.maxLoanAmount,
+          "total_points": +this.calculatedValues.total_points,
+          "property_value": +this.calculatedValues.propertyValue,
+          "TI_amount": +this.calculatedValues.tiAmount,
+          "total_closing_costs": Math.trunc(this.calculatedValues.totalCost),
         }
       })
       .subscribe((response: any) => {
