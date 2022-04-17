@@ -100,7 +100,9 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
       }
     } else {
       this.counter = 0;
-      this.propertyEconomicsInputForm?.get('multiReplicaLayout')?.reset();
+      if (this.propertyEconomicsInputForm?.get) {
+        this.propertyEconomicsInputForm?.get('multiReplicaLayout')?.reset();
+      }
       this.replicasToShow = 0;
 
       this.propertyEconomicsInputFormNonLtr = new FormGroup({
@@ -159,7 +161,7 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
         }
       });
 
-      this.propertyEconomicsInputForm.valueChanges.pipe(startWith(null), pairwise()).subscribe(([formChagesPrev, formChanges]: [any, any]) => {
+      this.propertyEconomicsInputForm?.valueChanges?.pipe(startWith(null), pairwise()).subscribe(([formChagesPrev, formChanges]: [any, any]) => {
         if (
           this.isEdit &&
           (this.propertyEconomicsInputForm.touched ||
@@ -181,7 +183,7 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
         }
       });
 
-      this.propertyEconomicsInputFormNonLtr.valueChanges.subscribe(
+      this.propertyEconomicsInputFormNonLtr?.valueChanges?.subscribe(
         (formChanges) => {
           if (
             this.isEdit &&
@@ -197,14 +199,14 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
         }
       );
 
-      this.propertyEconomicsInputForm.statusChanges.subscribe((status) => {
+      this.propertyEconomicsInputForm?.statusChanges?.subscribe((status) => {
         this.formsService.statusChangeEmitter.next({
           key: 'property_economics',
           status: this.getStatus(),
         });
       });
 
-      this.propertyEconomicsInputFormNonLtr.statusChanges.subscribe(
+      this.propertyEconomicsInputFormNonLtr?.statusChanges?.subscribe(
         (status) => {
           if (this.tabNameSelected !== 'LTR')
             this.formsService.statusChangeEmitter.next({
