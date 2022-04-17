@@ -178,7 +178,7 @@ export class SectionsComponent implements OnInit {
     this.formDataEnteredByUser.input.loan_inputs = {
       ...this.formDataEnteredByUser.input.loan_inputs,
       LTV: loan_amount / Math.min(appraised_value, purchase_price),
-      loan_amount: Math.trunc(loan_amount),
+      loan_amount: Math.ceil(loan_amount),
       TI: (annual_taxes + annual_hoi) / 12,
       TIA: (annual_taxes + annual_hoi + annual_other) / 12,
       ARV: 0,
@@ -330,7 +330,7 @@ export class SectionsComponent implements OnInit {
           "total_points": +this.calculatedValues.total_points,
           "property_value": +this.calculatedValues.propertyValue,
           "TI_amount": +this.calculatedValues.tiAmount,
-          "total_closing_costs": Math.trunc(this.calculatedValues.totalCost),
+          "total_closing_costs": Math.ceil(this.calculatedValues.totalCost),
         }
       })
       .subscribe((response: any) => {

@@ -165,8 +165,8 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
         if (maxLtvSelectedPercent && eventData.data['appraised_value']) {
           let loanAmount = (maxLtvSelectedPercent * eventData.data['appraised_value']*1.0/100);
           this.step2InputForm.patchValue({
-             loan_amount: Math.trunc(Math.round((loanAmount + Number.EPSILON) * 100) / 100),
-             other_costs: Math.trunc(Math.round(((2750 + (1.0/100 * loanAmount)) + Number.EPSILON) * 100) / 100),
+             loan_amount: Math.ceil(Math.round((loanAmount + Number.EPSILON) * 100) / 100),
+             other_costs: Math.ceil(Math.round(((2750 + (1.0/100 * loanAmount)) + Number.EPSILON) * 100) / 100),
             });
         }
       }
