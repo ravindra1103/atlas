@@ -178,6 +178,7 @@ export class SectionsComponent implements OnInit {
     this.formDataEnteredByUser.input.loan_inputs = {
       ...this.formDataEnteredByUser.input.loan_inputs,
       LTV: loan_amount / Math.min(appraised_value, purchase_price),
+      loan_amount: Math.trunc(loan_amount),
       TI: (annual_taxes + annual_hoi) / 12,
       TIA: (annual_taxes + annual_hoi + annual_other) / 12,
       ARV: 0,
