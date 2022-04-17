@@ -96,7 +96,8 @@ export class SectionsComponent implements OnInit {
             },
           };
         }
-        console.log('formDataEnteredByUser - ', this.formDataEnteredByUser);
+        this.filterFormDataBasedCurrentState();
+        //console.log('formDataEnteredByUser - ', this.formDataEnteredByUser);
       }
     );
 
@@ -122,6 +123,7 @@ export class SectionsComponent implements OnInit {
     if (this.typeSelected === 'New Loan')
       this.enablePricingButton = false;
     this.isGetApiResponseReceived = false;
+    this.onAtlasIdChange();
   }
 
   getTabDataByIndex(index: number = 0): SingleSectionTab {
@@ -337,5 +339,89 @@ export class SectionsComponent implements OnInit {
 
   formUpdated() {
     this.dataUpdated = true;
+  }
+
+  filterFormDataBasedCurrentState() {
+    this.omitValuesStep1();
+    this.omitValuesStep2();
+    this.omitValuesPropertyEconomics();
+    if (this.formDataEnteredByUser?.input?.loan_inputs?.other_costs) {
+      this.formDataEnteredByUser.input.loan_inputs.other_costs = (this.formDataEnteredByUser.input.loan_inputs.other_costs | 0);
+    }
+    if (this.formDataEnteredByUser?.input?.loan_inputs?.loan_amount) {
+      this.formDataEnteredByUser.input.loan_inputs.other_costs = (this.formDataEnteredByUser.input.loan_inputs.loan_amount | 0);
+    }
+  }
+
+  omitValuesStep1() {
+    const formsValue = this.formDataEnteredByUser?.input?.loan_inputs;
+    
+    if (Object.keys(formsValue || {}).length === 0)
+      return ;
+    
+    if (
+      formsValue.loan_purpose === 'Purchase' ||
+      formsValue.loan_purpose === 'Delayed Purchase'
+    ) {
+      delete formsValue?.upb;
+
+      if (formsValue.loan_purpose === 'Purchase')
+        delete formsValue?.acquisition_date;
+    } else if (
+      formsValue.loan_purpose === 'Rate/Term' ||
+      formsValue.loan_purpose === 'Cash Out'
+    ) {
+      delete formsValue?.purchase_price;
+    }
+
+    if (this.tabNameSelected !== 'Rehab') {
+      delete formsValue?.rehab_amount;
+      delete formsValue?.arv;
+    }
+  }
+
+  omitValuesStep2() {
+    const formsValue = this.formDataEnteredByUser?.input?.loan_inputs;
+
+    if (Object.keys(formsValue || {}).length === 0)
+      return ;
+      
+    if (this.tabNameSelected === 'Rehab') {
+      delete formsValue?.units;
+      delete formsValue?.zip_code;
+    }
+    else {
+      delete formsValue?.ppp_type;
+      delete formsValue?.ppp_term;
+    }
+  }
+
+  omitValuesPropertyEconomics() {
+    const formsValue = this.formDataEnteredByUser?.input?.loan_inputs;
+
+    if (Object.keys(formsValue || {}).length === 0)
+      return ;
+
+    if (formsValue.property_type !== "5+ Units" || this.tabNameSelected !== 'LTR') {
+      delete formsValue?.mf_expense_ratio;
+      // delete formsValue?.mf_gross_rents;
+      delete formsValue?.mf_noi;
+      delete formsValue?.mf_reserves;
+    }
+    
+    if  ((formsValue.property_type === "5+ Units" &&
+                this.formDataEnteredByUser?.input?.property_economics?.property_units?.length)
+                 || this.tabNameSelected !== 'LTR') {
+        this.formDataEnteredByUser.input.property_economics.property_units = [];
+    }
+
+    if (formsValue.property_type !== "5+ Units" && this.tabNameSelected === "LTR") {
+      delete formsValue?.mf_gross_rents;
+    }
+    if (this.tabNameSelected === "LTR") {
+      delete formsValue?.exit_strategy;
+      delete formsValue?.profitability_amount;
+      delete formsValue?.profitability_percent;
+    }
   }
 }

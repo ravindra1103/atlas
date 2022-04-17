@@ -7,7 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { FormService } from '../shared/form.service';
 
 @Component({
@@ -69,21 +69,21 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
         other_costs: this.dataToFillInForms.loan_inputs['other_costs'],
         ppp_type: this.dataToFillInForms.loan_inputs['ppp_type'],
         ppp_term: this.dataToFillInForms.loan_inputs['ppp_term'],
-        step2_units: this.dataToFillInForms.loan_inputs['step2_units'] || '',
-        step2_zip_code:
+        units: this.dataToFillInForms.loan_inputs['step2_units'] || '',
+        zip_code:
           this.dataToFillInForms.loan_inputs['step2_zip_code'] || '',
       });
     } else {
       this.step2InputForm = new FormGroup({
-        loan_amount: new FormControl(null),
+        loan_amount: new FormControl(0),
         annual_taxes: new FormControl(0),
         annual_hoi: new FormControl(0),
         annual_other: new FormControl(0),
         origination_points: new FormControl(1),
         broker_points: new FormControl(1),
-        other_costs: new FormControl(null),
-        step2_units: new FormControl(0),
-        step2_zip_code: new FormControl(null),
+        other_costs: new FormControl(0),
+        units: new FormControl(0),
+        zip_code: new FormControl('-'),
         ppp_type: new FormControl('Hard'),
         ppp_term: new FormControl('60 Mos.'),
       });
@@ -95,7 +95,6 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
           this.formUpdated.emit();
         }
 
-        this.omitValuesToNotEmit(formChanges);
         this.formsService.dataChangeEmitter.next({
           key: 'step2',
           data: formChanges,
@@ -117,22 +116,21 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.step2InputForm = new FormGroup({
-      loan_amount: new FormControl(null),
+      loan_amount: new FormControl(0),
       annual_taxes: new FormControl(0),
       annual_hoi: new FormControl(0),
       annual_other: new FormControl(0),
       origination_points: new FormControl(1),
       broker_points: new FormControl(1),
-      other_costs: new FormControl(null),
+      other_costs: new FormControl(0),
       step2_units: new FormControl(0),
-      step2_zip_code: new FormControl(null),
+      step2_zip_code: new FormControl('-'),
       ppp_type: new FormControl('Hard'),
       ppp_term: new FormControl('60 Mos.'),
     });
     this.step2InputForm.disable();
 
     this.step2InputForm.valueChanges.subscribe((formChanges) => {
-      this.omitValuesToNotEmit(formChanges);
       this.formsService.dataChangeEmitter.next({
         key: 'step2',
         data: formChanges,
@@ -165,7 +163,11 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
           maxLtvSelectedPercent = +value;
         }
         if (maxLtvSelectedPercent && eventData.data['appraised_value']) {
-          this.step2InputForm.patchValue({ loan_amount: (maxLtvSelectedPercent * eventData.data['appraised_value']*1.0/100)});
+          let loanAmount = (maxLtvSelectedPercent * eventData.data['appraised_value']*1.0/100);
+          this.step2InputForm.patchValue({
+             loan_amount: Math.round((loanAmount + Number.EPSILON) * 100) / 100,
+             other_costs: Math.round(((2750 + (1.0/100 * loanAmount)) + Number.EPSILON) * 100) / 100,
+            });
         }
       }
     });
@@ -195,16 +197,5 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
       isValid = step2Form.step2_units && step2Form.step2_zip_code?.length === 5;
     }
     return isValid ? 'VALID' : 'INVALID';
-  }
-
-  omitValuesToNotEmit(formChanges: any) {
-    if (this.tabNameSelected === 'LTR') {
-      delete formChanges?.step2_units;
-      delete formChanges?.step2_zip_code;
-    }
-    else {
-      delete formChanges?.ppp_type;
-      delete formChanges?.ppp_term;
-    }
   }
 }

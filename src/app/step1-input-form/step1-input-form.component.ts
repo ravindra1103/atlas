@@ -69,24 +69,24 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
         acquisition_date:
           this.dataToFillInForms.loan_inputs['acquisition_date'] || new Date(),
         rehab_amount: this.dataToFillInForms.loan_inputs['rehab_amount'],
-        arv: this.dataToFillInForms.loan_inputs['arv'] || '',
+        arv: this.dataToFillInForms.loan_inputs['arv'] || 0,
       });
     } else {
       this.step1InputForm?.reset();
       this.step1InputForm = new FormGroup({
-        fico: new FormControl(null),
+        fico: new FormControl('-'),
         loan_purpose: new FormControl('Purchase'),
         experience: new FormControl(0),
         property_type: new FormControl('SFR'),
-        appraised_value: new FormControl(null),
-        purchase_price: new FormControl(null),
-        upb: new FormControl(null),
+        appraised_value: new FormControl(0),
+        purchase_price: new FormControl(0),
+        upb: new FormControl(0),
         //@ts-ignore
-        units: new FormControl(null,[this.validateUnits.bind(this)]),
-        zip_code: new FormControl(null),
+        units: new FormControl(1,[this.validateUnits.bind(this)]),
+        zip_code: new FormControl('-'),
         acquisition_date: new FormControl(new Date()),
-        rehab_amount: new FormControl(null),
-        arv: new FormControl(null),
+        rehab_amount: new FormControl(0),
+        arv: new FormControl(0),
       });
 
       this.step1InputForm.valueChanges.subscribe((formChanges) => {
@@ -97,10 +97,13 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
           this.formUpdated.emit();
         }
         if (formChanges?.acquisition_date && this.isValidDate(formChanges.acquisition_date))
-        formChanges.acquisition_date =
-          formChanges?.acquisition_date?.toISOString();
+          formChanges.acquisition_date =
+            formChanges?.acquisition_date?.toISOString();
+        
+        formChanges.fico = +formChanges?.fico;
 
-        this.omitValuesToNotEmit(formChanges);
+        if (formChanges.arv) formChanges.arv = +formChanges.arv;
+
         this.formsService.dataChangeEmitter.next({
           key: 'step1',
           data: formChanges,
@@ -128,24 +131,27 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.step1InputForm = new FormGroup({
-      fico: new FormControl(null),
+      fico: new FormControl('-'),
       loan_purpose: new FormControl('Purchase'),
       experience: new FormControl(0),
       property_type: new FormControl('SFR'),
-      appraised_value: new FormControl(null),
-      purchase_price: new FormControl(null),
-      upb: new FormControl(null),
+      appraised_value: new FormControl(0),
+      purchase_price: new FormControl(0),
+      upb: new FormControl(0),
       //@ts-ignore
-      units: new FormControl(null, [this.validateUnits.bind(this)]),
-      zip_code: new FormControl(null),
+      units: new FormControl(1, [this.validateUnits.bind(this)]),
+      zip_code: new FormControl('-'),
       acquisition_date: new FormControl(new Date()),
-      rehab_amount: new FormControl(null),
-      arv: new FormControl(null),
+      rehab_amount: new FormControl(0),
+      arv: new FormControl(0),
     });
 
     this.step1InputForm.valueChanges.subscribe((formChanges) => {
       formChanges.acquisition_date = formChanges.acquisition_date?.toISOString();
-      this.omitValuesToNotEmit(formChanges);
+      formChanges.fico = +formChanges?.fico;
+
+      if (formChanges.arv) formChanges.arv = +formChanges.arv;
+      
       this.formsService.dataChangeEmitter.next({
         key: 'step1',
         data: formChanges,
@@ -219,35 +225,6 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
     }
 
     return isValid ? 'VALID' : 'INVALID';
-  }
-
-  omitValuesToNotEmit(formChanges: any) {
-    const step1Form = this.step1InputForm.value;
-
-    if (
-      step1Form.loan_purpose === 'Purchase' ||
-      step1Form.loan_purpose === 'Delayed Purchase'
-    ) {
-      delete formChanges?.upb;
-
-      if (step1Form.loan_purpose === 'Purchase')
-        delete formChanges?.acquisition_date;
-    } else if (
-      step1Form.loan_purpose === 'Rate/Term' ||
-      step1Form.loan_purpose === 'Cash Out'
-    ) {
-      delete formChanges?.purchase_price;
-    }
-
-    if (this.tabNameSelected !== 'Rehab') {
-      delete formChanges?.rehab_amount;
-      delete formChanges?.arv;
-    }
-    
-    if (this.tabNameSelected !== 'LTR') {
-      delete formChanges?.units;
-      delete formChanges?.zip_code;
-    }
   }
 
   isValidDate(strDate: any) {
