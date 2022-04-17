@@ -6,13 +6,13 @@
 
   <div *ngIf="tabNameSelected === 'LTR'">
     <div *ngIf="!showSingleReplicaLayout">
-      <!-- <div class="inputUnit">Unit 1</div> -->
       <form [formGroup]="propertyEconomicsInputForm">
         <div formArrayName="multiReplicaLayout">
             <div class="form-group"
                  *ngFor="let item of [].constructor(replicasToShow || 0); let i = index">
-                 <div class="inputUnit">Unit {{i + 1}}</div>
-                 <div class="flexDisplay">
+                <div [formGroupName]="i">
+                  <div class="inputUnit">Unit {{i + 1}}</div>
+                  <div class="flexDisplay">
                     <div class="inputField">
                     <span class="whiteSpaceNoWrap">
                         <label class="label inputFieldLabelCommon">Market Rent</label>
@@ -22,7 +22,7 @@
                         matInput
                         type="number"
                         placeholder="0"
-                        [formControlName]="getName(i + '0')"
+                        formControlName="market_rent"
                         required
                         />
                         <span matPrefix>$&nbsp;</span>
@@ -38,15 +38,15 @@
                       matInput
                       type="number"
                       placeholder="0"
-                      [formControlName]="getName(i + '1')"
+                      formControlName="in_place_rent"
                       required
                     />
                     <span matPrefix>$&nbsp;</span>
                   </mat-form-field>
                 </div>
-                </div>
+                  </div>
       
-              <div class="flexDisplay">
+                <div class="flexDisplay">
                 <div class="inputField">
                   <span class="whiteSpaceNoWrap">
                     <label class="label inputFieldLabelCommon">Sq Ft</label>
@@ -56,7 +56,7 @@
                       matInput
                       type="number"
                       placeholder="0"
-                      [formControlName]="getName(i + '2')"
+                      formControlName="sq_ft"
                       required
                     />
                     <span matPrefix>$&nbsp;</span>
@@ -68,7 +68,7 @@
                     <label class="label inputFieldLabelCommon">Lease Type</label>
                   </span>
                   <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
-                    <mat-select [formControlName]="getName(i + '3')">
+                    <mat-select formControlName="lease_type">
                       <mat-option
                         *ngFor="let valueToDisplay of leaseTypes"
                         [value]="valueToDisplay"
@@ -77,8 +77,9 @@
                     </mat-select>
                   </mat-form-field>
                 </div>
-              </div>
-            </div>
+                  </div>
+                </div>
+          </div>
         </div>
       </form>
     </div>
@@ -115,7 +116,7 @@
                     type="number"
                     placeholder="0"
                     formControlName="expense-ratio-amount"
-                    required
+                    readonly
                 />
                 <span matPrefix>$&nbsp;</span>
                 </mat-form-field>
@@ -132,7 +133,7 @@
                     type="number"
                     placeholder="0"
                     formControlName="reserves"
-                    required
+                    readonly
                 />
                 <span matPrefix>$&nbsp;</span>
                 </mat-form-field>
@@ -152,7 +153,7 @@
                     type="number"
                     placeholder="0"
                     formControlName="noi"
-                    required
+                    readonly
                     />
                     <span matPrefix>$&nbsp;</span>
                 </mat-form-field>
@@ -218,7 +219,7 @@
             <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
               <input
                 matInput
-                type="text"
+                type="number"
                 formControlName="profitability_amount"
                 required
               />
