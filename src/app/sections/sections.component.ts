@@ -391,10 +391,10 @@ export class SectionsComponent implements OnInit {
       delete formsValue?.units;
       delete formsValue?.zip_code;
     }
-    else {
-      delete formsValue?.ppp_type;
-      delete formsValue?.ppp_term;
-    }
+    // else {
+    //   delete formsValue?.ppp_type;
+    //   delete formsValue?.ppp_term;
+    // }
   }
 
   omitValuesPropertyEconomics() {
