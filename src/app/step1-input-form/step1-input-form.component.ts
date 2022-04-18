@@ -153,7 +153,7 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
       formChanges.fico = +formChanges?.fico;
 
       if (formChanges.arv) formChanges.arv = +formChanges.arv;
-      
+
       this.formsService.dataChangeEmitter.next({
         key: 'step1',
         data: formChanges,
@@ -202,19 +202,19 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
       step1Form.loan_purpose === 'Delayed Purchase'
     ) {
       isValid =
-        step1Form.fico &&
-        step1Form.experience &&
-        step1Form.appraised_value &&
-        step1Form.purchase_price;
+        step1Form.fico != null &&
+        step1Form.experience != null &&
+        step1Form.appraised_value != null &&
+        step1Form.purchase_price != null;
     } else if (
       step1Form.loan_purpose === 'Rate/Term' ||
       step1Form.loan_purpose === 'Cash Out'
     ) {
       isValid =
-        step1Form.fico &&
-        step1Form.experience &&
-        step1Form.appraised_value &&
-        step1Form.upb;
+        step1Form.fico != null &&
+        step1Form.experience != null &&
+        step1Form.appraised_value != null &&
+        step1Form.upb != null;
     }
 
     if (!isValid) return 'INVALID';
@@ -223,7 +223,7 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
       isValid = step1Form.units && step1Form.zip_code?.length === 5 &&
              this.step1InputForm?.controls['units']?.valid;
     } else if (this.tabNameSelected === 'Rehab') {
-      isValid = step1Form.rehab_amount && step1Form.arv;
+      isValid = step1Form.rehab_amount != null && step1Form.arv != null;
     }
 
     return isValid ? 'VALID' : 'INVALID';

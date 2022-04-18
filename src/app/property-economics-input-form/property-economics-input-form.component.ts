@@ -465,10 +465,10 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
       const formValue = this.propertyEconomicsInputForm.value;
       if (this.showSingleReplicaLayout) {
         isValid =
-          formValue.singleReplicaLayout.gross_rent &&
-          formValue.singleReplicaLayout['expense-ratio-amount'] &&
-          formValue.singleReplicaLayout.reserves &&
-          formValue.singleReplicaLayout.noi;
+          formValue.singleReplicaLayout.gross_rent != null &&
+          formValue.singleReplicaLayout['expense-ratio-amount'] != null &&
+          formValue.singleReplicaLayout.reserves != null &&
+          formValue.singleReplicaLayout.noi != null;
       } else {
         let controlsAvailable = this.getControls();
         const isInvalidGroupFound = controlsAvailable?.findIndex((singleFormGroup) => singleFormGroup.status !== "VALID");
