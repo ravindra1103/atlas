@@ -350,7 +350,7 @@ export class SectionsComponent implements OnInit {
       this.formDataEnteredByUser.input.loan_inputs.other_costs = (this.formDataEnteredByUser.input.loan_inputs.other_costs | 0);
     }
     if (this.formDataEnteredByUser?.input?.loan_inputs?.loan_amount) {
-      this.formDataEnteredByUser.input.loan_inputs.other_costs = (this.formDataEnteredByUser.input.loan_inputs.loan_amount | 0);
+      this.formDataEnteredByUser.input.loan_inputs.loan_amount = (this.formDataEnteredByUser.input.loan_inputs.loan_amount | 0);
     }
   }
 

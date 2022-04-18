@@ -66,11 +66,18 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
         upb: this.dataToFillInForms.loan_inputs['upb'],
         units: this.dataToFillInForms.loan_inputs['units'] || 0,
         zip_code: this.dataToFillInForms.loan_inputs['zip_code'] || '-',
-        acquisition_date:
-          this.dataToFillInForms.loan_inputs['acquisition_date'] || new Date(),
+        acquisition_date: this.dataToFillInForms.loan_inputs['acquisition_date']
+                          ? this.formatDateReceived(this.dataToFillInForms.loan_inputs['acquisition_date'])
+                          : new Date(),
         rehab_amount: this.dataToFillInForms.loan_inputs['rehab_amount'],
         arv: this.dataToFillInForms.loan_inputs['arv'] || 0,
       });
+      if (['Purchase', 'Delayed Purchase'].includes(this.dataToFillInForms.loan_inputs['loan_purpose'])) {
+        this.showUPB = false;
+      } else if (['Rate/Term', 'Cash Out'].includes(this.dataToFillInForms.loan_inputs['loan_purpose'])) {
+        this.showUPB = true;
+      }
+
     } else {
       if (this.step1InputForm?.reset) {
         this.step1InputForm?.reset();
@@ -267,5 +274,10 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
       return (unitsControl.errors || {}).invalidUnitValue ? 'ng-invalid': '';
     }
     return '';
+  }
+
+  formatDateReceived(date: string) {
+    const parts = date.split("/");
+    return parts?.length === 3 ? new Date(+parts[0], +parts[1] - 1, +parts[2]) || new Date() : new Date();
   }
 }
