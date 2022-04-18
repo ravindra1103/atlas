@@ -183,13 +183,13 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
     let isValid = false;
 
     isValid =
-      step2Form.loan_amount &&
+      step2Form.loan_amount != null &&
       // step2Form.annual_taxes &&
       // step2Form.annual_hoi &&
       // step2Form.annual_other &&
-      step2Form.origination_points &&
-      step2Form.broker_points &&
-      step2Form.other_costs;
+      step2Form.origination_points != null &&
+      step2Form.broker_points != null &&
+      step2Form.other_costs != null;
 
     if (!isValid) return 'INVALID';
 
