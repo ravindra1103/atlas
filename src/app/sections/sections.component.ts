@@ -175,9 +175,13 @@ export class SectionsComponent implements OnInit {
     //     initialValue
     //   );
     // }
+    let property_value = appraised_value;
+    if (purchase_price > 0) {
+      property_value = Math.min(appraised_value, purchase_price);
+    }
     this.formDataEnteredByUser.input.loan_inputs = {
       ...this.formDataEnteredByUser.input.loan_inputs,
-      LTV: loan_amount / Math.min(appraised_value, purchase_price),
+      LTV: loan_amount / property_value,
       loan_amount: Math.ceil(loan_amount),
       TI: (annual_taxes + annual_hoi) / 12,
       TIA: (annual_taxes + annual_hoi + annual_other) / 12,
@@ -185,7 +189,7 @@ export class SectionsComponent implements OnInit {
       ILTV: 0,
       LTC: 0,
       LTARV: 0,
-      property_value: Math.min(appraised_value, purchase_price),
+      property_value: property_value,
       exit_strategy: this.tabNameSelected === 'LTR' ? null : exit_strategy,
       mf_expense_ratio: property_type !== '5+ Units' ? null : mf_expense_ratio,
       mf_gross_rents: property_type !== '5+ Units' ? null : mf_gross_rents,
@@ -257,7 +261,10 @@ export class SectionsComponent implements OnInit {
     if (value) {
       maxLtvSelectedPercent = +value;
     }
-    let propertyValue = Math.min(appraised_value, purchase_price);
+    let propertyValue = appraised_value;
+    if (purchase_price > 0) {
+      propertyValue = Math.min(appraised_value, purchase_price);
+    }
     const totalCost = ((broker_points + origination_points) * loan_amount) + other_costs + (disc || 0);
     this.calculatedValues = {
       ltv: ((loan_amount * 1.0) / propertyValue).toFixed(2),
