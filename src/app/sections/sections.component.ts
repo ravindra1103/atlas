@@ -265,7 +265,7 @@ export class SectionsComponent implements OnInit {
     if (purchase_price > 0) {
       propertyValue = Math.min(appraised_value, purchase_price);
     }
-    const totalCost = ((broker_points + origination_points) * loan_amount) + other_costs + (disc || 0);
+    const totalCost = (((broker_points + origination_points) * loan_amount*1.0)/ 100) + other_costs + (disc || 0);
     this.calculatedValues = {
       ltv: ((loan_amount * 1.0) / propertyValue).toFixed(2),
       propertyValue: (propertyValue * 1.0).toFixed(2),
