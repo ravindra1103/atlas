@@ -48,6 +48,7 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
   annualTaxesInStep2 = 0;
   annualHoiInStep2 = 0;
   propertyTypeStep1 = '';
+  propertyTypeStep1ChangeDetected = false;
 
   constructor(private formsService: FormService, private fb: FormBuilder) {
   }
@@ -128,14 +129,17 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
           if (eventData.data['property_type'] !== this.propertyTypeStep1) {
             this.resetLayoutIfPropertyTypeChanged(eventData.data['property_type']);
             this.propertyTypeStep1 = eventData.data['property_type'];
+            this.propertyTypeStep1ChangeDetected = true;
           }
 
           this.showSingleReplicaLayout =
             eventData.data['property_type'] === '5+ Units';
           
           if (
-            eventData.data['units'] != null && !this.dataToFillInForms?.property_economics?.property_units?.length
+            eventData.data['units'] != null
+            && (this.replicasToShow !== eventData.data['units'] || this.propertyTypeStep1ChangeDetected)
           ) {
+            this.propertyTypeStep1ChangeDetected = false;
             this.replicasToShow = eventData.data['units'] > 4 ? this.maxPossibleReplicas : eventData.data['units'];
             this.mapOfCounter.clear();
             this.counter = 0;
@@ -316,13 +320,16 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
         if (eventData.data['property_type'] !== this.propertyTypeStep1) {
           this.resetLayoutIfPropertyTypeChanged(eventData.data['property_type']);
           this.propertyTypeStep1 = eventData.data['property_type'];
+          this.propertyTypeStep1ChangeDetected = true;
         }
 
         this.showSingleReplicaLayout =
           eventData.data['property_type'] === '5+ Units';
         if (
-          eventData.data['units'] != null && !this.dataToFillInForms?.property_economics?.property_units?.length
+          eventData.data['units'] != null
+          && (this.replicasToShow !== eventData.data['units'] || this.propertyTypeStep1ChangeDetected)
         ) {
+          this.propertyTypeStep1ChangeDetected = false;
           this.replicasToShow = eventData.data['units'] > 4 ? this.maxPossibleReplicas : eventData.data['units'];
           this.mapOfCounter.clear();
           this.counter = 0;
