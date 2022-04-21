@@ -22,7 +22,9 @@ const DEFAULT_CALCULATED_VALUES = {
   totalRents: '-',
   totalCost: '-',
   cashTo: '-',
-  approvalCode: '-'
+  approvalCode: '-',
+  totalPoints: '-',
+  totalClosingCost: '-'
 }
 @Component({
   selector: 'app-sections',
@@ -265,7 +267,9 @@ export class SectionsComponent implements OnInit {
     if (purchase_price > 0) {
       propertyValue = Math.min(appraised_value, purchase_price);
     }
+    const totalPoints =((broker_points + origination_points) * loan_amount*1.0)/ 100;
     const totalCost = (((broker_points + origination_points) * loan_amount*1.0)/ 100) + other_costs + (disc || 0);
+    const totalClosingCost = (((broker_points + origination_points) * loan_amount*1.0)/ 100) + other_costs;
     this.calculatedValues = {
       ltv: ((loan_amount * 1.0) / propertyValue).toFixed(2),
       propertyValue: (propertyValue * 1.0).toFixed(2),
@@ -283,7 +287,9 @@ export class SectionsComponent implements OnInit {
       totalCost: totalCost,
       cashTo: loan_amount - purchase_price - totalCost,
       approvalCode: approval_code,
-      total_points: ((broker_points + origination_points) * loan_amount)
+      total_points: ((broker_points + origination_points) * loan_amount),
+      totalClosingCost,
+      totalPoints
     };
     this.selectedRow = data;
   }
