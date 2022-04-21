@@ -91,12 +91,12 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
           this.mapOfCounter.set(`${i}3`, this.counter++);
         }
       } else if (this.showSingleReplicaLayout) {
-        this.propertyEconomicsInputForm.setValue({
-          gross_rent: this.dataToFillInForms.loan_inputs['gross_rent'],
+        this.propertyEconomicsInputForm.get('singleReplicaLayout')?.setValue({
+          gross_rent: this.dataToFillInForms.loan_inputs['mf_gross_rents'],
           'expense-ratio-amount':
-            this.dataToFillInForms.loan_inputs['expense-ratio-amount'],
-          reserves: this.dataToFillInForms.loan_inputs['reserves'],
-          noi: this.dataToFillInForms.loan_inputs['noi'],
+            this.dataToFillInForms.loan_inputs['mf_expense_ratio'],
+          reserves: this.dataToFillInForms.loan_inputs['mf_reserves'],
+          noi: this.dataToFillInForms.loan_inputs['mf_noi'],
         });
       }
     } else {

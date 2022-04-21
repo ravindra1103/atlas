@@ -206,6 +206,32 @@ export class SectionsComponent implements OnInit {
     if (this.atlasId) {
       this.formDataEnteredByUser.input.loan_inputs.atlas_id = this.atlasId;
     }
+
+    if (this.formDataEnteredByUser?.input?.loan_inputs?.acquisition_date) {
+      let dateToSet = this.formDataEnteredByUser?.input?.loan_inputs?.acquisition_date;
+      dateToSet?.setDate(dateToSet.getDate() + 1);
+      this.formDataEnteredByUser.input.loan_inputs.acquisition_date  = dateToSet;
+    }
+
+    if (this.formDataEnteredByUser?.input?.loan_inputs?.mf_expense_ratio) {
+      let loanInputs = this.formDataEnteredByUser?.input?.loan_inputs;
+      let expenseRatio = 0,
+       loanAmountInStep2 = loanInputs?.loan_amount || 0,
+       noOfUnitsInStep1 = loanInputs?.units || 0,
+       grossRent = loanInputs?.mf_gross_rents || 0;
+
+      if (loanAmountInStep2 / noOfUnitsInStep1 < 100000) {
+        expenseRatio = grossRent * 0.35;
+      }
+      else if (loanAmountInStep2 / noOfUnitsInStep1 > 250000) {
+        expenseRatio = grossRent * 0.15;
+      }
+      else {
+        expenseRatio = grossRent * 0.25;
+      }
+      this.formDataEnteredByUser.input.loan_inputs.mf_expense_ratio = expenseRatio;
+    }
+
     this.http
       .post(`${environment.apiUrl}/Price/GetPrice`, {
         ...this.formDataEnteredByUser,
@@ -270,6 +296,9 @@ export class SectionsComponent implements OnInit {
     const totalPoints =((broker_points + origination_points) * loan_amount*1.0)/ 100;
     const totalCost = (((broker_points + origination_points) * loan_amount*1.0)/ 100) + other_costs + (disc || 0);
     const totalClosingCost = (((broker_points + origination_points) * loan_amount*1.0)/ 100) + other_costs;
+    const totalRents = (property_units || []).reduce((acc: number, curr: { market_rent: number }) => (acc += curr.market_rent || 0), 0) || 
+                        (this.formDataEnteredByUser?.input?.loan_inputs?.mf_gross_rents || 0);
+
     this.calculatedValues = {
       ltv: ((loan_amount * 1.0) / propertyValue).toFixed(2),
       propertyValue: (propertyValue * 1.0).toFixed(2),
@@ -283,7 +312,7 @@ export class SectionsComponent implements OnInit {
       property_type,
       piti,
       disc,
-      totalRents: (property_units || []).reduce((acc: number, curr: { market_rent: number }) => (acc += curr.market_rent || 0), 0),
+      totalRents: totalRents,
       totalCost: totalCost,
       cashTo: loan_amount - purchase_price - totalCost,
       approvalCode: approval_code,
