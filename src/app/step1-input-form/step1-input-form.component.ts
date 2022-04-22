@@ -105,9 +105,6 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
         ) {
           this.formUpdated.emit();
         }
-        if (formChanges?.acquisition_date && this.isValidDate(formChanges.acquisition_date))
-          formChanges.acquisition_date =
-            formChanges?.acquisition_date?.toISOString();
         
         formChanges.fico = +formChanges?.fico;
 
@@ -156,7 +153,6 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
     });
 
     this.step1InputForm.valueChanges.subscribe((formChanges) => {
-      formChanges.acquisition_date = formChanges.acquisition_date?.toISOString();
       formChanges.fico = +formChanges?.fico;
 
       if (formChanges.arv) formChanges.arv = +formChanges.arv;
