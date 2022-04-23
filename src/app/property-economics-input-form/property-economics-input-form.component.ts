@@ -40,8 +40,6 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
   leaseTypes = ['Long Term', 'Short Term', 'Unoccupied'];
   replicasToShow: number = 0;
   showSingleReplicaLayout = false;
-  counter = 0;
-  mapOfCounter = new Map();
   maxPossibleReplicas = 4;
   noOfUnitsInStep1 = 0;
   loanAmountInStep2 = 0;
@@ -71,8 +69,6 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
 
       this.propertyEconomicsInputForm.setControl('multiReplicaLayout', this.fb.array([]));
       if (!this.showSingleReplicaLayout) {
-        this.counter = 0;
-
         for (let i = 0; i < this.replicasToShow || 0; i++) {
           (<FormArray>(
             this.propertyEconomicsInputForm.get('multiReplicaLayout')
@@ -84,11 +80,6 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
               lease_type: this.dataToFillInForms.property_economics.property_units[i].lease_type || 'Long Term'
             })
           );
-          
-          this.mapOfCounter.set(`${i}0`, this.counter++);
-          this.mapOfCounter.set(`${i}1`, this.counter++);
-          this.mapOfCounter.set(`${i}2`, this.counter++);
-          this.mapOfCounter.set(`${i}3`, this.counter++);
         }
       } else if (this.showSingleReplicaLayout) {
         this.propertyEconomicsInputForm.get('singleReplicaLayout')?.setValue({
@@ -100,7 +91,6 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
         });
       }
     } else {
-      this.counter = 0;
       if (this.propertyEconomicsInputForm?.get) {
         this.propertyEconomicsInputForm?.get('multiReplicaLayout')?.reset();
       }
@@ -141,8 +131,6 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
           ) {
             this.propertyTypeStep1ChangeDetected = false;
             this.replicasToShow = eventData.data['units'] > 4 ? this.maxPossibleReplicas : eventData.data['units'];
-            this.mapOfCounter.clear();
-            this.counter = 0;
             this.propertyEconomicsInputForm.setControl('multiReplicaLayout', this.fb.array([]));
 
             for (let i = 0; i < this.replicasToShow || 0; i++) {
@@ -156,10 +144,6 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
                   lease_type: 'Long Term'
                 })
               );
-              this.mapOfCounter.set(`${i}0`, this.counter++);
-              this.mapOfCounter.set(`${i}1`, this.counter++);
-              this.mapOfCounter.set(`${i}2`, this.counter++);
-              this.mapOfCounter.set(`${i}3`, this.counter++);
             }
           }
         }
@@ -196,11 +180,12 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
           ) {
             this.formUpdated.emit(true);
           }
-          this.formsService.dataChangeEmitter.next({
-            key: 'property_economics_single',
-            data: this.getDataToEmitForNonLtr(formChanges),
-          });
-        }
+          if (this.tabNameSelected !== 'LTR')
+            this.formsService.dataChangeEmitter.next({
+              key: 'property_economics_single',
+              data: this.getDataToEmitForNonLtr(formChanges),
+            });
+          }
       );
 
       this.propertyEconomicsInputForm?.statusChanges?.subscribe((status) => {
@@ -266,13 +251,13 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
 
       this.propertyEconomicsInputFormNonLtr.valueChanges.subscribe(
         (formChanges) => {
-          this.formsService.dataChangeEmitter.next({
-            key: 'property_economics_single',
-            data: this.getDataToEmitForNonLtr(formChanges),
-          });
-        }
+          if (this.tabNameSelected !== 'LTR')
+            this.formsService.dataChangeEmitter.next({
+              key: 'property_economics_single',
+              data: this.getDataToEmitForNonLtr(formChanges),
+            });
+          }
       );
-
 
       this.propertyEconomicsInputFormNonLtr.statusChanges.subscribe(
         (status) => {
@@ -331,8 +316,6 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
         ) {
           this.propertyTypeStep1ChangeDetected = false;
           this.replicasToShow = eventData.data['units'] > 4 ? this.maxPossibleReplicas : eventData.data['units'];
-          this.mapOfCounter.clear();
-          this.counter = 0;
           this.propertyEconomicsInputForm.setControl('multiReplicaLayout', this.fb.array([]));
           for (let i = 0; i < this.replicasToShow || 0; i++) {
             (<FormArray>(
@@ -345,11 +328,6 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
                 lease_type: 'Long Term'
               })
             );
-            
-            this.mapOfCounter.set(`${i}0`, this.counter++);
-            this.mapOfCounter.set(`${i}1`, this.counter++);
-            this.mapOfCounter.set(`${i}2`, this.counter++);
-            this.mapOfCounter.set(`${i}3`, this.counter++);
           }
         }
       }
@@ -451,10 +429,6 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
     ).controls;
   }
 
-  getName(i: string) {
-    return this.mapOfCounter.get(i);
-  }
-
   enableOrDisableForm() {
     if (this.disableDiv) {
       this.propertyEconomicsInputForm.disable();
@@ -472,10 +446,10 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
       const formValue = this.propertyEconomicsInputForm.value;
       if (this.showSingleReplicaLayout) {
         isValid =
-          formValue.singleReplicaLayout.gross_rent != null &&
-          formValue.singleReplicaLayout['expense-ratio-amount'] != null &&
-          formValue.singleReplicaLayout.reserves != null &&
-          formValue.singleReplicaLayout.noi != null;
+          formValue.singleReplicaLayout?.gross_rent != null &&
+          formValue.singleReplicaLayout?.['expense-ratio-amount'] != null &&
+          formValue.singleReplicaLayout?.reserves != null &&
+          formValue.singleReplicaLayout?.noi != null;
       } else {
         let controlsAvailable = this.getControls();
         const isInvalidGroupFound = controlsAvailable?.findIndex((singleFormGroup) => singleFormGroup.status !== "VALID");

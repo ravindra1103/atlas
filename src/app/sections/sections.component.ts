@@ -49,6 +49,7 @@ export class SectionsComponent implements OnInit {
   rateStackResponseReceived: any;
   dataUpdated = false;
   isGetApiResponseReceived = false;
+  newIdAvailable = 0;
 
   @Input()
   isToggled: boolean = false;
@@ -98,8 +99,8 @@ export class SectionsComponent implements OnInit {
             },
           };
         }
-        this.filterFormDataBasedCurrentState();
         //console.log('formDataEnteredByUser - ', this.formDataEnteredByUser);
+        this.filterFormDataBasedCurrentState();
       }
     );
 
@@ -132,7 +133,7 @@ export class SectionsComponent implements OnInit {
     return this.data[index];
   }
 
-  typeChanged(selectedLoanText: any) {
+  typeChanged(selectedLoanText: any) {  
     this.typeSelected =
       this.typesOfLoan.find(
         (loan) => loan.toLowerCase() === selectedLoanText.value.toLowerCase()
@@ -143,15 +144,11 @@ export class SectionsComponent implements OnInit {
     this.selectedRow = {};
     this.isGetApiResponseReceived = false;
 
+    this.onAtlasIdChange();
+
     if (this.typeSelected === 'New Loan') {
       this.atlasId = '';
-      this.dataToFillInForms = {};
       this.enablePricingButton = false;
-    }
-    else {
-      this.enablePricingButton = true;
-      this.dataToFillInForms = {};
-      this.calculatedValues = DEFAULT_CALCULATED_VALUES;
     }
   }
 
@@ -220,9 +217,7 @@ export class SectionsComponent implements OnInit {
       this.formDataEnteredByUser.input.property_economics = { property_units: [] };
     }
 
-    if (this.atlasId) {
-      this.formDataEnteredByUser.input.loan_inputs.atlas_id = this.atlasId;
-    }
+    this.formDataEnteredByUser.input.loan_inputs.atlas_id = this.atlasId ? this.atlasId : 0;
     
     if (this.formDataEnteredByUser?.input?.loan_inputs?.acquisition_date) {
       let dateToSet = this.formDataEnteredByUser?.input?.loan_inputs?.acquisition_date;
@@ -246,7 +241,8 @@ export class SectionsComponent implements OnInit {
       else {
         expenseRatio = grossRent * 0.25;
       }
-      this.formDataEnteredByUser.input.loan_inputs.mf_expense_ratio = expenseRatio;
+      this.formDataEnteredByUser.input.loan_inputs.mf_expense_ratio = (expenseRatio | 0);
+      this.formDataEnteredByUser.input.loan_inputs.mf_noi = grossRent - loanInputs.annual_taxes - loanInputs.annual_hoi - expenseRatio - loanInputs.mf_reserves;
     }
     this.http
       .post(`${environment.apiUrl}/Price/GetPrice`, {
@@ -254,6 +250,9 @@ export class SectionsComponent implements OnInit {
       })
       .subscribe((response: any) => {
         this.rateStackResponseReceived = response;
+
+        if (this.typeSelected !== 'Existing Loan')
+          this.newIdAvailable = response[0]?.atlas_id;
       });
   }
 
@@ -270,6 +269,7 @@ export class SectionsComponent implements OnInit {
     this.isGetApiResponseReceived = false;
     this.enablePricingButton = true;
     this.rateStackResponseReceived = [];
+    this.newIdAvailable = 0;
   }
 
   onRowToPass(data: any) {
@@ -331,7 +331,6 @@ export class SectionsComponent implements OnInit {
 
     //Get the Total Rents Value bases on Property Type
     function GetTotalRents(): any{
-
       if(property_type === "5+ Units"){
         return mf_gross_rents;
       }else{
@@ -407,15 +406,15 @@ export class SectionsComponent implements OnInit {
         },
         calculated_values: {  
           "LTV": +this.calculatedValues.ltv,
-          "max_loan_amount": +this.calculatedValues.maxLoanAmount,
-          "total_points": +this.calculatedValues.totalPoints,
+          "max_loan_amount": +this.calculatedValues.maxLoanAmount | 0,
+          "total_points": +this.calculatedValues.totalPoints | 0,
           "property_value": +this.calculatedValues.propertyValue,
           "TI_amount": +this.calculatedValues.tiAmount,
-          "total_closing_costs": this.calculatedValues.totalClosingCosts
+          "total_closing_costs": this.calculatedValues.totalClosingCosts | 0
         }
       })
       .subscribe((response: any) => {
-        this.rateStackResponseReceived = response;
+        //this.rateStackResponseReceived = response;
       });
   }
 

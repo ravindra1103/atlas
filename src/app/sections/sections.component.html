@@ -30,6 +30,15 @@
         [(ngModel)]="atlasId"
         (ngModelChange)="onAtlasIdChange()"
         required
+        *ngIf="newIdAvailable === 0"
+      />
+      <input
+        matInput
+        type="number"
+        placeholder="Enter Atlas ID"
+        [disabled]="true"
+        *ngIf="typeSelected !== 'Existing Loan' && newIdAvailable !== 0"
+        [(ngModel)]="newIdAvailable"
       />
     </mat-form-field>
     <button mat-flat-button color="primary" (click)="getPricingById()" [disabled]="!enablePricingButton">
