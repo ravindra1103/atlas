@@ -316,7 +316,7 @@ export class SectionsComponent implements OnInit {
       propertyValue = Math.min(appraised_value, purchase_price);
     }
 
-    const TotalCost = ((broker_points + origination_points) * loan_amount) + other_costs + disc ;
+    const TotalCost = ((broker_points + origination_points) * loan_amount / 100) + other_costs + disc ;
     const CashTo = getCashTo(TotalCost);
     const TotalRents = GetTotalRents();
 
@@ -344,8 +344,8 @@ export class SectionsComponent implements OnInit {
       propertyValue: (propertyValue * 1.0).toFixed(2),
       maxLoanAmount: (maxLtvSelectedPercent * propertyValue * 1.0 / 100).toFixed(2),
       tiAmount: ((annual_taxes * 1.0 + annual_hoi) / 12).toFixed(2),
-      totalPoints: ((broker_points + origination_points) * loan_amount),
-      totalClosingCosts: ((broker_points + origination_points) * loan_amount) + other_costs,
+      totalPoints: ((broker_points + origination_points) * loan_amount / 100),
+      totalClosingCosts: ((broker_points + origination_points) * loan_amount / 100) + other_costs,
       loan_purpose,
       loan_amount,
       rate,
@@ -402,7 +402,7 @@ export class SectionsComponent implements OnInit {
           "cash_to_from": this.calculatedValues.cashTo,
           "DSCR": this.calculatedValues.dscr,
           "PITI": this.calculatedValues.piti,
-          "DiscPrem": this.calculatedValues.disc_prem,
+          "DiscPrem": this.calculatedValues.disc,
           "total_cost": this.calculatedValues.totalCost
         },
         calculated_values: {  
