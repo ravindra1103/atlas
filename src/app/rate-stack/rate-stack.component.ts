@@ -76,12 +76,14 @@ export class RateStackComponent implements OnInit, OnChanges {
       if (this.rateStackResponseReceived?.length) {
         for (let rateRow of this.rateStackResponseReceived) {
           newDataToBind.push({
+            ...rateRow,
             id: count++,
             rate: rateRow['rate'],
             dscr: rateRow['io_dscr'],
             piti: rateRow['io_piti'],
             price: rateRow['io_price'],
             disc_prem: rateRow['io_disc'],
+            approval_code: rateRow['io_approval_code']
           });
         }
         this.dataSource = newDataToBind;
@@ -92,12 +94,14 @@ export class RateStackComponent implements OnInit, OnChanges {
       if (this.rateStackResponseReceived?.length) {
         for (let rateRow of this.rateStackResponseReceived) {
           newDataToBind.push({
+            ...rateRow,
             id: count++,
             rate: rateRow['rate'],
             dscr: rateRow['dscr'],
             piti: rateRow['piti'],
             price: rateRow['price'],
             disc_prem: rateRow['disc'],
+            approval_code: rateRow['approval_code']
           });
         }
         this.dataSource = newDataToBind;
