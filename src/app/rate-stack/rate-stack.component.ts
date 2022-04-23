@@ -85,6 +85,7 @@ export class RateStackComponent implements OnInit, OnChanges {
           });
         }
         this.dataSource = newDataToBind;
+        this.onRateStackSelectedRow.emit(this.dataSource[this.selectedRowIndex]);
       }
     } else {
       let newDataToBind = [];
@@ -100,6 +101,7 @@ export class RateStackComponent implements OnInit, OnChanges {
           });
         }
         this.dataSource = newDataToBind;
+        this.onRateStackSelectedRow.emit(this.dataSource[this.selectedRowIndex]);
       }
     }
   }

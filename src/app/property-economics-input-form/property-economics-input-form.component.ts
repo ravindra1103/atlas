@@ -94,7 +94,7 @@ export class PropertyEconomicsInputFormComponent implements OnInit, OnChanges {
         this.propertyEconomicsInputForm.get('singleReplicaLayout')?.setValue({
           gross_rent: this.dataToFillInForms.loan_inputs['mf_gross_rents'],
           'expense-ratio-amount':
-            this.dataToFillInForms.loan_inputs['mf_expense_ratio'],
+          this.dataToFillInForms.loan_inputs['mf_expense_ratio'],
           reserves: this.dataToFillInForms.loan_inputs['mf_reserves'],
           noi: this.dataToFillInForms.loan_inputs['mf_noi'],
         });

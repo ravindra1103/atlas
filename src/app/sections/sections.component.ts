@@ -11,6 +11,8 @@ const DEFAULT_CALCULATED_VALUES = {
   propertyValue: '-',
   maxLoanAmount: '-',
   tiAmount: '-',
+  totalPoints: '-',
+  totalClosingCosts: '-',
   loanPurpose: '-',
   loan_amount: '-',
   rate: '-',
@@ -22,9 +24,7 @@ const DEFAULT_CALCULATED_VALUES = {
   totalRents: '-',
   totalCost: '-',
   cashTo: '-',
-  approvalCode: '-',
-  totalPoints: '-',
-  totalClosingCost: '-'
+  approvalCode: '-'
 }
 @Component({
   selector: 'app-sections',
@@ -132,7 +132,7 @@ export class SectionsComponent implements OnInit {
     return this.data[index];
   }
 
-  typeChanged(selectedLoanText: any) {
+  typeChanged(selectedLoanText: any) {  
     this.typeSelected =
       this.typesOfLoan.find(
         (loan) => loan.toLowerCase() === selectedLoanText.value.toLowerCase()
@@ -143,15 +143,11 @@ export class SectionsComponent implements OnInit {
     this.selectedRow = {};
     this.isGetApiResponseReceived = false;
 
+    this.onAtlasIdChange();
+
     if (this.typeSelected === 'New Loan') {
       this.atlasId = '';
-      this.dataToFillInForms = {};
       this.enablePricingButton = false;
-    }
-    else {
-      this.enablePricingButton = true;
-      this.dataToFillInForms = {};
-      this.calculatedValues = DEFAULT_CALCULATED_VALUES;
     }
   }
 
@@ -166,7 +162,24 @@ export class SectionsComponent implements OnInit {
       return;
     }
     // if (!this.atlasId && this.typeSelected === 'New Loan') {
-    const { input: { property_economics, loan_inputs: { loan_amount, appraised_value, purchase_price, annual_taxes, annual_hoi, annual_other, exit_strategy, property_type, mf_expense_ratio, mf_gross_rents, mf_noi, mf_reserves } } } = this.formDataEnteredByUser;
+    const { input: 
+            { property_economics, 
+              loan_inputs: { 
+                  loan_amount, 
+                  appraised_value, 
+                  purchase_price, 
+                  annual_taxes, 
+                  annual_hoi, 
+                  annual_other, 
+                  exit_strategy, 
+                  property_type, 
+                  mf_expense_ratio, 
+                  mf_gross_rents, 
+                  mf_noi, 
+                  mf_reserves 
+               } 
+              } 
+            } = this.formDataEnteredByUser;
     // let mf_gross_rents = 0;
     // if (property_economics?.property_units?.length) {
     //   const initialValue = 0;
@@ -203,10 +216,8 @@ export class SectionsComponent implements OnInit {
       this.formDataEnteredByUser.input.property_economics = { property_units: [] };
     }
 
-    if (this.atlasId) {
-      this.formDataEnteredByUser.input.loan_inputs.atlas_id = this.atlasId;
-    }
-
+    this.formDataEnteredByUser.input.loan_inputs.atlas_id = this.atlasId ? this.atlasId : 0;
+    
     if (this.formDataEnteredByUser?.input?.loan_inputs?.acquisition_date) {
       let dateToSet = this.formDataEnteredByUser?.input?.loan_inputs?.acquisition_date;
       dateToSet?.setDate(dateToSet.getDate() + 1);
@@ -230,8 +241,8 @@ export class SectionsComponent implements OnInit {
         expenseRatio = grossRent * 0.25;
       }
       this.formDataEnteredByUser.input.loan_inputs.mf_expense_ratio = expenseRatio;
+      this.formDataEnteredByUser.input.loan_inputs.mf_noi = grossRent - loanInputs.annual_taxes - loanInputs.annual_hoi - expenseRatio - loanInputs.mf_reserves;
     }
-
     this.http
       .post(`${environment.apiUrl}/Price/GetPrice`, {
         ...this.formDataEnteredByUser,
@@ -265,6 +276,8 @@ export class SectionsComponent implements OnInit {
         loan_inputs: {
           appraised_value,
           purchase_price,
+          upb,
+          mf_gross_rents,
           loan_amount,
           annual_hoi,
           annual_taxes,
@@ -280,30 +293,54 @@ export class SectionsComponent implements OnInit {
         }
       },
     } = this.formDataEnteredByUser;
+
     const { rate, dscr, piti, disc_prem: disc, approval_code } = data;
+
     const maxLtvSelectedPercentValue = localStorage.getItem(
       'maxLtvSelectedPercent'
     );
+
     let maxLtvSelectedPercent = 0;
     const value = maxLtvSelectedPercentValue?.slice(0, -1);
     if (value) {
       maxLtvSelectedPercent = +value;
     }
+
     let propertyValue = appraised_value;
     if (purchase_price > 0) {
       propertyValue = Math.min(appraised_value, purchase_price);
     }
-    const totalPoints =((broker_points + origination_points) * loan_amount*1.0)/ 100;
-    const totalCost = (((broker_points + origination_points) * loan_amount*1.0)/ 100) + other_costs + (disc || 0);
-    const totalClosingCost = (((broker_points + origination_points) * loan_amount*1.0)/ 100) + other_costs;
-    const totalRents = (property_units || []).reduce((acc: number, curr: { market_rent: number }) => (acc += curr.market_rent || 0), 0) || 
-                        (this.formDataEnteredByUser?.input?.loan_inputs?.mf_gross_rents || 0);
 
+    const TotalCost = ((broker_points + origination_points) * loan_amount) + other_costs + disc ;
+    const CashTo = getCashTo(TotalCost);
+    const TotalRents = GetTotalRents();
+
+    // Calculate 'Cash To From' value based on Loan Purpose
+    function getCashTo(totalCost : number): any {
+      if(loan_purpose ==="Purchase"){
+        return loan_amount - purchase_price - totalCost;
+      }else{
+        return loan_amount - upb - totalCost;
+      }
+    }
+
+    //Get the Total Rents Value bases on Property Type
+    function GetTotalRents(): any{
+
+      if(property_type === "5+ Units"){
+        return mf_gross_rents;
+      }else{
+        return (property_units || []).reduce((acc: number, curr: { market_rent: number }) => (acc += curr.market_rent || 0), 0);
+      }
+    }
+    
     this.calculatedValues = {
       ltv: ((loan_amount * 1.0) / propertyValue).toFixed(2),
       propertyValue: (propertyValue * 1.0).toFixed(2),
       maxLoanAmount: (maxLtvSelectedPercent * propertyValue * 1.0 / 100).toFixed(2),
       tiAmount: ((annual_taxes * 1.0 + annual_hoi) / 12).toFixed(2),
+      totalPoints: ((broker_points + origination_points) * loan_amount),
+      totalClosingCosts: ((broker_points + origination_points) * loan_amount) + other_costs,
       loan_purpose,
       loan_amount,
       rate,
@@ -312,13 +349,10 @@ export class SectionsComponent implements OnInit {
       property_type,
       piti,
       disc,
-      totalRents: totalRents,
-      totalCost: totalCost,
-      cashTo: loan_amount - purchase_price - totalCost,
-      approvalCode: approval_code,
-      total_points: ((broker_points + origination_points) * loan_amount),
-      totalClosingCost,
-      totalPoints
+      totalRents: TotalRents,
+      totalCost: TotalCost,
+      cashTo: CashTo,
+      approvalCode: approval_code
     };
     this.selectedRow = data;
   }
@@ -348,7 +382,7 @@ export class SectionsComponent implements OnInit {
           "io_min_dscr": this.selectedRow.io_min_dscr,
           "io_messages": this.selectedRow.io_messages,
           "io_approval_code": this.selectedRow.io_approval_code,
-          "rate_sheet_id": this.selectedRow.rate_sheet_id,
+          "rate_sheet_id": this.selectedRow.rate_sheet_id
         },
         loan_terms:
         {
@@ -359,20 +393,20 @@ export class SectionsComponent implements OnInit {
           "property_value": +this.calculatedValues.propertyValue,
           "gross_rents": this.calculatedValues.totalRents,
           "LTV": +this.calculatedValues.ltv,
-          "rate": +this.selectedRow.rate,
-          "cash_to_from": this.selectedRow.cashTo,
-          "DSCR": this.selectedRow.dscr,
-          "PITI": this.selectedRow.piti,
-          "DiscPrem": this.selectedRow.disc_prem,
+          "rate": +this.calculatedValues.rate,
+          "cash_to_from": this.calculatedValues.cashTo,
+          "DSCR": this.calculatedValues.dscr,
+          "PITI": this.calculatedValues.piti,
+          "DiscPrem": this.calculatedValues.disc_prem,
           "total_cost": this.calculatedValues.totalCost
         },
         calculated_values: {  
           "LTV": +this.calculatedValues.ltv,
           "max_loan_amount": +this.calculatedValues.maxLoanAmount,
-          "total_points": +this.calculatedValues.total_points,
+          "total_points": +this.calculatedValues.totalPoints,
           "property_value": +this.calculatedValues.propertyValue,
           "TI_amount": +this.calculatedValues.tiAmount,
-          "total_closing_costs": Math.ceil(this.calculatedValues.totalCost),
+          "total_closing_costs": this.calculatedValues.totalClosingCosts
         }
       })
       .subscribe((response: any) => {
