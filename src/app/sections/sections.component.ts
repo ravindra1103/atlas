@@ -241,7 +241,7 @@ export class SectionsComponent implements OnInit {
       else {
         expenseRatio = grossRent * 0.25;
       }
-      this.formDataEnteredByUser.input.loan_inputs.mf_expense_ratio = expenseRatio;
+      this.formDataEnteredByUser.input.loan_inputs.mf_expense_ratio = (expenseRatio | 0);
       this.formDataEnteredByUser.input.loan_inputs.mf_noi = grossRent - loanInputs.annual_taxes - loanInputs.annual_hoi - expenseRatio - loanInputs.mf_reserves;
     }
     this.http
