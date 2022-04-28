@@ -202,7 +202,7 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
       nums = singleRow['fico_range']?.split('-');
       singleRow['highlight'] = {};
       let attrNameToUse = this.getAttrName(loanPurpose);
-      if (nums[0] <= fico && nums[1] >= fico) {
+      if (nums?.[0] <= fico && nums?.[1] >= fico) {
         localStorage.setItem('maxLtvSelectedPercent', singleRow[attrNameToUse]);
       }
     }
