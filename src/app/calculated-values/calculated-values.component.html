@@ -141,7 +141,7 @@
   </div>
 
   <div class="actionButtonWrapper borderTopCommon">
-    <button mat-stroked-button color="primary" class="secondary-button borderRadius0" (click)="onLockRate.emit()">
+    <button mat-stroked-button color="primary" class="borderRadius0" [ngClass]="{'secondary-button' : !lockRateDisabled}" [disabled]="lockRateDisabled" (click)="onLockRate.emit()">
       Lock Rate
     </button>
     <!-- <button mat-flat-button color="primary" class="borderRadius0">

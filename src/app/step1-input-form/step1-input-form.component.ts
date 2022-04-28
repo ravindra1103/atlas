@@ -274,6 +274,37 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
 
   formatDateReceived(date: string) {
     const parts = date.split("/");
-    return parts?.length === 3 ? new Date(+parts[0], +parts[1] - 1, +parts[2]) || new Date() : new Date();
+    console.log('got date', date);
+    let sentDate = parts?.length === 3 ? new Date(+parts[0], +parts[1] - 1, +parts[2]) || new Date() : new Date();
+    console.log(sentDate);
+    return sentDate;
+  }
+  checkUnitRang(event: any) {
+    const proptype = this.step1InputForm.get('property_type')?.value
+    const unitval = this.step1InputForm.get('units')?.value
+    if (proptype) {
+      switch (proptype) {
+        case 'SFR':
+        case 'Condo':
+          if (event.key != 1) {
+            return false;
+          }
+          break;
+        case '2-4 Unit':
+          if (event.key < 2 || event.key > 4) {
+            event.preventDefault();
+            return false;
+          }
+          else
+            return true;
+          break;
+        case '5+ Units':
+          if (event.key < 5) {
+            return false;
+          }
+          break;
+      }
+    }
+    return null;
   }
 }

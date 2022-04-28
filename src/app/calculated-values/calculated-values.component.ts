@@ -19,6 +19,8 @@ export class CalculatedValuesComponent implements OnInit, OnChanges {
 
   @Output() onLockRate = new EventEmitter();
 
+  @Input() lockRateDisabled = false;
+
   constructor() { }
 
   ngOnChanges(changes: SimpleChanges): void {

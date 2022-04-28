@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { ToastrModule } from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -38,18 +39,22 @@ import { PropertyEconomicsInputFormComponent } from './property-economics-input-
 import { OnlynumberDirective } from './directives/number.directive';
 import { DateAdapter, MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/material/core';
 import { Platform } from '@angular/cdk/platform';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+import { MatMomentDateModule } from "@angular/material-moment-adapter";
+import { CurrencyMaskModule } from "ng2-currency-mask";
+
 import { CustomDateAdapter } from './shared/customdateadapter';
 
-export const MY_FORMATS = {
+const MY_FORMATS = {
   parse: {
-      dateInput: 'LL'
+    dateInput: 'MM/DD/YY',
   },
   display: {
-      dateInput: 'YYYY-MM-DD',
-      monthYearLabel: 'YYYY',
-      dateA11yLabel: 'LL',
-      monthYearA11yLabel: 'YYYY'
-  }
+    dateInput: 'MM/DD/YY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
 };
 
 @NgModule({
@@ -93,11 +98,13 @@ export const MY_FORMATS = {
     MatTooltipModule,
     HttpClientModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatMomentDateModule,
+    ToastrModule.forRoot(),
+    CurrencyMaskModule
   ],
   providers: [
-    {provide: MAT_DATE_LOCALE, useValue: 'en-GB'},
-    {provide: DateAdapter, useClass: CustomDateAdapter, deps: [MAT_DATE_LOCALE, Platform]}
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
   ],
   bootstrap: [AppComponent]
 })

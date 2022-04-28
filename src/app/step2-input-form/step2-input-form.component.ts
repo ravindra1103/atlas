@@ -162,17 +162,66 @@ export class Step2InputFormComponent implements OnInit, OnChanges {
         if (value) {
           maxLtvSelectedPercent = +value;
         }
-        if (maxLtvSelectedPercent && eventData.data['appraised_value']) {
+        if (maxLtvSelectedPercent == 0) {
+          let configureEligibilityStorage: any = localStorage.getItem('ConfigureEligibility')
+          if (configureEligibilityStorage) {
+            let configureEligibility = JSON.parse(configureEligibilityStorage);
+
+            const configureEligibilityTabSelected = configureEligibility[this.tabNameSelected.toLowerCase()];
+            this.getHighLightColumn(eventData.data['fico'], eventData.data['loan_purpose'], configureEligibilityTabSelected);
+            const maxLtvSelectedPercentValueRetry = localStorage.getItem(
+              'maxLtvSelectedPercent'
+            );
+            const valueRetry = maxLtvSelectedPercentValueRetry?.slice(0, -1);
+            if (valueRetry) {
+              maxLtvSelectedPercent = +valueRetry;
+            }
+          }
+        }
+        if (maxLtvSelectedPercent && eventData.data['appraised_value'] && eventData.data['fico']) {
           let loanAmount = (maxLtvSelectedPercent * eventData.data['appraised_value']*1.0/100);
           this.step2InputForm.patchValue({
              loan_amount: Math.ceil(Math.round((loanAmount + Number.EPSILON) * 100) / 100),
              other_costs: Math.ceil(Math.round(((2750 + (1.0/100 * loanAmount)) + Number.EPSILON) * 100) / 100),
             });
+        }else if(maxLtvSelectedPercent === 0) {
+          this.step2InputForm.patchValue({
+            loan_amount: 0,
+            other_costs: Math.ceil(Math.round(((2750 + (1.0/100 * 0)) + Number.EPSILON) * 100) / 100),
+           });
         }
       }
     });
   }
 
+  getHighLightColumn(fico: string, loanPurpose: string, dataToLoad: any) {
+    localStorage.setItem('maxLtvSelectedPercent', '0');
+    let singleRow, nums;
+    for (let i = 0; i < dataToLoad?.length || 0; i++) {
+      singleRow = dataToLoad[i];
+      nums = singleRow['fico_range']?.split('-');
+      singleRow['highlight'] = {};
+      let attrNameToUse = this.getAttrName(loanPurpose);
+      if (nums[0] <= fico && nums[1] >= fico) {
+        localStorage.setItem('maxLtvSelectedPercent', singleRow[attrNameToUse]);
+      }
+    }
+  }
+
+  getAttrName(purpose: string) {
+    switch (purpose) {
+      case 'Purchase':
+        return 'purchase';
+      case 'Delayed Purchase':
+        return 'purchase';
+      case 'Rate/Term':
+        return 'rate_term';
+      case 'Cash Out':
+        return 'cashout';
+      default:
+        return '';
+    }
+  }
   getClassToApply() {
     if (this.isToggled) return 'width93Px';
     return 'width105Px';

@@ -4,6 +4,9 @@
 
 @import "~@angular/material/theming";
 
+@import '~ngx-toastr/toastr';
+
+
 @include mat.core();
 
 $atlas-t: (
@@ -238,6 +241,7 @@ $dark-theme: mat.define-dark-theme(
   button.secondary-button {
     color: #287cf2 !important;
     border-color: #287cf2 !important;
+    cursor: pointer;
   }
 
   .calcDLabel {
@@ -357,11 +361,13 @@ $dark-theme: mat.define-dark-theme(
   button.secondary-button {
     color: #a8c150 !important;
     border-color: #a8c150 !important;
+    cursor: pointer;
   }
 
   button.secondary-button {
     color: #a8c150 !important;
     border-color: #a8c150 !important;
+    cursor: pointer;
   }
 
   .commonBg {

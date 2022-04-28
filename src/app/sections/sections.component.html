@@ -28,7 +28,7 @@
         placeholder="Enter Atlas ID"
         [disabled]="typeSelected !== 'Existing Loan'"
         [(ngModel)]="atlasId"
-        (ngModelChange)="onAtlasIdChange()"
+        (ngModelChange)="onAtlasIdChange($event)"
         required
         *ngIf="newIdAvailable === 0"
       />
@@ -59,6 +59,7 @@
       (formUpdated)="formUpdated()"
       [messages]="messages"
       (onLockRate)="onLockRate()"
+      [lockRateDisabled]="lockRateDisabled"
     ></app-section-tab>
   </div>
 </div>

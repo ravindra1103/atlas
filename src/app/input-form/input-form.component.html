@@ -55,8 +55,8 @@
            </span>
           </span>
           <mat-form-field appearance="outline" [ngClass]="getClassToApply()" >
-            <input matInput type="number" placeholder="0" required [(ngModel)]="inputField.valueToBind"/>
-            <span matPrefix>$&nbsp;</span>
+            <input matInput currencyMask [options]="{precision:0}" type="text" placeholder="0" required [(ngModel)]="inputField.valueToBind"/>
+            <!--<span matPrefix>$&nbsp;</span>-->
           </mat-form-field>
         </div>
 

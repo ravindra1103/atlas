@@ -37,6 +37,8 @@ export class SectionTabComponent implements OnInit {
 
   @Output() onLockRate = new EventEmitter();
 
+  @Input() lockRateDisabled: any;
+
   constructor() { }
 
   ngOnInit(): void {

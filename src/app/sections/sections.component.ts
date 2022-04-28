@@ -5,6 +5,9 @@ import { data as savedData } from '../data/ui-metadata';
 import { FormService } from '../shared/form.service';
 import { SingleSectionName, SingleSectionTab } from '../shared/interfaces';
 import { environment } from 'src/environments/environment';
+import * as moment from 'moment';
+
+import { ToastrService } from 'ngx-toastr';
 
 const DEFAULT_CALCULATED_VALUES = {
   ltv: '-',
@@ -50,6 +53,7 @@ export class SectionsComponent implements OnInit {
   dataUpdated = false;
   isGetApiResponseReceived = false;
   newIdAvailable = 0;
+  lockRateDisabled = true;
 
   @Input()
   isToggled: boolean = false;
@@ -62,7 +66,7 @@ export class SectionsComponent implements OnInit {
 
   aggregatedStatus: any = {};
 
-  constructor(private http: HttpClient, private formsService: FormService) { }
+  constructor(private http: HttpClient, private formsService: FormService, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.sections = [
@@ -126,7 +130,7 @@ export class SectionsComponent implements OnInit {
     if (this.typeSelected === 'New Loan')
       this.enablePricingButton = false;
     this.isGetApiResponseReceived = false;
-    this.onAtlasIdChange();
+    this.onAtlasIdChange(null);
   }
 
   getTabDataByIndex(index: number = 0): SingleSectionTab {
@@ -144,7 +148,7 @@ export class SectionsComponent implements OnInit {
     this.selectedRow = {};
     this.isGetApiResponseReceived = false;
 
-    this.onAtlasIdChange();
+    this.onAtlasIdChange(null);
 
     if (this.typeSelected === 'New Loan') {
       this.atlasId = '';
@@ -153,6 +157,7 @@ export class SectionsComponent implements OnInit {
   }
 
   getPricingById() {
+    this.toastr.clear();
     if (this.atlasId && !this.dataUpdated) {
       this.http
         .get(`${environment.apiUrl}/Price/GetLoanInputs/${this.atlasId}`)
@@ -197,6 +202,7 @@ export class SectionsComponent implements OnInit {
     }
     this.formDataEnteredByUser.input.loan_inputs = {
       ...this.formDataEnteredByUser.input.loan_inputs,
+      product_type: this.tabNameSelected,
       LTV: loan_amount / property_value,
       loan_amount: Math.ceil(loan_amount),
       TI: (annual_taxes + annual_hoi) / 12,
@@ -221,8 +227,7 @@ export class SectionsComponent implements OnInit {
     
     if (this.formDataEnteredByUser?.input?.loan_inputs?.acquisition_date) {
       let dateToSet = this.formDataEnteredByUser?.input?.loan_inputs?.acquisition_date;
-      dateToSet?.setDate(dateToSet.getDate() + 1);
-      this.formDataEnteredByUser.input.loan_inputs.acquisition_date  = dateToSet;
+      this.formDataEnteredByUser.input.loan_inputs.acquisition_date = moment.utc(dateToSet.toLocaleString());
     }
 
     if (this.formDataEnteredByUser?.input?.loan_inputs?.mf_expense_ratio) {
@@ -244,15 +249,27 @@ export class SectionsComponent implements OnInit {
       this.formDataEnteredByUser.input.loan_inputs.mf_expense_ratio = (expenseRatio | 0);
       this.formDataEnteredByUser.input.loan_inputs.mf_noi = grossRent - loanInputs.annual_taxes - loanInputs.annual_hoi - expenseRatio - loanInputs.mf_reserves;
     }
+    const maxLtvSelectedPercentValue = localStorage.getItem(
+      'maxLtvSelectedPercent'
+    );
+
+    const value = maxLtvSelectedPercentValue?.slice(0, -1);
+    if (!value) {
+      this.toastr.error('Fico out of range', 'Error', { disableTimeOut: true });
+      return;
+    }
     this.http
       .post(`${environment.apiUrl}/Price/GetPrice`, {
         ...this.formDataEnteredByUser,
       })
       .subscribe((response: any) => {
         this.rateStackResponseReceived = response;
-
+        this.toastr.success('Get Pricing successful');
+        this.lockRateDisabled = false;
         if (this.typeSelected !== 'Existing Loan')
           this.newIdAvailable = response[0]?.atlas_id;
+      }, (err) => {
+        this.toastr.error('Get Pricing failed', 'Error', { disableTimeOut: true });
       });
   }
 
@@ -261,15 +278,20 @@ export class SectionsComponent implements OnInit {
     this.activatedSubStatus?.unsubscribe();
   }
 
-  onAtlasIdChange(): void {
+  onAtlasIdChange($event: any): void {
     this.dataToFillInForms = {};
     this.calculatedValues = DEFAULT_CALCULATED_VALUES;
     this.selectedRow = {};
     this.dataUpdated = false;
     this.isGetApiResponseReceived = false;
-    this.enablePricingButton = true;
     this.rateStackResponseReceived = [];
     this.newIdAvailable = 0;
+    this.lockRateDisabled = true;;
+    if (this.typeSelected === 'Existing Loan' && $event) {
+      this.enablePricingButton = true;
+    }else {
+      this.enablePricingButton = false;
+    }
   }
 
   onRowToPass(data: any) {
@@ -415,6 +437,11 @@ export class SectionsComponent implements OnInit {
       })
       .subscribe((response: any) => {
         //this.rateStackResponseReceived = response;
+        this.toastr.success('Lock Rate successful');
+        this.atlasId = '';
+        this.onAtlasIdChange(null);
+      }, (err) => {
+        this.toastr.error('Lock Rate failed', 'Error', { disableTimeOut: true });
       });
   }
 

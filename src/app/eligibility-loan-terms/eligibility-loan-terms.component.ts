@@ -63,6 +63,7 @@ export class EligibilityLoanTermsComponent implements OnInit, OnChanges {
         if (Object.keys(response)?.length) {
           this.dataToLoad = response[this.tabNameSelected] || [];
           this.apiResponse = response;
+          localStorage.setItem('ConfigureEligibility', JSON.stringify(response));
         }
       });
 
@@ -76,6 +77,7 @@ export class EligibilityLoanTermsComponent implements OnInit, OnChanges {
   }
 
   getHighLightColumn(fico: string, loanPurpose: string) {
+    localStorage.setItem('maxLtvSelectedPercent', '0');
     let singleRow, nums;
     for (let i = 0; i < this.dataToLoad?.length || 0; i++) {
       singleRow = this.dataToLoad[i];
@@ -87,7 +89,6 @@ export class EligibilityLoanTermsComponent implements OnInit, OnChanges {
         singleRow['highlight']['highlight' + attrNameToUse] = true;
         this.maxLtvSelectedPercent = singleRow[attrNameToUse];
         localStorage.setItem('maxLtvSelectedPercent', singleRow[attrNameToUse]);
-        localStorage.setItem('maxLtvSelectedDetails', JSON.stringify({ col: attrNameToUse, range: singleRow['fico_range'] }));
       }
       else {
         singleRow['highlight']['highlight' + attrNameToUse] = false;

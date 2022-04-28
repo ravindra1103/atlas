@@ -12,12 +12,13 @@
         <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
           <input
             matInput
-            type="number"
+                  currencyMask [options]="{precision:0}"
+            type="text"
             placeholder="0"
             required
             formControlName="loan_amount"
           />
-          <span matPrefix>$&nbsp;</span>
+          <!--<span matPrefix>$&nbsp;</span>-->
         </mat-form-field>
       </div>
 
@@ -25,7 +26,7 @@
         <span class="whiteSpaceNoWrap">
           <label class="label inputFieldLabelCommon">PPP Type</label>
           <span
-            [matTooltip]="'The penalty is the same all years'"
+            [matTooltip]="'“Declining” means the penalty lessens each year, “Hard” means the penalty is the same all years, “1%” means the penalty is 1% every year'"
             [matTooltipPosition]="'below'"
           >
             <mat-icon class="infoIcon"> info </mat-icon>
@@ -45,7 +46,6 @@
       <div class="inputField" *ngIf="tabNameSelected ==='LTR'">
         <span class="whiteSpaceNoWrap">
           <label class="label inputFieldLabelCommon">PPP Term</label>
-          <mat-icon class="infoIcon"> info </mat-icon>
         </span>
         <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
           <mat-select formControlName="ppp_term">
@@ -89,12 +89,13 @@
         <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
           <input
             matInput
-            type="number"
+                  currencyMask [options]="{precision:0}"
+            type="text"
             placeholder="0"
             required
             formControlName="annual_taxes"
           />
-          <span matPrefix>$&nbsp;</span>
+          <!--<span matPrefix>$&nbsp;</span>-->
         </mat-form-field>
       </div>
 
@@ -105,28 +106,38 @@
         <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
           <input
             matInput
-            type="number"
+                  currencyMask [options]="{precision:0}"
+            type="text"
             placeholder="0"
             required
             formControlName="annual_hoi"
           />
-          <span matPrefix>$&nbsp;</span>
+          <!--<span matPrefix>$&nbsp;</span>-->
         </mat-form-field>
       </div>
 
       <div class="inputField">
         <span class="whiteSpaceNoWrap">
           <label class="label inputFieldLabelCommon">Annual Other</label>
+          <span
+            [matTooltip]="
+              'e.g. HOA, Flood, Management Fees'
+            "
+            [matTooltipPosition]="'below'"
+          >
+            <mat-icon class="infoIcon"> info </mat-icon>
+          </span>
         </span>
         <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
           <input
             matInput
-            type="number"
+                  currencyMask [options]="{precision:0}"
+            type="text"
             placeholder="0"
             required
             formControlName="annual_other"
           />
-          <span matPrefix>$&nbsp;</span>
+          <!--<span matPrefix>$&nbsp;</span>-->
         </mat-form-field>
       </div>
 
@@ -175,12 +186,13 @@
         <mat-form-field appearance="outline"  [ngClass]="getClassToApply()">
           <input
             matInput
-            type="number"
+                  currencyMask [options]="{precision:0}"
+            type="text"
             placeholder="0"
             required
             formControlName="other_costs"
           />
-          <span matPrefix>$&nbsp;</span>
+          <!--<span matPrefix>$&nbsp;</span>-->
         </mat-form-field>
       </div>
     </div>

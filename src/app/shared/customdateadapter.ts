@@ -17,7 +17,7 @@ export class CustomDateAdapter extends NativeDateAdapter {
             month = !!str[1] ? +str[1] - 1 : month;
             year = !!str[2] ?
                  +str[2].length <= 3 ? +str[2] + 2000 : +str[2] : year ;
-
+                console.log(new Date(year, month, day))
             return new Date(year, month, day);
         }
     }

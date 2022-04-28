@@ -14,8 +14,8 @@
                     <label class="label inputFieldLabelCommon">Market Rent</label>
                   </span>
                   <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
-                    <input matInput type="number" placeholder="0" formControlName="market_rent" required />
-                    <span matPrefix>$&nbsp;</span>
+                    <input matInput currencyMask [options]="{precision:0}" type="text" placeholder="0" formControlName="market_rent" required />
+                    <!--<span matPrefix>$&nbsp;</span>-->
                   </mat-form-field>
                 </div>
 
@@ -24,8 +24,8 @@
                     <label class="label inputFieldLabelCommon">In-Place Rent</label>
                   </span>
                   <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
-                    <input matInput type="number" placeholder="0" formControlName="in_place_rent" required />
-                    <span matPrefix>$&nbsp;</span>
+                    <input matInput currencyMask [options]="{precision:0}" type="text" placeholder="0" formControlName="in_place_rent" required />
+                    <!--<span matPrefix>$&nbsp;</span>-->
                   </mat-form-field>
                 </div>
               </div>
@@ -36,8 +36,8 @@
                     <label class="label inputFieldLabelCommon">Sq Ft</label>
                   </span>
                   <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
-                    <input matInput type="number" placeholder="0" formControlName="sq_ft" required />
-                    <span matPrefix>$&nbsp;</span>
+                    <input matInput currencyMask [options]="{precision:0}" type="text" placeholder="0" formControlName="sq_ft" required />
+                    <!--<span matPrefix>$&nbsp;</span>-->
                   </mat-form-field>
                 </div>
 
@@ -66,20 +66,36 @@
             <div class="inputField">
               <span class="whiteSpaceNoWrap">
                 <label class="label inputFieldLabelCommon">Gross Rent</label>
+                <span
+            [matTooltip]="
+              'Total expected Gross Rents on the property'
+            "
+            [matTooltipPosition]="'below'"
+          >
+            <mat-icon class="infoIcon"> info </mat-icon>
+          </span>
               </span>
               <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
-                <input matInput type="number" placeholder="0" formControlName="gross_rent" required />
-                <span matPrefix>$&nbsp;</span>
+                <input matInput currencyMask [options]="{precision:0}" type="text" placeholder="0" formControlName="gross_rent" required />
+                <!--<span matPrefix>$&nbsp;</span>-->
               </mat-form-field>
             </div>
 
             <div class="inputField">
               <span class="whiteSpaceNoWrap">
                 <label class="label inputFieldLabelCommon">Expense ratio Amt.</label>
+                <span
+            [matTooltip]="
+              'Calculated expenses for management and vacancy'
+            "
+            [matTooltipPosition]="'below'"
+          >
+            <mat-icon class="infoIcon"> info </mat-icon>
+          </span>
               </span>
               <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
-                <input matInput type="number" placeholder="0" formControlName="expense-ratio-amount" readonly />
-                <span matPrefix>$&nbsp;</span>
+                <input matInput currencyMask type="text" placeholder="0" formControlName="expense-ratio-amount" readonly />
+                <!--<span matPrefix>$&nbsp;</span>-->
               </mat-form-field>
             </div>
           </div>
@@ -87,10 +103,18 @@
             <div class="inputField">
               <span class="whiteSpaceNoWrap">
                 <label class="label inputFieldLabelCommon">Reserves</label>
+                <span
+            [matTooltip]="
+              'Required expense for reserves'
+            "
+            [matTooltipPosition]="'below'"
+          >
+            <mat-icon class="infoIcon"> info </mat-icon>
+          </span>
               </span>
               <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
-                <input matInput type="number" placeholder="0" formControlName="reserves" readonly />
-                <span matPrefix>$&nbsp;</span>
+                <input matInput currencyMask type="text" placeholder="0" formControlName="reserves" readonly />
+                <!--<span matPrefix>$&nbsp;</span>-->
               </mat-form-field>
             </div>
 
@@ -98,10 +122,18 @@
               <div class="inputField">
                 <span class="whiteSpaceNoWrap">
                   <label class="label inputFieldLabelCommon">NOI</label>
+                  <span
+            [matTooltip]="
+              'Net Operating Income – Used to determine DSCR'
+            "
+            [matTooltipPosition]="'below'"
+          >
+            <mat-icon class="infoIcon"> info </mat-icon>
+          </span>
                 </span>
                 <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
-                  <input matInput type="number" placeholder="0" formControlName="noi" readonly />
-                  <span matPrefix>$&nbsp;</span>
+                  <input matInput currencyMask type="text" placeholder="0" formControlName="noi" readonly />
+                  <!--<span matPrefix>$&nbsp;</span>-->
                 </mat-form-field>
               </div>
             </div>
@@ -132,8 +164,8 @@
               <label class="label inputFieldLabelCommon">Gross Rents</label>
             </span>
             <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
-              <input matInput type="number" placeholder="0" formControlName="gross_rent" required />
-              <span matPrefix>$&nbsp;</span>
+              <input matInput currencyMask [options]="{precision:0}" type="text" placeholder="0" formControlName="gross_rent" required />
+              <!--<span matPrefix>$&nbsp;</span>-->
             </mat-form-field>
           </div>
         </div>
