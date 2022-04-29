@@ -51,7 +51,7 @@
           <label class="label inputFieldLabelCommon">Property Type</label>
         </span>
         <mat-form-field appearance="outline" [ngClass]="getClassToApply()">
-          <mat-select formControlName="property_type" >
+          <mat-select formControlName="property_type" (selectionChange)="updateUnits($event.value)">
             <mat-option
               *ngFor="let valueToDisplay of propertyType"
               [value]="valueToDisplay"
@@ -121,7 +121,8 @@
             matInput
             type="number"
             formControlName="units"
-                 (keypress)="checkUnitRang($event)"
+                 (keypress)="checkUnitRange($event)"
+                 (focusout)="checkUnitValidation($event)"
             required
             [ngClass]="getNgInvalidClassIfRequired()"
           />

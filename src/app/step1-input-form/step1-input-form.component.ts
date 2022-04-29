@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormService } from '../shared/form.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-step1-input-form',
@@ -45,7 +46,7 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
   ];
   propertyType: string[] = ['SFR', 'Condo', '2-4 Unit', '5+ Units'];
 
-  constructor(private formsService: FormService) {}
+  constructor(private formsService: FormService, private toastr: ToastrService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     this.populateFormIfDataAvailable();
@@ -279,7 +280,30 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
     console.log(sentDate);
     return sentDate;
   }
-  checkUnitRang(event: any) {
+  updateUnits(e: any) {
+    if (e) {
+      switch (e) {
+        case 'SFR':
+        case 'Condo':
+          this.step1InputForm.patchValue({
+            units: 1
+          });
+          break;
+        case '2-4 Unit':
+          this.step1InputForm.patchValue({
+            units: 2
+          });
+          break;
+        case '5+ Units':
+          this.step1InputForm.patchValue({
+            units: 5
+          });
+          break;
+      }
+    }
+    
+  }
+  checkUnitRange(event: any) {
     const proptype = this.step1InputForm.get('property_type')?.value
     const unitval = this.step1InputForm.get('units')?.value
     if (proptype) {
@@ -295,16 +319,32 @@ export class Step1InputFormComponent implements OnInit, OnChanges {
             event.preventDefault();
             return false;
           }
-          else
-            return true;
-          break;
-        case '5+ Units':
-          if (event.key < 5) {
-            return false;
-          }
-          break;
+         break;
+        //case '5+ Units':
+        //  if (event.key < 5) {
+        //    return false;
+        //  }
+        //  break;
       }
     }
     return null;
+  }
+  checkUnitValidation(event: any) {
+    const proptype = this.step1InputForm.get('property_type')?.value
+    if (proptype) {
+      switch (proptype) {
+        case '5+ Units':
+          if (event.target.value < 5) {
+            this.step1InputForm.patchValue({
+              units: 5
+            });
+            // alert('No. of Units cannot be less than 5 for Property type 5+ Units');
+            this.toastr.error('No. of Units cannot be less than 5 for Property type 5+ Units', 'Error', { disableTimeOut: true });
+          break;
+      }
+    }
+    
+    }
+
   }
 }

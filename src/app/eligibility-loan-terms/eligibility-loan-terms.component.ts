@@ -85,7 +85,7 @@ export class EligibilityLoanTermsComponent implements OnInit, OnChanges {
       singleRow['highlight'] = {};
       let attrNameToUse = this.getAttrName(loanPurpose);
 
-      if (nums[0] <= fico && nums[1] >= fico) {
+      if (nums?.[0] <= fico && nums?.[1] >= fico) {
         singleRow['highlight']['highlight' + attrNameToUse] = true;
         this.maxLtvSelectedPercent = singleRow[attrNameToUse];
         localStorage.setItem('maxLtvSelectedPercent', singleRow[attrNameToUse]);

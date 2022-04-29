@@ -41,7 +41,8 @@ import { DateAdapter, MatNativeDateModule, MAT_DATE_LOCALE } from '@angular/mate
 import { Platform } from '@angular/cdk/platform';
 import { MAT_DATE_FORMATS } from '@angular/material/core';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
-import { CurrencyMaskModule } from "ng2-currency-mask";
+/*import { CurrencyMaskModule } from "ng2-currency-mask";*/
+import { NgxCurrencyModule } from "ngx-currency";
 
 import { CustomDateAdapter } from './shared/customdateadapter';
 
@@ -101,7 +102,8 @@ const MY_FORMATS = {
     MatNativeDateModule,
     MatMomentDateModule,
     ToastrModule.forRoot(),
-    CurrencyMaskModule
+    NgxCurrencyModule
+    /*CurrencyMaskModule*/
   ],
   providers: [
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
